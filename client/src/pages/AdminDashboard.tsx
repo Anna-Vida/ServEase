@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
   CalendarDays,
   CreditCard,
@@ -10,8 +11,127 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
+type Appointment = {
+  id: string
+  appointment_date: string
+  appointment_time: string
+  status: string
+  customer: {
+    full_name: string
+  } | null
+  service: {
+    name: string
+  } | null
+}
+
 function AdminDashboard() {
   const navigate = useNavigate()
+
+  const [totalRevenue, setTotalRevenue] = useState(0)
+  const [totalBookings, setTotalBookings] = useState(0)
+  const [totalCustomers, setTotalCustomers] = useState(0)
+  const [activeStaff, setActiveStaff] = useState(0)
+  const [todayAppointments, setTodayAppointments] = useState<Appointment[]>([])
+  const [loadingStats, setLoadingStats] = useState(true)
+
+  useEffect(() => {
+    const loadDashboardStats = async () => {
+      setLoadingStats(true)
+
+      try {
+        const [
+          bookingsResult,
+          customersResult,
+          staffResult,
+          paymentsResult,
+        ] = await Promise.all([
+          supabase
+            .from('appointments')
+            .select('*', { count: 'exact', head: true }),
+
+          supabase
+            .from('profiles')
+            .select('*', { count: 'exact', head: true })
+            .eq('role', 'customer'),
+
+          supabase
+            .from('staff_profiles')
+            .select('*', { count: 'exact', head: true })
+            .eq('is_active', true),
+
+          supabase
+            .from('payments')
+            .select('amount')
+            .eq('payment_status', 'paid'),
+        ])
+
+        if (bookingsResult.error) {
+          console.error('Bookings error:', bookingsResult.error)
+        }
+
+        if (customersResult.error) {
+          console.error('Customers error:', customersResult.error)
+        }
+
+        if (staffResult.error) {
+          console.error('Staff error:', staffResult.error)
+        }
+
+        if (paymentsResult.error) {
+          console.error('Payments error:', paymentsResult.error)
+        }
+
+        setTotalBookings(bookingsResult.count ?? 0)
+        setTotalCustomers(customersResult.count ?? 0)
+        setActiveStaff(staffResult.count ?? 0)
+
+        const revenue =
+          paymentsResult.data?.reduce(
+            (total, payment) => total + Number(payment.amount),
+            0
+          ) ?? 0
+
+        setTotalRevenue(revenue)
+
+        const today = new Date().toLocaleDateString('en-CA')
+
+        const { data: appointmentsData, error: appointmentsError } =
+          await supabase
+            .from('appointments')
+            .select(`
+              id,
+              appointment_date,
+              appointment_time,
+              status,
+              customer:profiles!appointments_customer_id_fkey (
+                full_name
+              ),
+              service:services (
+                name
+              )
+            `)
+            .eq('appointment_date', today)
+            .order('appointment_time', { ascending: true })
+
+        if (appointmentsError) {
+          console.error(
+            'Today appointments error:',
+            appointmentsError
+          )
+        } else {
+          setTodayAppointments(
+            (appointmentsData as unknown as Appointment[]) ?? []
+          )
+        }
+      } catch (error) {
+        console.error('Dashboard stats error:', error)
+      } finally {
+        setLoadingStats(false)
+      }
+    }
+
+    loadDashboardStats()
+  }, [])
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -103,11 +223,16 @@ function AdminDashboard() {
                 </p>
 
                 <p className="mt-3 text-3xl font-bold">
-                  ₱84,250
+                  {loadingStats
+                    ? '...'
+                    : `₱${totalRevenue.toLocaleString('en-PH', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}`}
                 </p>
 
                 <p className="mt-2 text-sm text-emerald-400">
-                  +12.5% this month
+                  Paid transactions
                 </p>
               </div>
 
@@ -117,11 +242,11 @@ function AdminDashboard() {
                 </p>
 
                 <p className="mt-3 text-3xl font-bold">
-                  284
+                  {loadingStats ? '...' : totalBookings}
                 </p>
 
                 <p className="mt-2 text-sm text-indigo-400">
-                  23 upcoming
+                  All appointments
                 </p>
               </div>
 
@@ -131,11 +256,11 @@ function AdminDashboard() {
                 </p>
 
                 <p className="mt-3 text-3xl font-bold">
-                  156
+                  {loadingStats ? '...' : totalCustomers}
                 </p>
 
                 <p className="mt-2 text-sm text-cyan-400">
-                  +18 new
+                  Registered customers
                 </p>
               </div>
 
@@ -145,11 +270,11 @@ function AdminDashboard() {
                 </p>
 
                 <p className="mt-3 text-3xl font-bold">
-                  12
+                  {loadingStats ? '...' : activeStaff}
                 </p>
 
                 <p className="mt-2 text-sm text-amber-400">
-                  8 available today
+                  Currently active
                 </p>
               </div>
             </div>
@@ -161,7 +286,7 @@ function AdminDashboard() {
                 </h3>
 
                 <div className="mt-6 flex h-72 items-center justify-center rounded-xl border border-dashed border-white/10 text-slate-500">
-                  Chart will go here
+                  Revenue chart coming next
                 </div>
               </div>
 
@@ -170,36 +295,48 @@ function AdminDashboard() {
                   Today&apos;s Appointments
                 </h3>
 
-                <div className="mt-5 space-y-4">
-                  <div className="rounded-xl bg-white/5 p-4">
-                    <p className="font-medium">
-                      Hair Treatment
+                <div className="mt-5 space-y-3">
+                  {loadingStats ? (
+                    <p className="text-sm text-slate-500">
+                      Loading appointments...
                     </p>
+                  ) : todayAppointments.length === 0 ? (
+                    <div className="flex h-60 items-center justify-center rounded-xl border border-dashed border-white/10 text-sm text-slate-500">
+                      No appointments today
+                    </div>
+                  ) : (
+                    todayAppointments.map((appointment) => (
+                      <div
+                        key={appointment.id}
+                        className="rounded-xl border border-white/10 bg-white/5 p-4"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="font-medium text-white">
+                              {appointment.service?.name ??
+                                'Service'}
+                            </p>
 
-                    <p className="mt-1 text-sm text-slate-400">
-                      10:00 AM · Maria Santos
-                    </p>
-                  </div>
+                            <p className="mt-1 text-sm text-slate-400">
+                              {appointment.customer?.full_name ??
+                                'Customer'}
+                            </p>
 
-                  <div className="rounded-xl bg-white/5 p-4">
-                    <p className="font-medium">
-                      Consultation
-                    </p>
+                            <p className="mt-1 text-sm text-slate-500">
+                              {appointment.appointment_time.slice(
+                                0,
+                                5
+                              )}
+                            </p>
+                          </div>
 
-                    <p className="mt-1 text-sm text-slate-400">
-                      1:30 PM · John Reyes
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl bg-white/5 p-4">
-                    <p className="font-medium">
-                      Premium Service
-                    </p>
-
-                    <p className="mt-1 text-sm text-slate-400">
-                      4:00 PM · Ana Cruz
-                    </p>
-                  </div>
+                          <span className="rounded-full bg-indigo-500/10 px-3 py-1 text-xs font-medium capitalize text-indigo-300">
+                            {appointment.status}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>

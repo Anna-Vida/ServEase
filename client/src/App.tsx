@@ -3,7 +3,9 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import CustomerDashboard from './pages/CustomerDashboard'
 import AdminDashboard from './pages/AdminDashboard'
+import AdminBookings from './pages/AdminBookings'
 import StaffDashboard from './pages/StaffDashboard'
+import BookAppointment from './pages/BookAppointment'
 import ProtectedRoute from './components/ProtectedRoute'
 import RoleProtectedRoute from './components/RoleProtectedRoute'
 
@@ -25,10 +27,28 @@ function App() {
       />
 
       <Route
+        path="/book"
+        element={
+          <RoleProtectedRoute allowedRole="customer">
+            <BookAppointment />
+          </RoleProtectedRoute>
+        }
+      />
+
+      <Route
         path="/admin"
         element={
           <RoleProtectedRoute allowedRole="admin">
             <AdminDashboard />
+          </RoleProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/bookings"
+        element={
+          <RoleProtectedRoute allowedRole="admin">
+            <AdminBookings />
           </RoleProtectedRoute>
         }
       />
