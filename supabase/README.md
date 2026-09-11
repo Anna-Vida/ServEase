@@ -22,40 +22,24 @@ The Supabase backend includes:
 
 ## Database Schema
 
-The complete database schema is located in:
-
-```text
-supabase/schema.sql
-````
+The complete database schema is located in [schema.sql](schema.sql).
 
 The schema contains:
 
-* Tables
-* Relationships
-* Constraints
-* Authentication triggers
-* Helper functions
-* RLS policies
-* Seed services
+- Tables
+- Relationships
+- Constraints
+- Authentication triggers
+- Helper functions
+- RLS policies
+- Seed services
 
 ## Creating a New Supabase Project
 
 1. Create a new project at Supabase.
-
-2. Open:
-
-```text
-SQL Editor
-```
-
+2. Open **SQL Editor**.
 3. Create a new query.
-
-4. Copy the contents of:
-
-```text
-schema.sql
-```
-
+4. Copy the contents of [schema.sql](schema.sql).
 5. Run the SQL script.
 
 This will create the ServEase database structure.
@@ -101,28 +85,28 @@ Row Level Security is enabled on the main tables.
 
 Customers can:
 
-* View their own profile
-* View their own appointments
-* Create appointments
-* Cancel/update eligible appointments
-* View payments connected to their appointments
-* View staff assigned to their appointments
-* Create audit records for their own actions
+- View their own profile
+- View their own appointments
+- Create appointments
+- Cancel/update eligible appointments
+- View payments connected to their appointments
+- View staff assigned to their appointments
+- Create audit records for their own actions
 
 Staff can:
 
-* View their own staff profile
-* View appointments assigned to them
-* Update assigned appointments
+- View their own staff profile
+- View appointments assigned to them
+- Update assigned appointments
 
 Admins can:
 
-* View customers
-* Manage staff
-* Manage services
-* Manage appointments
-* Manage payments
-* View audit logs
+- View customers
+- Manage staff
+- Manage services
+- Manage appointments
+- Manage payments
+- View audit logs
 
 ## Audit Logging
 
@@ -134,21 +118,21 @@ public.audit_logs
 
 Examples include:
 
-* Booking status changes
-* Customer cancellations
-* Staff assignment
-* Staff unassignment
-* Payment creation
-* Payment status changes
+- Booking status changes
+- Customer cancellations
+- Staff assignment
+- Staff unassignment
+- Payment creation
+- Payment status changes
 
 ## Seed Services
 
 The schema currently includes example services such as:
 
-* Basic Consultation
-* Standard Service
-* Premium Service
-* Home Service Consultation
+- Basic Consultation
+- Standard Service
+- Premium Service
+- Home Service Consultation
 
 These can be changed later through the ServEase Admin interface.
 
@@ -159,20 +143,3 @@ Never expose Supabase secret/service-role keys in the frontend.
 Only the Supabase publishable key should be used by the React client.
 
 Administrative authorization is enforced using Supabase Row Level Security and the `is_admin()` database helper.
-
----
-
-ServEase
-Full-Stack Business Operations Platform
-
-````
-
-Then save it.
-
-After that, run:
-
-```powershell
-git add supabase/README.md
-git commit -m "docs: add Supabase setup guide"
-git push
-````
