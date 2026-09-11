@@ -8,9 +8,9 @@ import AdminCustomers from './pages/AdminCustomers'
 import AdminStaff from './pages/AdminStaff'
 import AdminServices from './pages/AdminServices'
 import AdminPayments from './pages/AdminPayments'
+import AdminAuditLogs from './pages/AdminAuditLogs'
 import StaffDashboard from './pages/StaffDashboard'
 import BookAppointment from './pages/BookAppointment'
-import ProtectedRoute from './components/ProtectedRoute'
 import RoleProtectedRoute from './components/RoleProtectedRoute'
 
 function App() {
@@ -24,9 +24,9 @@ function App() {
       <Route
         path="/customer"
         element={
-          <ProtectedRoute>
+          <RoleProtectedRoute allowedRole="customer">
             <CustomerDashboard />
-          </ProtectedRoute>
+          </RoleProtectedRoute>
         }
       />
 
@@ -89,6 +89,15 @@ function App() {
         element={
           <RoleProtectedRoute allowedRole="admin">
             <AdminPayments />
+          </RoleProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/audit-logs"
+        element={
+          <RoleProtectedRoute allowedRole="admin">
+            <AdminAuditLogs />
           </RoleProtectedRoute>
         }
       />

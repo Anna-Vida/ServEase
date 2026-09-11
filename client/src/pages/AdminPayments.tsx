@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { logAudit } from '../lib/audit'
 
 type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded'
 
@@ -148,9 +149,13 @@ function AdminPayments() {
       return
     }
 
+    const selectedAppointment = appointments.find(
+      (appointment) => appointment.id === appointmentId
+    )
+
     setSaving(true)
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('payments')
       .insert({
         appointment_id: appointmentId,
@@ -162,12 +167,30 @@ function AdminPayments() {
             ? new Date().toISOString()
             : null,
       })
+      .select('id')
+      .single()
 
     if (error) {
       console.error('Failed to create payment:', error)
       setSaving(false)
       return
     }
+
+    await logAudit({
+      action: 'payment_recorded',
+      entityType: 'payment',
+      entityId: data.id,
+      details: {
+        appointment_id: appointmentId,
+        customer:
+          selectedAppointment?.customer?.full_name ?? null,
+        service:
+          selectedAppointment?.service?.name ?? null,
+        amount: Number(amount),
+        payment_method: paymentMethod || null,
+        payment_status: paymentStatus,
+      },
+    })
 
     setAppointmentId('')
     setAmount('')
@@ -183,6 +206,16 @@ function AdminPayments() {
     paymentId: string,
     newStatus: PaymentStatus
   ) => {
+    const payment = payments.find(
+      (currentPayment) => currentPayment.id === paymentId
+    )
+
+    if (!payment) {
+      return
+    }
+
+    const previousStatus = payment.payment_status
+
     const { error } = await supabase
       .from('payments')
       .update({
@@ -203,19 +236,35 @@ function AdminPayments() {
     }
 
     setPayments((currentPayments) =>
-      currentPayments.map((payment) =>
-        payment.id === paymentId
+      currentPayments.map((currentPayment) =>
+        currentPayment.id === paymentId
           ? {
-              ...payment,
+              ...currentPayment,
               payment_status: newStatus,
               paid_at:
                 newStatus === 'paid'
                   ? new Date().toISOString()
                   : null,
             }
-          : payment
+          : currentPayment
       )
     )
+
+    await logAudit({
+      action: 'payment_status_changed',
+      entityType: 'payment',
+      entityId: paymentId,
+      details: {
+        previous_status: previousStatus,
+        new_status: newStatus,
+        amount: Number(payment.amount),
+        payment_method: payment.payment_method,
+        customer:
+          payment.appointment?.customer?.full_name ?? null,
+        service:
+          payment.appointment?.service?.name ?? null,
+      },
+    })
   }
 
   const getStatusStyles = (status: PaymentStatus) => {
