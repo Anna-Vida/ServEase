@@ -4,6 +4,10 @@ import Register from './pages/Register'
 import CustomerDashboard from './pages/CustomerDashboard'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminBookings from './pages/AdminBookings'
+import AdminCustomers from './pages/AdminCustomers'
+import AdminStaff from './pages/AdminStaff'
+import AdminServices from './pages/AdminServices'
+import AdminPayments from './pages/AdminPayments'
 import StaffDashboard from './pages/StaffDashboard'
 import BookAppointment from './pages/BookAppointment'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -49,6 +53,42 @@ function App() {
         element={
           <RoleProtectedRoute allowedRole="admin">
             <AdminBookings />
+          </RoleProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/customers"
+        element={
+          <RoleProtectedRoute allowedRole="admin">
+            <AdminCustomers />
+          </RoleProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/staff"
+        element={
+          <RoleProtectedRoute allowedRole="admin">
+            <AdminStaff />
+          </RoleProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/services"
+        element={
+          <RoleProtectedRoute allowedRole="admin">
+            <AdminServices />
+          </RoleProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/payments"
+        element={
+          <RoleProtectedRoute allowedRole="admin">
+            <AdminPayments />
           </RoleProtectedRoute>
         }
       />

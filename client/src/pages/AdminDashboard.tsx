@@ -153,32 +153,50 @@ function AdminDashboard() {
           </div>
 
           <nav className="mt-10 space-y-2">
-            <button className="flex w-full items-center gap-3 rounded-xl bg-indigo-500/15 px-4 py-3 text-left text-indigo-300">
+            <button
+              onClick={() => navigate('/admin')}
+              className="flex w-full items-center gap-3 rounded-xl bg-indigo-500/15 px-4 py-3 text-left text-indigo-300"
+            >
               <LayoutDashboard size={20} />
               Dashboard
             </button>
 
-            <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-slate-400 transition hover:bg-white/5 hover:text-white">
+            <button
+              onClick={() => navigate('/admin/bookings')}
+              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-slate-400 transition hover:bg-white/5 hover:text-white"
+            >
               <CalendarDays size={20} />
               Bookings
             </button>
 
-            <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-slate-400 transition hover:bg-white/5 hover:text-white">
+            <button
+              onClick={() => navigate('/admin/customers')}
+              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-slate-400 transition hover:bg-white/5 hover:text-white"
+            >
               <Users size={20} />
               Customers
             </button>
 
-            <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-slate-400 transition hover:bg-white/5 hover:text-white">
+            <button
+              onClick={() => navigate('/admin/staff')}
+              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-slate-400 transition hover:bg-white/5 hover:text-white"
+            >
               <Users size={20} />
               Staff
             </button>
 
-            <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-slate-400 transition hover:bg-white/5 hover:text-white">
+            <button
+              onClick={() => navigate('/admin/services')}
+              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-slate-400 transition hover:bg-white/5 hover:text-white"
+            >
               <Wrench size={20} />
               Services
             </button>
 
-            <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-slate-400 transition hover:bg-white/5 hover:text-white">
+            <button
+              onClick={() => navigate('/admin/payments')}
+              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-slate-400 transition hover:bg-white/5 hover:text-white"
+            >
               <CreditCard size={20} />
               Payments
             </button>
@@ -313,20 +331,15 @@ function AdminDashboard() {
                         <div className="flex items-start justify-between gap-4">
                           <div>
                             <p className="font-medium text-white">
-                              {appointment.service?.name ??
-                                'Service'}
+                              {appointment.service?.name ?? 'Service'}
                             </p>
 
                             <p className="mt-1 text-sm text-slate-400">
-                              {appointment.customer?.full_name ??
-                                'Customer'}
+                              {appointment.customer?.full_name ?? 'Customer'}
                             </p>
 
                             <p className="mt-1 text-sm text-slate-500">
-                              {appointment.appointment_time.slice(
-                                0,
-                                5
-                              )}
+                              {appointment.appointment_time.slice(0, 5)}
                             </p>
                           </div>
 
