@@ -2,6 +2,8 @@
 
 ServEase is a full-stack appointment management application for businesses that need one place to manage customers, staff, services, and bookings.
 
+Live site: [**servease-iota.vercel.app**](https://servease-iota.vercel.app/)
+
 The application currently supports three roles:
 
 - **Customer**: create an account, sign in, view the customer dashboard, and book an appointment.
