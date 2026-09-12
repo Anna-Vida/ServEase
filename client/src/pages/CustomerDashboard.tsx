@@ -62,6 +62,7 @@ function CustomerDashboard() {
     useState<CustomerAppointment[]>([])
 
   const [loading, setLoading] = useState(true)
+
   const [customerName, setCustomerName] =
     useState('Customer')
 
@@ -81,9 +82,6 @@ function CustomerDashboard() {
         return
       }
 
-      /*
-       * CUSTOMER PROFILE
-       */
       const {
         data: profileData,
         error: profileError,
@@ -104,9 +102,6 @@ function CustomerDashboard() {
         )
       }
 
-      /*
-       * CUSTOMER APPOINTMENTS
-       */
       const {
         data: appointmentData,
         error: appointmentError,
@@ -157,9 +152,6 @@ function CustomerDashboard() {
           } | null
         }[]) ?? []
 
-      /*
-       * ASSIGNED STAFF
-       */
       const staffIds = [
         ...new Set(
           baseAppointments
@@ -199,9 +191,6 @@ function CustomerDashboard() {
         }
       }
 
-      /*
-       * PAYMENTS
-       */
       const appointmentIds =
         baseAppointments.map(
           (appointment) => appointment.id
@@ -239,10 +228,8 @@ function CustomerDashboard() {
         }
       }
 
-      /*
-       * MERGE DATA
-       */
-      const mergedAppointments: CustomerAppointment[] =
+      const mergedAppointments:
+        CustomerAppointment[] =
         baseAppointments.map(
           (appointment) => {
             const assignedStaff =
@@ -286,9 +273,6 @@ function CustomerDashboard() {
     loadCustomerDashboard()
   }, [navigate])
 
-  /*
-   * LIVE DASHBOARD STATS
-   */
   const upcomingAppointments = useMemo(() => {
     const today =
       new Date()
@@ -323,24 +307,21 @@ function CustomerDashboard() {
     )
   }, [appointments])
 
-  /*
-   * STATUS STYLING
-   */
   const getStatusStyles = (
     status: AppointmentStatus
   ) => {
     switch (status) {
       case 'confirmed':
-        return 'border border-cyan-400/20 bg-cyan-400/10 text-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.08)]'
+        return 'bg-[#eaf3ff] text-[#3569a6]'
 
       case 'completed':
-        return 'border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 shadow-[0_0_18px_rgba(52,211,153,0.08)]'
+        return 'bg-[#e9f8f1] text-[#16845b]'
 
       case 'cancelled':
-        return 'border border-rose-400/20 bg-rose-400/10 text-rose-300'
+        return 'bg-[#fff0ec] text-[#c9472d]'
 
       default:
-        return 'border border-indigo-400/20 bg-indigo-400/10 text-indigo-300 shadow-[0_0_18px_rgba(99,102,241,0.08)]'
+        return 'bg-[#fff3d7] text-[#b26a00]'
     }
   }
 
@@ -349,22 +330,19 @@ function CustomerDashboard() {
   ) => {
     switch (status) {
       case 'paid':
-        return 'border border-emerald-400/20 bg-emerald-400/10 text-emerald-300'
+        return 'bg-[#e9f8f1] text-[#16845b]'
 
       case 'failed':
-        return 'border border-red-400/20 bg-red-400/10 text-red-300'
+        return 'bg-[#fff0ec] text-[#c9472d]'
 
       case 'refunded':
-        return 'border border-amber-400/20 bg-amber-400/10 text-amber-300'
+        return 'bg-[#f2edff] text-[#6c55aa]'
 
       default:
-        return 'border border-indigo-400/20 bg-indigo-400/10 text-indigo-300'
+        return 'bg-[#fff3d7] text-[#b26a00]'
     }
   }
 
-  /*
-   * CUSTOMER CANCELLATION
-   */
   const handleCancelBooking = async (
     appointmentId: string
   ) => {
@@ -458,194 +436,205 @@ function CustomerDashboard() {
     setCancellingId(null)
   }
 
-  /*
-   * LOGOUT
-   */
   const handleLogout = async () => {
     await supabase.auth.signOut()
     navigate('/login')
   }
 
+  const formatCurrency = (
+    value: number
+  ) => {
+    return `₱${Number(value).toLocaleString(
+      'en-PH',
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }
+    )}`
+  }
+
   return (
-    <main className="se-page se-grid-bg relative min-h-screen overflow-hidden text-white">
-      {/* BACKGROUND GLOWS */}
-      <div className="se-orb se-orb-indigo -left-28 top-10" />
-      <div className="se-orb se-orb-cyan -right-24 top-40" />
-      <div className="se-orb se-orb-violet bottom-[-100px] left-[40%]" />
-
-      <div className="relative z-10 mx-auto max-w-[1500px] px-5 py-8 sm:px-8 lg:px-10">
-        {/* HEADER */}
-        <header className="se-glass rounded-[28px] px-6 py-6 sm:px-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-center gap-4">
-              <div className="se-icon-box h-14 w-14 rounded-2xl text-indigo-300">
-                <Sparkles size={25} />
-              </div>
-
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-indigo-300">
-                  ServEase
-                </p>
-
-                <h1 className="se-gradient-text mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-                  Customer Dashboard
-                </h1>
-
-                <p className="mt-2 text-sm text-slate-400">
-                  Welcome, {customerName}
-                </p>
-              </div>
+    <main className="min-h-screen bg-[#fff8f1] text-[#1c1410]">
+      {/* HEADER */}
+      <header className="sticky top-0 z-40 border-b border-[#f1ded0] bg-[#fff8f1]/95 backdrop-blur-md">
+        <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-6 px-6 py-4 lg:px-8">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white shadow-[0_12px_30px_-12px_rgba(255,107,74,0.6)]">
+              <Sparkles size={20} />
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() =>
-                  navigate('/book')
-                }
-                className="se-btn-primary flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold"
-              >
-                <Plus size={18} />
-                Book Appointment
-              </button>
+            <div>
+              <p className="text-base font-extrabold tracking-tight">
+                ServEase
+              </p>
 
-              <button
-                onClick={handleLogout}
-                className="se-btn-secondary flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-medium text-red-300 hover:text-red-200"
-              >
-                <LogOut size={18} />
+              <p className="text-xs text-[#8b7c73]">
+                Customer Workspace
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() =>
+                navigate('/book')
+              }
+              className="se-btn-primary hidden items-center gap-2 px-5 py-2.5 text-sm sm:flex"
+            >
+              <Plus size={17} />
+              Book Appointment
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="inline-flex h-11 items-center gap-2 rounded-full border border-[#e7d4c6] bg-white px-4 text-sm font-semibold text-[#74675f] transition hover:border-[#ffb9a3] hover:text-[#c9472d]"
+            >
+              <LogOut size={17} />
+              <span className="hidden sm:inline">
                 Logout
-              </button>
-            </div>
+              </span>
+            </button>
           </div>
-        </header>
+        </div>
+      </header>
 
-        {/* LIVE STATS */}
-        <section className="mt-7 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {/* TOTAL BOOKINGS */}
-          <div className="se-glass se-card-3d rounded-[24px] p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-slate-400">
-                  Total Bookings
-                </p>
+      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
+        {/* PAGE INTRO */}
+        <section className="flex flex-col gap-8 border-b border-[#ead7ca] pb-10 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-sm font-bold text-[#ff6b4a]">
+              Customer dashboard
+            </p>
 
-                <p className="mt-3 text-4xl font-bold">
-                  {loading
-                    ? '...'
-                    : appointments.length}
-                </p>
+            <h1 className="mt-2 text-4xl font-extrabold tracking-[-0.04em] sm:text-5xl">
+              Welcome back,{' '}
+              <span className="se-gradient-text">
+                {customerName}
+              </span>
+            </h1>
 
-                <p className="mt-2 text-xs text-slate-500">
-                  All your appointments
-                </p>
-              </div>
-
-              <div className="se-icon-box h-12 w-12 rounded-2xl text-indigo-300">
-                <CalendarDays
-                  size={21}
-                />
-              </div>
-            </div>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-[#74675f]">
+              View your appointments, assigned
+              staff, booking status, and payment
+              information in one place.
+            </p>
           </div>
 
-          {/* UPCOMING */}
-          <div className="se-glass se-card-3d rounded-[24px] p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-slate-400">
-                  Upcoming
-                </p>
+          <button
+            onClick={() =>
+              navigate('/book')
+            }
+            className="se-btn-primary flex items-center gap-2 self-start px-6 py-3 text-sm sm:hidden"
+          >
+            <Plus size={17} />
+            Book Appointment
+          </button>
+        </section>
 
-                <p className="mt-3 text-4xl font-bold">
-                  {loading
-                    ? '...'
-                    : upcomingAppointments.length}
-                </p>
+        {/* LIVE STATS - FLAT, NOT BENTO */}
+        <section className="grid border-b border-[#ead7ca] py-9 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="border-b border-[#ead7ca] py-5 sm:border-r sm:px-5 lg:border-b-0 lg:px-6 lg:first:pl-0">
+            <div className="flex items-center gap-2 text-[#ff6b4a]">
+              <CalendarDays size={17} />
 
-                <p className="mt-2 text-xs text-cyan-400">
-                  Active future appointments
-                </p>
-              </div>
-
-              <div className="se-icon-box h-12 w-12 rounded-2xl text-cyan-300">
-                <Clock3 size={21} />
-              </div>
+              <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                Total Bookings
+              </p>
             </div>
+
+            <p className="mt-3 text-4xl font-extrabold tracking-tight">
+              {loading
+                ? '...'
+                : appointments.length}
+            </p>
+
+            <p className="mt-1 text-sm text-[#8b7c73]">
+              All appointments
+            </p>
           </div>
 
-          {/* COMPLETED */}
-          <div className="se-glass se-card-3d rounded-[24px] p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-slate-400">
-                  Completed
-                </p>
+          <div className="border-b border-[#ead7ca] py-5 sm:px-5 lg:border-b-0 lg:border-r lg:px-6">
+            <div className="flex items-center gap-2 text-[#d98500]">
+              <Clock3 size={17} />
 
-                <p className="mt-3 text-4xl font-bold">
-                  {loading
-                    ? '...'
-                    : completedAppointments.length}
-                </p>
-
-                <p className="mt-2 text-xs text-emerald-400">
-                  Finished appointments
-                </p>
-              </div>
-
-              <div className="se-icon-box h-12 w-12 rounded-2xl text-emerald-300">
-                <CheckCircle2
-                  size={21}
-                />
-              </div>
+              <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                Upcoming
+              </p>
             </div>
+
+            <p className="mt-3 text-4xl font-extrabold tracking-tight">
+              {loading
+                ? '...'
+                : upcomingAppointments.length}
+            </p>
+
+            <p className="mt-1 text-sm text-[#8b7c73]">
+              Future appointments
+            </p>
           </div>
 
-          {/* PAID */}
-          <div className="se-glass se-card-3d rounded-[24px] p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-slate-400">
-                  Paid
-                </p>
+          <div className="border-b border-[#ead7ca] py-5 sm:border-r sm:px-5 lg:border-b-0 lg:px-6">
+            <div className="flex items-center gap-2 text-[#16845b]">
+              <CheckCircle2 size={17} />
 
-                <p className="mt-3 text-4xl font-bold">
-                  {loading
-                    ? '...'
-                    : paidAppointments.length}
-                </p>
-
-                <p className="mt-2 text-xs text-violet-400">
-                  Paid appointment records
-                </p>
-              </div>
-
-              <div className="se-icon-box h-12 w-12 rounded-2xl text-violet-300">
-                <CreditCard size={21} />
-              </div>
+              <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                Completed
+              </p>
             </div>
+
+            <p className="mt-3 text-4xl font-extrabold tracking-tight">
+              {loading
+                ? '...'
+                : completedAppointments.length}
+            </p>
+
+            <p className="mt-1 text-sm text-[#8b7c73]">
+              Finished appointments
+            </p>
+          </div>
+
+          <div className="py-5 sm:px-5 lg:px-6 lg:pr-0">
+            <div className="flex items-center gap-2 text-[#6c55aa]">
+              <CreditCard size={17} />
+
+              <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                Paid
+              </p>
+            </div>
+
+            <p className="mt-3 text-4xl font-extrabold tracking-tight">
+              {loading
+                ? '...'
+                : paidAppointments.length}
+            </p>
+
+            <p className="mt-1 text-sm text-[#8b7c73]">
+              Paid appointments
+            </p>
           </div>
         </section>
 
-        {/* APPOINTMENTS */}
-        <section className="se-glass mt-7 overflow-hidden rounded-[28px]">
-          <div className="flex flex-col gap-4 border-b border-white/10 px-6 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        {/* APPOINTMENTS HEADER */}
+        <section className="pt-12">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo-300">
-                Appointment Activity
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6b4a]">
+                Appointment activity
               </p>
 
-              <h2 className="mt-2 text-xl font-semibold">
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight">
                 My Appointments
               </h2>
 
-              <p className="mt-1 text-sm text-slate-400">
-                Track your service, assigned staff,
-                booking status, and payment status.
+              <p className="mt-2 text-sm leading-6 text-[#74675f]">
+                Your service history and current
+                booking activity.
               </p>
             </div>
 
-            <div className="se-badge rounded-full px-4 py-2 text-xs">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full bg-[#fff0e7] px-4 py-2 text-xs font-bold text-[#b95736]">
               <UserRound size={14} />
+
               {appointments.length}{' '}
               {appointments.length === 1
                 ? 'booking'
@@ -653,164 +642,310 @@ function CustomerDashboard() {
             </div>
           </div>
 
-          {loading ? (
-            <div className="flex min-h-[280px] items-center justify-center">
-              <div className="text-center">
-                <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-indigo-400/30 border-t-indigo-300" />
+          {/* CONTENT */}
+          <div className="mt-7">
+            {loading ? (
+              <div className="flex min-h-[260px] items-center justify-center border-y border-[#ead7ca]">
+                <div className="text-center">
+                  <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-[#f4c9b7] border-t-[#ff6b4a]" />
 
-                <p className="mt-4 text-sm text-slate-500">
-                  Loading your appointments...
-                </p>
+                  <p className="mt-4 text-sm text-[#8b7c73]">
+                    Loading your appointments...
+                  </p>
+                </div>
               </div>
-            </div>
-          ) : appointments.length === 0 ? (
-            <div className="flex min-h-[300px] items-center justify-center px-6 py-12">
-              <div className="max-w-md text-center">
-                <div className="se-icon-box mx-auto h-16 w-16 rounded-3xl text-indigo-300">
-                  <CalendarDays
-                    size={27}
-                  />
+            ) : appointments.length === 0 ? (
+              <div className="flex min-h-[300px] items-center justify-center border-y border-[#ead7ca] px-6 py-12">
+                <div className="max-w-md text-center">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#fff0e7] text-[#ff6b4a]">
+                    <CalendarDays size={24} />
+                  </div>
+
+                  <h3 className="mt-5 text-xl font-bold">
+                    No appointments yet
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-6 text-[#74675f]">
+                    Book an available ServEase
+                    service to create your first
+                    appointment.
+                  </p>
+
+                  <button
+                    onClick={() =>
+                      navigate('/book')
+                    }
+                    className="se-btn-primary mt-6 inline-flex items-center gap-2 px-5 py-3 text-sm"
+                  >
+                    <Plus size={17} />
+                    Book Appointment
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* DESKTOP TABLE */}
+                <div className="hidden overflow-hidden rounded-2xl border border-[#ead7ca] bg-white lg:block">
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse text-left">
+                      <thead className="bg-[#fff7f0]">
+                        <tr>
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Service
+                          </th>
+
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Staff
+                          </th>
+
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Schedule
+                          </th>
+
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Price
+                          </th>
+
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Booking
+                          </th>
+
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Payment
+                          </th>
+
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Notes
+                          </th>
+
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Action
+                          </th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {appointments.map(
+                          (appointment) => (
+                            <tr
+                              key={
+                                appointment.id
+                              }
+                              className="border-t border-[#f4e5da] transition hover:bg-[#fffaf6]"
+                            >
+                              <td className="px-5 py-5">
+                                <p className="font-semibold">
+                                  {appointment
+                                    .service?.name ??
+                                    'Service'}
+                                </p>
+                              </td>
+
+                              <td className="px-5 py-5">
+                                <div className="flex items-center gap-2 text-sm text-[#65574f]">
+                                  <UserRound
+                                    size={15}
+                                    className="text-[#a09187]"
+                                  />
+
+                                  {appointment.staff_name ??
+                                    'Unassigned'}
+                                </div>
+                              </td>
+
+                              <td className="whitespace-nowrap px-5 py-5">
+                                <p className="text-sm text-[#493c35]">
+                                  {
+                                    appointment.appointment_date
+                                  }
+                                </p>
+
+                                <p className="mt-1 text-xs text-[#8b7c73]">
+                                  {appointment.appointment_time.slice(
+                                    0,
+                                    5
+                                  )}
+                                </p>
+                              </td>
+
+                              <td className="whitespace-nowrap px-5 py-5 text-sm font-semibold">
+                                {appointment.service
+                                  ? formatCurrency(
+                                      appointment
+                                        .service
+                                        .price
+                                    )
+                                  : '—'}
+                              </td>
+
+                              <td className="px-5 py-5">
+                                <span
+                                  className={`inline-flex rounded-full px-3 py-1.5 text-xs font-bold capitalize ${getStatusStyles(
+                                    appointment.status
+                                  )}`}
+                                >
+                                  {
+                                    appointment.status
+                                  }
+                                </span>
+                              </td>
+
+                              <td className="px-5 py-5">
+                                {appointment.payment_status ? (
+                                  <div>
+                                    <span
+                                      className={`inline-flex rounded-full px-3 py-1.5 text-xs font-bold capitalize ${getPaymentStyles(
+                                        appointment.payment_status
+                                      )}`}
+                                    >
+                                      {
+                                        appointment.payment_status
+                                      }
+                                    </span>
+
+                                    {appointment.payment_amount !==
+                                      null && (
+                                      <p className="mt-2 text-xs text-[#8b7c73]">
+                                        {formatCurrency(
+                                          appointment.payment_amount
+                                        )}
+                                      </p>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <span className="text-xs text-[#a09187]">
+                                    No payment
+                                  </span>
+                                )}
+                              </td>
+
+                              <td className="max-w-[220px] px-5 py-5 text-sm text-[#74675f]">
+                                {appointment.notes ||
+                                  '—'}
+                              </td>
+
+                              <td className="px-5 py-5">
+                                {appointment.status ===
+                                'pending' ? (
+                                  <button
+                                    onClick={() =>
+                                      handleCancelBooking(
+                                        appointment.id
+                                      )
+                                    }
+                                    disabled={
+                                      cancellingId ===
+                                      appointment.id
+                                    }
+                                    className="inline-flex items-center gap-2 rounded-full border border-[#f3c7bb] bg-[#fff0ec] px-3 py-2 text-xs font-bold text-[#c9472d] transition hover:bg-[#ffe5dd] disabled:cursor-not-allowed disabled:opacity-50"
+                                  >
+                                    <XCircle size={15} />
+
+                                    {cancellingId ===
+                                    appointment.id
+                                      ? 'Cancelling...'
+                                      : 'Cancel'}
+                                  </button>
+                                ) : (
+                                  <span className="text-xs text-[#b2a49b]">
+                                    —
+                                  </span>
+                                )}
+                              </td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
 
-                <h3 className="mt-5 text-xl font-semibold">
-                  No appointments yet
-                </h3>
+                {/* MOBILE LIST */}
+                <div className="divide-y divide-[#ead7ca] border-y border-[#ead7ca] lg:hidden">
+                  {appointments.map(
+                    (appointment) => (
+                      <article
+                        key={appointment.id}
+                        className="py-6"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#ff6b4a]">
+                              Service
+                            </p>
 
-                <p className="mt-2 text-sm leading-6 text-slate-400">
-                  Book an available ServEase
-                  service to create your first
-                  appointment.
-                </p>
-
-                <button
-                  onClick={() =>
-                    navigate('/book')
-                  }
-                  className="se-btn-primary mt-6 inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold"
-                >
-                  <Plus size={17} />
-                  Book Appointment
-                </button>
-              </div>
-            </div>
-          ) : (
-            <>
-              {/* DESKTOP TABLE */}
-              <div className="hidden overflow-x-auto lg:block">
-                <table className="w-full text-left">
-                  <thead className="border-b border-white/10 bg-white/[0.025]">
-                    <tr>
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Service
-                      </th>
-
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Staff
-                      </th>
-
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Schedule
-                      </th>
-
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Price
-                      </th>
-
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Booking
-                      </th>
-
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Payment
-                      </th>
-
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Notes
-                      </th>
-
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Action
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {appointments.map(
-                      (appointment) => (
-                        <tr
-                          key={
-                            appointment.id
-                          }
-                          className="border-b border-white/5 transition hover:bg-white/[0.035] last:border-0"
-                        >
-                          <td className="px-6 py-5">
-                            <p className="font-medium text-white">
+                            <h3 className="mt-1 text-lg font-bold">
                               {appointment
                                 .service?.name ??
                                 'Service'}
-                            </p>
-                          </td>
+                            </h3>
+                          </div>
 
-                          <td className="px-6 py-5">
-                            <div className="flex items-center gap-2 text-sm text-slate-300">
-                              <UserRound
-                                size={15}
-                                className="text-slate-500"
-                              />
+                          <span
+                            className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-bold capitalize ${getStatusStyles(
+                              appointment.status
+                            )}`}
+                          >
+                            {
+                              appointment.status
+                            }
+                          </span>
+                        </div>
 
+                        <dl className="mt-5 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+                          <div>
+                            <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-[#a09187]">
+                              Assigned Staff
+                            </dt>
+
+                            <dd className="mt-1 text-sm text-[#493c35]">
                               {appointment.staff_name ??
                                 'Unassigned'}
-                            </div>
-                          </td>
+                            </dd>
+                          </div>
 
-                          <td className="whitespace-nowrap px-6 py-5">
-                            <p className="text-sm text-slate-300">
+                          <div>
+                            <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-[#a09187]">
+                              Schedule
+                            </dt>
+
+                            <dd className="mt-1 text-sm text-[#493c35]">
                               {
                                 appointment.appointment_date
-                              }
-                            </p>
-
-                            <p className="mt-1 text-xs text-slate-500">
+                              }{' '}
+                              ·{' '}
                               {appointment.appointment_time.slice(
                                 0,
                                 5
                               )}
-                            </p>
-                          </td>
+                            </dd>
+                          </div>
 
-                          <td className="whitespace-nowrap px-6 py-5 font-medium text-slate-200">
-                            {appointment.service
-                              ? `₱${Number(
-                                  appointment
-                                    .service
-                                    .price
-                                ).toLocaleString(
-                                  'en-PH',
-                                  {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  }
-                                )}`
-                              : '—'}
-                          </td>
+                          <div>
+                            <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-[#a09187]">
+                              Price
+                            </dt>
 
-                          <td className="px-6 py-5">
-                            <span
-                              className={`inline-flex rounded-full px-3 py-1.5 text-xs font-medium capitalize ${getStatusStyles(
-                                appointment.status
-                              )}`}
-                            >
-                              {
-                                appointment.status
-                              }
-                            </span>
-                          </td>
+                            <dd className="mt-1 text-sm font-semibold">
+                              {appointment.service
+                                ? formatCurrency(
+                                    appointment
+                                      .service
+                                      .price
+                                  )
+                                : '—'}
+                            </dd>
+                          </div>
 
-                          <td className="px-6 py-5">
-                            {appointment.payment_status ? (
-                              <div>
+                          <div>
+                            <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-[#a09187]">
+                              Payment
+                            </dt>
+
+                            <dd className="mt-1">
+                              {appointment.payment_status ? (
                                 <span
-                                  className={`inline-flex rounded-full px-3 py-1.5 text-xs font-medium capitalize ${getPaymentStyles(
+                                  className={`inline-flex rounded-full px-3 py-1 text-xs font-bold capitalize ${getPaymentStyles(
                                     appointment.payment_status
                                   )}`}
                                 >
@@ -818,226 +953,58 @@ function CustomerDashboard() {
                                     appointment.payment_status
                                   }
                                 </span>
-
-                                {appointment.payment_amount !==
-                                  null && (
-                                  <p className="mt-2 text-xs text-slate-500">
-                                    ₱
-                                    {Number(
-                                      appointment.payment_amount
-                                    ).toLocaleString(
-                                      'en-PH',
-                                      {
-                                        minimumFractionDigits: 2,
-                                        maximumFractionDigits: 2,
-                                      }
-                                    )}
-                                  </p>
-                                )}
-                              </div>
-                            ) : (
-                              <span className="inline-flex rounded-full border border-white/5 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-500">
-                                No payment
-                              </span>
-                            )}
-                          </td>
-
-                          <td className="max-w-[220px] px-6 py-5 text-sm text-slate-500">
-                            {appointment.notes ||
-                              '—'}
-                          </td>
-
-                          <td className="px-6 py-5">
-                            {appointment.status ===
-                            'pending' ? (
-                              <button
-                                onClick={() =>
-                                  handleCancelBooking(
-                                    appointment.id
-                                  )
-                                }
-                                disabled={
-                                  cancellingId ===
-                                  appointment.id
-                                }
-                                className="inline-flex items-center gap-2 rounded-xl border border-rose-500/20 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-300 transition hover:-translate-y-0.5 hover:bg-rose-500/20 disabled:cursor-not-allowed disabled:opacity-50"
-                              >
-                                <XCircle
-                                  size={
-                                    15
-                                  }
-                                />
-
-                                {cancellingId ===
-                                appointment.id
-                                  ? 'Cancelling...'
-                                  : 'Cancel'}
-                              </button>
-                            ) : (
-                              <span className="text-xs text-slate-700">
-                                —
-                              </span>
-                            )}
-                          </td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* MOBILE / TABLET CARDS */}
-              <div className="grid gap-4 p-5 lg:hidden">
-                {appointments.map(
-                  (appointment) => (
-                    <article
-                      key={appointment.id}
-                      className="se-card-3d rounded-3xl border border-white/10 bg-slate-950/55 p-5"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p className="text-xs uppercase tracking-[0.2em] text-indigo-300">
-                            Service
-                          </p>
-
-                          <h3 className="mt-2 text-lg font-semibold">
-                            {appointment
-                              .service?.name ??
-                              'Service'}
-                          </h3>
-                        </div>
-
-                        <span
-                          className={`rounded-full px-3 py-1.5 text-xs font-medium capitalize ${getStatusStyles(
-                            appointment.status
-                          )}`}
-                        >
-                          {
-                            appointment.status
-                          }
-                        </span>
-                      </div>
-
-                      <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                        <div>
-                          <p className="text-xs text-slate-600">
-                            Assigned Staff
-                          </p>
-
-                          <p className="mt-1 text-sm text-slate-300">
-                            {appointment.staff_name ??
-                              'Unassigned'}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-xs text-slate-600">
-                            Schedule
-                          </p>
-
-                          <p className="mt-1 text-sm text-slate-300">
-                            {
-                              appointment.appointment_date
-                            }{' '}
-                            •{' '}
-                            {appointment.appointment_time.slice(
-                              0,
-                              5
-                            )}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-xs text-slate-600">
-                            Service Price
-                          </p>
-
-                          <p className="mt-1 text-sm font-medium text-white">
-                            {appointment.service
-                              ? `₱${Number(
-                                  appointment
-                                    .service
-                                    .price
-                                ).toLocaleString(
-                                  'en-PH',
-                                  {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  }
-                                )}`
-                              : '—'}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-xs text-slate-600">
-                            Payment
-                          </p>
-
-                          <div className="mt-2">
-                            {appointment.payment_status ? (
-                              <span
-                                className={`inline-flex rounded-full px-3 py-1 text-xs font-medium capitalize ${getPaymentStyles(
-                                  appointment.payment_status
-                                )}`}
-                              >
-                                {
-                                  appointment.payment_status
-                                }
-                              </span>
-                            ) : (
-                              <span className="text-sm text-slate-500">
-                                No payment
-                              </span>
-                            )}
+                              ) : (
+                                <span className="text-sm text-[#8b7c73]">
+                                  No payment
+                                </span>
+                              )}
+                            </dd>
                           </div>
-                        </div>
-                      </div>
+                        </dl>
 
-                      {appointment.notes && (
-                        <div className="mt-5 rounded-2xl border border-white/5 bg-white/[0.025] p-4">
-                          <p className="text-xs text-slate-600">
-                            Notes
-                          </p>
+                        {appointment.notes && (
+                          <div className="mt-5 border-l-2 border-[#f0cdb8] pl-4">
+                            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#a09187]">
+                              Notes
+                            </p>
 
-                          <p className="mt-1 text-sm text-slate-400">
-                            {
-                              appointment.notes
+                            <p className="mt-1 text-sm leading-6 text-[#74675f]">
+                              {
+                                appointment.notes
+                              }
+                            </p>
+                          </div>
+                        )}
+
+                        {appointment.status ===
+                          'pending' && (
+                          <button
+                            onClick={() =>
+                              handleCancelBooking(
+                                appointment.id
+                              )
                             }
-                          </p>
-                        </div>
-                      )}
-
-                      {appointment.status ===
-                        'pending' && (
-                        <button
-                          onClick={() =>
-                            handleCancelBooking(
+                            disabled={
+                              cancellingId ===
                               appointment.id
-                            )
-                          }
-                          disabled={
-                            cancellingId ===
-                            appointment.id
-                          }
-                          className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-sm font-semibold text-rose-300 transition hover:bg-rose-500/20 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          <XCircle
-                            size={17}
-                          />
+                            }
+                            className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#f3c7bb] bg-[#fff0ec] px-4 py-2.5 text-sm font-bold text-[#c9472d] transition hover:bg-[#ffe5dd] disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            <XCircle size={16} />
 
-                          {cancellingId ===
-                          appointment.id
-                            ? 'Cancelling...'
-                            : 'Cancel Appointment'}
-                        </button>
-                      )}
-                    </article>
-                  )
-                )}
-              </div>
-            </>
-          )}
+                            {cancellingId ===
+                            appointment.id
+                              ? 'Cancelling...'
+                              : 'Cancel Appointment'}
+                          </button>
+                        )}
+                      </article>
+                    )
+                  )}
+                </div>
+              </>
+            )}
+          </div>
         </section>
       </div>
     </main>

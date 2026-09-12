@@ -222,9 +222,6 @@ function AdminDashboard() {
           staffResult.count ?? 0
         )
 
-        /*
-         * BOOKING STATUS ANALYTICS
-         */
         const bookingRows =
           (bookingsResult.data as
             | BookingStatusRow[]
@@ -258,28 +255,25 @@ function AdminDashboard() {
           {
             name: 'Pending',
             value: pendingCount,
-            color: '#6366f1',
+            color: '#ffb020',
           },
           {
             name: 'Confirmed',
             value: confirmedCount,
-            color: '#22d3ee',
+            color: '#6e9ed2',
           },
           {
             name: 'Completed',
             value: completedCount,
-            color: '#34d399',
+            color: '#43a77b',
           },
           {
             name: 'Cancelled',
             value: cancelledCount,
-            color: '#fb7185',
+            color: '#df6b56',
           },
         ])
 
-        /*
-         * REVENUE ANALYTICS
-         */
         const paidPayments =
           (paymentsResult.data as
             | PaidPayment[]
@@ -356,9 +350,6 @@ function AdminDashboard() {
 
         setRevenueData(months)
 
-        /*
-         * TODAY'S APPOINTMENTS
-         */
         const today =
           new Date().toLocaleDateString(
             'en-CA'
@@ -438,23 +429,23 @@ function AdminDashboard() {
   ) => {
     switch (status) {
       case 'confirmed':
-        return 'border-cyan-400/20 bg-cyan-400/10 text-cyan-300'
+        return 'bg-[#eaf3ff] text-[#3569a6]'
 
       case 'completed':
-        return 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300'
+        return 'bg-[#e9f8f1] text-[#16845b]'
 
       case 'cancelled':
-        return 'border-rose-400/20 bg-rose-400/10 text-rose-300'
+        return 'bg-[#fff0ec] text-[#c9472d]'
 
       default:
-        return 'border-indigo-400/20 bg-indigo-400/10 text-indigo-300'
+        return 'bg-[#fff3d7] text-[#b26a00]'
     }
   }
 
   const renderNavigation = (
     mobile = false
   ) => (
-    <nav className="mt-8 space-y-2">
+    <nav className="mt-8 space-y-1">
       {navItems.map((item) => {
         const Icon = item.icon
         const active =
@@ -467,18 +458,16 @@ function AdminDashboard() {
               navigate(item.path)
 
               if (mobile) {
-                setMobileMenuOpen(
-                  false
-                )
+                setMobileMenuOpen(false)
               }
             }}
             className={
               active
-                ? 'flex w-full items-center gap-3 rounded-2xl border border-indigo-400/20 bg-indigo-500/10 px-4 py-3 text-left text-indigo-200 shadow-[0_0_24px_rgba(99,102,241,0.08)]'
-                : 'flex w-full items-center gap-3 rounded-2xl border border-transparent px-4 py-3 text-left text-slate-400 transition hover:border-white/5 hover:bg-white/5 hover:text-white'
+                ? 'flex w-full items-center gap-3 rounded-xl bg-[#ffe9db] px-4 py-3 text-left font-semibold text-[#c45231]'
+                : 'flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-medium text-[#75675f] transition hover:bg-[#fff0e6] hover:text-[#1c1410]'
             }
           >
-            <Icon size={19} />
+            <Icon size={18} />
             {item.label}
           </button>
         )
@@ -487,28 +476,21 @@ function AdminDashboard() {
   )
 
   return (
-    <main className="se-page se-grid-bg relative min-h-screen overflow-hidden text-white">
-      {/* BACKGROUND GLOWS */}
-      <div className="se-orb se-orb-indigo -left-32 top-12" />
-
-      <div className="se-orb se-orb-cyan -right-28 top-32" />
-
-      <div className="se-orb se-orb-violet bottom-[-140px] left-[45%]" />
-
-      <div className="relative z-10 flex min-h-screen">
+    <main className="min-h-screen bg-[#fff8f1] text-[#1c1410]">
+      <div className="flex min-h-screen">
         {/* DESKTOP SIDEBAR */}
-        <aside className="hidden w-[290px] shrink-0 border-r border-white/10 bg-slate-950/55 p-6 backdrop-blur-2xl lg:flex lg:flex-col">
+        <aside className="hidden w-[270px] shrink-0 border-r border-[#f1ded0] bg-[#fffaf5] p-6 lg:flex lg:flex-col">
           <div className="flex items-center gap-3">
-            <div className="se-icon-box h-12 w-12 rounded-2xl text-indigo-300">
-              <Sparkles size={22} />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+              <Sparkles size={20} />
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-indigo-300">
+              <p className="text-base font-extrabold tracking-tight">
                 ServEase
               </p>
 
-              <p className="mt-1 text-sm font-medium text-white">
+              <p className="text-xs text-[#8b7c73]">
                 Admin Console
               </p>
             </div>
@@ -516,22 +498,20 @@ function AdminDashboard() {
 
           {renderNavigation()}
 
-          <div className="mt-auto pt-8">
-            <div className="mb-4 rounded-2xl border border-white/5 bg-white/[0.025] p-4">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-600">
-                Access Level
-              </p>
+          <div className="mt-auto border-t border-[#ead7ca] pt-6">
+            <p className="px-4 text-xs font-bold uppercase tracking-[0.12em] text-[#a09187]">
+              Access level
+            </p>
 
-              <p className="mt-2 text-sm font-medium text-slate-300">
-                Administrator
-              </p>
-            </div>
+            <p className="mt-2 px-4 text-sm font-semibold">
+              Administrator
+            </p>
 
             <button
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 rounded-2xl border border-rose-500/10 px-4 py-3 text-left text-rose-300 transition hover:border-rose-500/20 hover:bg-rose-500/10"
+              className="mt-5 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#c9472d] transition hover:bg-[#fff0ec]"
             >
-              <LogOut size={19} />
+              <LogOut size={18} />
               Logout
             </button>
           </div>
@@ -541,25 +521,25 @@ function AdminDashboard() {
         {mobileMenuOpen && (
           <>
             <div
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 bg-[#1c1410]/35 lg:hidden"
               onClick={() =>
                 setMobileMenuOpen(false)
               }
             />
 
-            <aside className="fixed inset-y-0 left-0 z-50 w-[290px] border-r border-white/10 bg-slate-950 p-6 shadow-2xl lg:hidden">
+            <aside className="fixed inset-y-0 left-0 z-50 w-[280px] border-r border-[#f1ded0] bg-[#fffaf5] p-6 shadow-2xl lg:hidden">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="se-icon-box h-11 w-11 rounded-2xl text-indigo-300">
-                    <Sparkles size={20} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+                    <Sparkles size={18} />
                   </div>
 
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-indigo-300">
+                    <p className="font-extrabold">
                       ServEase
                     </p>
 
-                    <p className="mt-1 text-sm font-medium">
+                    <p className="text-xs text-[#8b7c73]">
                       Admin Console
                     </p>
                   </div>
@@ -571,7 +551,7 @@ function AdminDashboard() {
                       false
                     )
                   }
-                  className="rounded-xl border border-white/10 bg-white/5 p-2 text-slate-400"
+                  className="rounded-lg border border-[#ead7ca] bg-white p-2 text-[#74675f]"
                 >
                   <X size={18} />
                 </button>
@@ -581,31 +561,31 @@ function AdminDashboard() {
 
               <button
                 onClick={handleLogout}
-                className="mt-8 flex w-full items-center gap-3 rounded-2xl border border-rose-500/10 px-4 py-3 text-left text-rose-300"
+                className="mt-8 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#c9472d] hover:bg-[#fff0ec]"
               >
-                <LogOut size={19} />
+                <LogOut size={18} />
                 Logout
               </button>
             </aside>
           </>
         )}
 
-        {/* MAIN CONTENT */}
+        {/* MAIN */}
         <section className="min-w-0 flex-1">
-          {/* MOBILE TOP BAR */}
-          <div className="border-b border-white/10 bg-slate-950/50 px-5 py-4 backdrop-blur-xl lg:hidden">
+          {/* MOBILE BAR */}
+          <div className="border-b border-[#f1ded0] bg-[#fffaf5] px-5 py-4 lg:hidden">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="se-icon-box h-10 w-10 rounded-xl text-indigo-300">
-                  <Sparkles size={18} />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+                  <Sparkles size={17} />
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">
+                  <p className="font-bold">
                     ServEase
                   </p>
 
-                  <p className="text-sm font-medium">
+                  <p className="text-xs text-[#8b7c73]">
                     Admin Console
                   </p>
                 </div>
@@ -615,197 +595,163 @@ function AdminDashboard() {
                 onClick={() =>
                   setMobileMenuOpen(true)
                 }
-                className="rounded-xl border border-white/10 bg-white/5 p-2.5 text-slate-300"
+                className="rounded-lg border border-[#ead7ca] bg-white p-2.5 text-[#493c35]"
               >
                 <Menu size={20} />
               </button>
             </div>
           </div>
 
-          <div className="mx-auto max-w-[1600px] px-5 py-8 sm:px-8 lg:px-10">
+          <div className="mx-auto max-w-[1500px] px-6 py-10 lg:px-10 lg:py-12">
             {/* PAGE HEADER */}
-            <header className="se-glass rounded-[28px] px-6 py-6 sm:px-8">
-              <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-indigo-300">
-                    Business Operations
-                  </p>
+            <header className="flex flex-col gap-6 border-b border-[#ead7ca] pb-9 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-sm font-bold text-[#ff6b4a]">
+                  Business operations
+                </p>
 
-                  <h1 className="se-gradient-text mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-                    Business Overview
-                  </h1>
+                <h1 className="mt-2 text-4xl font-extrabold tracking-[-0.04em] sm:text-5xl">
+                  Business{' '}
+                  <span className="se-gradient-text">
+                    Overview
+                  </span>
+                </h1>
 
-                  <p className="mt-2 max-w-xl text-sm leading-6 text-slate-400">
-                    Review live ServEase
-                    bookings, revenue,
-                    customers, active staff,
-                    and appointment activity.
-                  </p>
-                </div>
-
-                <button
-                  onClick={() =>
-                    navigate(
-                      '/admin/bookings'
-                    )
-                  }
-                  className="se-btn-primary flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold"
-                >
-                  <CalendarDays
-                    size={18}
-                  />
-                  Manage Bookings
-                </button>
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-[#74675f] sm:text-base">
+                  Review live bookings, revenue,
+                  customers, active staff, and
+                  appointment activity.
+                </p>
               </div>
+
+              <button
+                onClick={() =>
+                  navigate(
+                    '/admin/bookings'
+                  )
+                }
+                className="se-btn-primary flex items-center justify-center gap-2 px-5 py-3 text-sm"
+              >
+                <CalendarDays size={18} />
+                Manage Bookings
+              </button>
             </header>
 
-            {/* LIVE STAT CARDS */}
-            <section className="mt-7 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-              {/* REVENUE */}
-              <div className="se-glass se-card-3d rounded-[24px] p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-sm text-slate-400">
-                      Total Revenue
-                    </p>
+            {/* STATS */}
+            <section className="grid border-b border-[#ead7ca] py-9 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="border-b border-[#ead7ca] py-5 sm:border-r sm:px-5 xl:border-b-0 xl:px-6 xl:first:pl-0">
+                <div className="flex items-center gap-2 text-[#16845b]">
+                  <CircleDollarSign size={17} />
 
-                    <p className="mt-3 text-3xl font-bold xl:text-4xl">
-                      {loadingStats
-                        ? '...'
-                        : `₱${totalRevenue.toLocaleString(
-                            'en-PH',
-                            {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            }
-                          )}`}
-                    </p>
-
-                    <p className="mt-2 text-xs text-emerald-400">
-                      Paid payment records
-                    </p>
-                  </div>
-
-                  <div className="se-icon-box h-12 w-12 shrink-0 rounded-2xl text-emerald-300">
-                    <CircleDollarSign
-                      size={21}
-                    />
-                  </div>
+                  <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                    Total Revenue
+                  </p>
                 </div>
+
+                <p className="mt-3 text-3xl font-extrabold tracking-tight xl:text-4xl">
+                  {loadingStats
+                    ? '...'
+                    : `₱${totalRevenue.toLocaleString(
+                        'en-PH',
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }
+                      )}`}
+                </p>
+
+                <p className="mt-1 text-sm text-[#8b7c73]">
+                  Paid payment records
+                </p>
               </div>
 
-              {/* BOOKINGS */}
-              <div className="se-glass se-card-3d rounded-[24px] p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-sm text-slate-400">
-                      Total Bookings
-                    </p>
+              <div className="border-b border-[#ead7ca] py-5 sm:px-5 xl:border-b-0 xl:border-r xl:px-6">
+                <div className="flex items-center gap-2 text-[#ff6b4a]">
+                  <CalendarDays size={17} />
 
-                    <p className="mt-3 text-4xl font-bold">
-                      {loadingStats
-                        ? '...'
-                        : totalBookings}
-                    </p>
-
-                    <p className="mt-2 text-xs text-indigo-400">
-                      All appointment records
-                    </p>
-                  </div>
-
-                  <div className="se-icon-box h-12 w-12 shrink-0 rounded-2xl text-indigo-300">
-                    <CalendarDays
-                      size={21}
-                    />
-                  </div>
+                  <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                    Total Bookings
+                  </p>
                 </div>
+
+                <p className="mt-3 text-4xl font-extrabold">
+                  {loadingStats
+                    ? '...'
+                    : totalBookings}
+                </p>
+
+                <p className="mt-1 text-sm text-[#8b7c73]">
+                  All appointment records
+                </p>
               </div>
 
-              {/* CUSTOMERS */}
-              <div className="se-glass se-card-3d rounded-[24px] p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-sm text-slate-400">
-                      Customers
-                    </p>
+              <div className="border-b border-[#ead7ca] py-5 sm:border-r sm:px-5 xl:border-b-0 xl:px-6">
+                <div className="flex items-center gap-2 text-[#3569a6]">
+                  <Users size={17} />
 
-                    <p className="mt-3 text-4xl font-bold">
-                      {loadingStats
-                        ? '...'
-                        : totalCustomers}
-                    </p>
-
-                    <p className="mt-2 text-xs text-cyan-400">
-                      Registered customer
-                      profiles
-                    </p>
-                  </div>
-
-                  <div className="se-icon-box h-12 w-12 shrink-0 rounded-2xl text-cyan-300">
-                    <Users size={21} />
-                  </div>
+                  <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                    Customers
+                  </p>
                 </div>
+
+                <p className="mt-3 text-4xl font-extrabold">
+                  {loadingStats
+                    ? '...'
+                    : totalCustomers}
+                </p>
+
+                <p className="mt-1 text-sm text-[#8b7c73]">
+                  Registered customers
+                </p>
               </div>
 
-              {/* ACTIVE STAFF */}
-              <div className="se-glass se-card-3d rounded-[24px] p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-sm text-slate-400">
-                      Active Staff
-                    </p>
+              <div className="py-5 sm:px-5 xl:px-6 xl:pr-0">
+                <div className="flex items-center gap-2 text-[#6c55aa]">
+                  <Users size={17} />
 
-                    <p className="mt-3 text-4xl font-bold">
-                      {loadingStats
-                        ? '...'
-                        : activeStaff}
-                    </p>
-
-                    <p className="mt-2 text-xs text-violet-400">
-                      Active staff profiles
-                    </p>
-                  </div>
-
-                  <div className="se-icon-box h-12 w-12 shrink-0 rounded-2xl text-violet-300">
-                    <Users size={21} />
-                  </div>
+                  <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                    Active Staff
+                  </p>
                 </div>
+
+                <p className="mt-3 text-4xl font-extrabold">
+                  {loadingStats
+                    ? '...'
+                    : activeStaff}
+                </p>
+
+                <p className="mt-1 text-sm text-[#8b7c73]">
+                  Active staff profiles
+                </p>
               </div>
             </section>
 
             {/* REVENUE + TODAY */}
-            <section className="mt-7 grid gap-6 xl:grid-cols-[1.45fr_0.8fr]">
-              {/* REVENUE CHART */}
-              <div className="se-glass rounded-[28px] p-6 sm:p-8">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-300">
-                      Payments
-                    </p>
+            <section className="grid gap-12 border-b border-[#ead7ca] py-12 xl:grid-cols-[1.45fr_0.8fr]">
+              {/* REVENUE */}
+              <div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#16845b]">
+                    Payments
+                  </p>
 
-                    <h2 className="mt-2 text-xl font-semibold">
-                      Revenue Overview
-                    </h2>
+                  <h2 className="mt-2 text-2xl font-extrabold">
+                    Revenue Overview
+                  </h2>
 
-                    <p className="mt-1 text-sm text-slate-500">
-                      Paid ServEase revenue
-                      during the last six
-                      months.
-                    </p>
-                  </div>
-
-                  <div className="se-badge rounded-full px-4 py-2 text-xs">
-                    6 months
-                  </div>
+                  <p className="mt-2 text-sm text-[#74675f]">
+                    Paid ServEase revenue during
+                    the last six months.
+                  </p>
                 </div>
 
-                <div className="mt-8 h-[300px] sm:h-[340px]">
+                <div className="mt-8 h-[320px]">
                   {loadingStats ? (
                     <div className="flex h-full items-center justify-center">
                       <div className="text-center">
-                        <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-indigo-400/30 border-t-indigo-300" />
+                        <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-[#f4c9b7] border-t-[#ff6b4a]" />
 
-                        <p className="mt-4 text-sm text-slate-500">
+                        <p className="mt-4 text-sm text-[#8b7c73]">
                           Loading revenue...
                         </p>
                       </div>
@@ -826,20 +772,20 @@ function AdminDashboard() {
                       >
                         <CartesianGrid
                           strokeDasharray="3 3"
-                          stroke="rgba(255,255,255,0.06)"
+                          stroke="#f0e1d7"
                           vertical={false}
                         />
 
                         <XAxis
                           dataKey="month"
-                          stroke="#64748b"
+                          stroke="#8b7c73"
                           tickLine={false}
                           axisLine={false}
                           fontSize={12}
                         />
 
                         <YAxis
-                          stroke="#64748b"
+                          stroke="#8b7c73"
                           tickLine={false}
                           axisLine={false}
                           fontSize={12}
@@ -865,33 +811,33 @@ function AdminDashboard() {
                           ]}
                           contentStyle={{
                             background:
-                              'rgba(2, 6, 23, 0.96)',
+                              '#ffffff',
                             border:
-                              '1px solid rgba(255,255,255,0.1)',
+                              '1px solid #ead7ca',
                             borderRadius:
-                              '16px',
+                              '12px',
                             boxShadow:
-                              '0 20px 60px rgba(0,0,0,0.4)',
+                              '0 16px 35px rgba(28,20,16,0.12)',
                           }}
                           labelStyle={{
                             color:
-                              '#cbd5e1',
+                              '#493c35',
                           }}
                         />
 
                         <Line
                           type="monotone"
                           dataKey="revenue"
-                          stroke="#818cf8"
+                          stroke="#ff6b4a"
                           strokeWidth={3}
                           dot={{
                             r: 4,
-                            fill: '#818cf8',
+                            fill: '#ff6b4a',
                             strokeWidth: 0,
                           }}
                           activeDot={{
                             r: 6,
-                            fill: '#67e8f9',
+                            fill: '#ffb020',
                           }}
                         />
                       </LineChart>
@@ -900,45 +846,39 @@ function AdminDashboard() {
                 </div>
               </div>
 
-              {/* TODAY'S APPOINTMENTS */}
-              <div className="se-glass rounded-[28px] p-6 sm:p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+              {/* TODAY */}
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6b4a]">
                   Today
                 </p>
 
-                <h2 className="mt-2 text-xl font-semibold">
+                <h2 className="mt-2 text-2xl font-extrabold">
                   Today's Appointments
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-2 text-sm text-[#74675f]">
                   Non-cancelled appointments
                   scheduled for today.
                 </p>
 
-                <div className="mt-6 space-y-3">
+                <div className="mt-6 divide-y divide-[#ead7ca] border-y border-[#ead7ca]">
                   {loadingStats ? (
                     <div className="flex min-h-[250px] items-center justify-center">
-                      <div className="text-center">
-                        <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-cyan-400/30 border-t-cyan-300" />
-
-                        <p className="mt-4 text-sm text-slate-500">
-                          Loading appointments...
-                        </p>
-                      </div>
+                      <p className="text-sm text-[#8b7c73]">
+                        Loading appointments...
+                      </p>
                     </div>
                   ) : todayAppointments.length ===
                     0 ? (
-                    <div className="flex min-h-[250px] items-center justify-center rounded-3xl border border-dashed border-white/10 bg-white/[0.015]">
-                      <div className="text-center">
-                        <div className="se-icon-box mx-auto h-14 w-14 rounded-2xl text-cyan-300">
-                          <CalendarDays
-                            size={23}
-                          />
-                        </div>
+                    <div className="flex min-h-[250px] items-center justify-center text-center">
+                      <div>
+                        <CalendarDays
+                          size={28}
+                          className="mx-auto text-[#ff6b4a]"
+                        />
 
-                        <p className="mt-4 text-sm text-slate-500">
-                          No appointments
-                          today
+                        <p className="mt-4 text-sm text-[#8b7c73]">
+                          No appointments today
                         </p>
                       </div>
                     </div>
@@ -949,38 +889,34 @@ function AdminDashboard() {
                           key={
                             appointment.id
                           }
-                          className="se-card-3d rounded-2xl border border-white/10 bg-slate-950/40 p-4"
+                          className="py-5"
                         >
                           <div className="flex items-start justify-between gap-4">
                             <div>
-                              <p className="font-medium text-white">
+                              <p className="font-bold">
                                 {appointment
                                   .service
                                   ?.name ??
                                   'Service'}
                               </p>
 
-                              <p className="mt-1 text-sm text-slate-400">
+                              <p className="mt-1 text-sm text-[#74675f]">
                                 {appointment
                                   .customer
                                   ?.full_name ??
                                   'Customer'}
                               </p>
 
-                              <div className="mt-3 flex items-center gap-2 text-xs text-slate-500">
-                                <CalendarDays
-                                  size={13}
-                                />
-
+                              <p className="mt-3 text-xs font-semibold text-[#8b7c73]">
                                 {appointment.appointment_time.slice(
                                   0,
                                   5
                                 )}
-                              </div>
+                              </p>
                             </div>
 
                             <span
-                              className={`rounded-full border px-3 py-1 text-xs font-medium capitalize ${getAppointmentStatusStyle(
+                              className={`rounded-full px-3 py-1.5 text-xs font-bold capitalize ${getAppointmentStatusStyle(
                                 appointment.status
                               )}`}
                             >
@@ -997,43 +933,33 @@ function AdminDashboard() {
               </div>
             </section>
 
-            {/* BOOKING STATUS */}
-            <section className="se-glass mt-7 rounded-[28px] p-6 sm:p-8">
+            {/* STATUS */}
+            <section className="py-12">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-violet-300">
-                  Appointment Analytics
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6b4a]">
+                  Appointment analytics
                 </p>
 
-                <h2 className="mt-2 text-xl font-semibold">
+                <h2 className="mt-2 text-2xl font-extrabold">
                   Booking Status Overview
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-2 text-sm text-[#74675f]">
                   Distribution of real
                   appointment statuses in
                   ServEase.
                 </p>
               </div>
 
-              <div className="mt-8 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-                {/* DONUT */}
+              <div className="mt-8 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
                 <div className="relative h-[320px]">
                   {loadingStats ? (
-                    <div className="flex h-full items-center justify-center">
-                      <div className="text-center">
-                        <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-violet-400/30 border-t-violet-300" />
-
-                        <p className="mt-4 text-sm text-slate-500">
-                          Loading booking
-                          data...
-                        </p>
-                      </div>
+                    <div className="flex h-full items-center justify-center text-sm text-[#8b7c73]">
+                      Loading booking data...
                     </div>
-                  ) : totalBookings ===
-                    0 ? (
-                    <div className="flex h-full items-center justify-center text-sm text-slate-500">
-                      No booking data
-                      available
+                  ) : totalBookings === 0 ? (
+                    <div className="flex h-full items-center justify-center text-sm text-[#8b7c73]">
+                      No booking data available
                     </div>
                   ) : (
                     <>
@@ -1074,15 +1000,15 @@ function AdminDashboard() {
                           <Tooltip
                             contentStyle={{
                               background:
-                                'rgba(2, 6, 23, 0.96)',
+                                '#ffffff',
                               border:
-                                '1px solid rgba(255,255,255,0.1)',
+                                '1px solid #ead7ca',
                               borderRadius:
-                                '16px',
+                                '12px',
                             }}
                             labelStyle={{
                               color:
-                                '#cbd5e1',
+                                '#493c35',
                             }}
                           />
                         </PieChart>
@@ -1090,13 +1016,13 @@ function AdminDashboard() {
 
                       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                         <div className="text-center">
-                          <p className="text-4xl font-bold">
+                          <p className="text-4xl font-extrabold">
                             {
                               totalBookings
                             }
                           </p>
 
-                          <p className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-600">
+                          <p className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-[#a09187]">
                             Bookings
                           </p>
                         </div>
@@ -1105,44 +1031,45 @@ function AdminDashboard() {
                   )}
                 </div>
 
-                {/* STATUS CARDS */}
-                <div className="grid content-center gap-4 sm:grid-cols-2">
+                {/* FLAT STATUS LIST */}
+                <div className="divide-y divide-[#ead7ca] border-y border-[#ead7ca]">
                   {bookingStatusData.map(
                     (status) => (
                       <div
                         key={status.name}
-                        className="se-card-3d rounded-3xl border border-white/10 bg-slate-950/45 p-5"
+                        className="flex items-center justify-between py-5"
                       >
                         <div className="flex items-center gap-3">
                           <span
-                            className="h-3 w-3 rounded-full shadow-[0_0_12px_currentColor]"
+                            className="h-3 w-3 rounded-full"
                             style={{
                               backgroundColor:
                                 status.color,
                             }}
                           />
 
-                          <p className="text-sm text-slate-400">
+                          <p className="font-semibold">
                             {status.name}
                           </p>
                         </div>
 
-                        <p className="mt-4 text-3xl font-bold">
-                          {loadingStats
-                            ? '...'
-                            : status.value}
-                        </p>
+                        <div className="text-right">
+                          <p className="text-2xl font-extrabold">
+                            {loadingStats
+                              ? '...'
+                              : status.value}
+                          </p>
 
-                        <p className="mt-2 text-xs text-slate-600">
-                          {totalBookings >
-                          0
-                            ? `${Math.round(
-                                (status.value /
-                                  totalBookings) *
-                                  100
-                              )}% of bookings`
-                            : '0% of bookings'}
-                        </p>
+                          <p className="mt-1 text-xs text-[#8b7c73]">
+                            {totalBookings > 0
+                              ? `${Math.round(
+                                  (status.value /
+                                    totalBookings) *
+                                    100
+                                )}% of bookings`
+                              : '0% of bookings'}
+                          </p>
+                        </div>
                       </div>
                     )
                   )}

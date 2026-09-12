@@ -100,17 +100,19 @@ function BookAppointment() {
       .insert({
         customer_id: user.id,
         service_id: serviceId,
-        appointment_date:
-          appointmentDate,
-        appointment_time:
-          appointmentTime,
+        appointment_date: appointmentDate,
+        appointment_time: appointmentTime,
         notes: notes || null,
       })
       .select('id')
       .single()
 
     if (error || !booking) {
-      setMessage(error?.message || 'Failed to create appointment.')
+      setMessage(
+        error?.message ||
+          'Failed to create appointment.'
+      )
+
       setLoading(false)
       return
     }
@@ -121,12 +123,15 @@ function BookAppointment() {
       } = await supabase.auth.getSession()
 
       if (session?.access_token) {
-        await sendBookingConfirmation(booking.id, session.access_token)
+        await sendBookingConfirmation(
+          booking.id,
+          session.access_token
+        )
       }
     } catch (notificationError) {
       console.error(
         'Appointment booked, but confirmation email failed:',
-        notificationError,
+        notificationError
       )
     }
 
@@ -145,82 +150,102 @@ function BookAppointment() {
     message ===
     'Appointment booked successfully.'
 
-  return (
-    <main className="se-page se-grid-bg relative min-h-screen overflow-hidden px-5 py-8 text-white sm:px-8 lg:px-10">
-      {/* BACKGROUND GLOWS */}
-      <div className="se-orb se-orb-indigo -left-32 top-16" />
-      <div className="se-orb se-orb-cyan -right-20 top-24" />
-      <div className="se-orb se-orb-violet bottom-[-120px] left-[42%]" />
+  const formatCurrency = (
+    value: number
+  ) => {
+    return `₱${Number(value).toLocaleString(
+      'en-PH',
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }
+    )}`
+  }
 
-      <div className="relative z-10 mx-auto max-w-7xl">
-        {/* TOP BAR */}
-        <div className="flex items-center justify-between gap-4">
+  return (
+    <main className="min-h-screen bg-[#fff8f1] text-[#1c1410]">
+      {/* HEADER */}
+      <header className="border-b border-[#f1ded0] bg-[#fff8f1]/95 backdrop-blur-md">
+        <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-4 px-6 py-4 lg:px-8">
           <button
             type="button"
             onClick={() =>
               navigate('/customer')
             }
-            className="se-btn-secondary inline-flex items-center gap-2 rounded-2xl px-4 py-2.5 text-sm"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#74675f] transition hover:text-[#ff6b4a]"
           >
             <ArrowLeft size={17} />
             Back to Dashboard
           </button>
 
-          <div className="se-badge hidden rounded-full px-4 py-2 text-xs sm:inline-flex">
-            <Sparkles size={14} />
-            ServEase Booking
+          <div className="hidden items-center gap-3 sm:flex">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+              <Sparkles size={17} />
+            </div>
+
+            <span className="text-sm font-extrabold">
+              ServEase
+            </span>
           </div>
         </div>
+      </header>
 
-        {/* PAGE HEADER */}
-        <div className="mt-8 max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-indigo-300">
-            Appointment Scheduling
+      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
+        {/* PAGE INTRO */}
+        <section className="max-w-3xl">
+          <p className="text-sm font-bold text-[#ff6b4a]">
+            Appointment scheduling
           </p>
 
-          <h1 className="se-gradient-text mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
-            Book an Appointment
+          <h1 className="mt-2 text-4xl font-extrabold tracking-[-0.04em] sm:text-5xl">
+            Book an{' '}
+            <span className="se-gradient-text">
+              appointment
+            </span>
           </h1>
 
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-400 sm:text-base">
+          <p className="mt-4 max-w-2xl text-base leading-7 text-[#74675f]">
             Choose an active ServEase service,
             select your preferred date and time,
-            and submit your appointment request.
+            and submit your booking request.
           </p>
-        </div>
+        </section>
 
-        <div className="mt-8 grid gap-7 lg:grid-cols-[1.05fr_0.95fr]">
-          {/* LEFT - FORM */}
-          <section className="se-glass rounded-[28px] p-6 sm:p-8">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo-300">
-                Booking Details
+        <div className="mt-12 grid gap-14 lg:grid-cols-[1.05fr_0.95fr]">
+          {/* FORM */}
+          <section>
+            <div className="border-b border-[#ead7ca] pb-6">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6b4a]">
+                Booking details
               </p>
 
-              <h2 className="mt-2 text-2xl font-semibold">
+              <h2 className="mt-2 text-2xl font-extrabold">
                 Schedule your service
               </h2>
 
-              <p className="mt-2 text-sm text-slate-400">
-                All available services below are
-                loaded directly from ServEase.
+              <p className="mt-2 text-sm leading-6 text-[#74675f]">
+                Available services are loaded
+                directly from ServEase.
               </p>
             </div>
 
             <form
               onSubmit={handleSubmit}
-              className="mt-8 space-y-6"
+              className="mt-7 space-y-6"
             >
               {/* SERVICE */}
               <div>
-                <label htmlFor="service" className="mb-2 block text-sm font-medium text-slate-300">
+                <label
+                  htmlFor="service"
+                  className="mb-2 block text-sm font-bold text-[#493c35]"
+                >
                   Service
                 </label>
 
                 <div className="relative">
                   <Wrench
                     size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-slate-500"
+                    className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-[#a09187]"
                   />
 
                   <select
@@ -232,10 +257,8 @@ function BookAppointment() {
                       )
                     }
                     required
-                    disabled={
-                      servicesLoading
-                    }
-                    className="se-input w-full appearance-none rounded-2xl py-3.5 pl-11 pr-10"
+                    disabled={servicesLoading}
+                    className="se-input se-input-icon-left h-14 appearance-none pr-10"
                   >
                     <option value="">
                       {servicesLoading
@@ -248,13 +271,10 @@ function BookAppointment() {
                         <option
                           key={service.id}
                           value={service.id}
-                          className="bg-slate-900 text-white"
                         >
-                          {service.name} — ₱
-                          {Number(
+                          {service.name} —{' '}
+                          {formatCurrency(
                             service.price
-                          ).toLocaleString(
-                            'en-PH'
                           )}
                         </option>
                       )
@@ -266,22 +286,23 @@ function BookAppointment() {
               {/* DATE / TIME */}
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="appointment-date" className="mb-2 block text-sm font-medium text-slate-300">
+                  <label
+                    htmlFor="appointment-date"
+                    className="mb-2 block text-sm font-bold text-[#493c35]"
+                  >
                     Appointment Date
                   </label>
 
                   <div className="relative">
                     <CalendarDays
                       size={18}
-                      className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-slate-500"
+                      className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-[#a09187]"
                     />
 
                     <input
                       id="appointment-date"
                       type="date"
-                      value={
-                        appointmentDate
-                      }
+                      value={appointmentDate}
                       min={today}
                       onChange={(event) =>
                         setAppointmentDate(
@@ -289,35 +310,36 @@ function BookAppointment() {
                         )
                       }
                       required
-                      className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4"
+                      className="se-input se-input-icon-left h-14"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="appointment-time" className="mb-2 block text-sm font-medium text-slate-300">
+                  <label
+                    htmlFor="appointment-time"
+                    className="mb-2 block text-sm font-bold text-[#493c35]"
+                  >
                     Appointment Time
                   </label>
 
                   <div className="relative">
                     <Clock3
                       size={18}
-                      className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-slate-500"
+                      className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-[#a09187]"
                     />
 
                     <input
                       id="appointment-time"
                       type="time"
-                      value={
-                        appointmentTime
-                      }
+                      value={appointmentTime}
                       onChange={(event) =>
                         setAppointmentTime(
                           event.target.value
                         )
                       }
                       required
-                      className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4"
+                      className="se-input se-input-icon-left h-14"
                     />
                   </div>
                 </div>
@@ -325,17 +347,21 @@ function BookAppointment() {
 
               {/* NOTES */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-300">
+                <label
+                  htmlFor="notes"
+                  className="mb-2 block text-sm font-bold text-[#493c35]"
+                >
                   Notes
                 </label>
 
                 <div className="relative">
                   <FileText
                     size={18}
-                    className="pointer-events-none absolute left-4 top-4 text-slate-500"
+                    className="pointer-events-none absolute left-4 top-4 text-[#a09187]"
                   />
 
                   <textarea
+                    id="notes"
                     value={notes}
                     onChange={(event) =>
                       setNotes(
@@ -344,7 +370,7 @@ function BookAppointment() {
                     }
                     rows={5}
                     placeholder="Optional notes for the business"
-                    className="se-input w-full resize-none rounded-2xl py-3.5 pl-11 pr-4"
+                    className="se-input se-input-icon-left min-h-32 resize-none py-4"
                   />
                 </div>
               </div>
@@ -354,8 +380,8 @@ function BookAppointment() {
                 <div
                   className={
                     successMessage
-                      ? 'flex items-start gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-300'
-                      : 'rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300'
+                      ? 'flex items-start gap-3 rounded-xl border border-[#bfe7d6] bg-[#e9f8f1] px-4 py-3 text-sm text-[#16845b]'
+                      : 'rounded-xl border border-[#f3c7bb] bg-[#fff0ec] px-4 py-3 text-sm text-[#c9472d]'
                   }
                 >
                   {successMessage && (
@@ -369,25 +395,22 @@ function BookAppointment() {
                 </div>
               )}
 
-              {/* SUBMIT */}
               <button
                 type="submit"
                 disabled={
                   loading ||
                   servicesLoading
                 }
-                className="se-btn-primary flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 font-semibold disabled:cursor-not-allowed disabled:opacity-60"
+                className="se-btn-primary flex h-14 w-full items-center justify-center gap-2 px-5 text-sm disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? (
                   <>
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
                     Booking...
                   </>
                 ) : (
                   <>
-                    <CalendarDays
-                      size={18}
-                    />
+                    <CalendarDays size={18} />
                     Book Appointment
                   </>
                 )}
@@ -395,157 +418,142 @@ function BookAppointment() {
             </form>
           </section>
 
-          {/* RIGHT - LIVE SERVICE PREVIEW */}
-          <aside className="space-y-5">
-            <div className="se-glass se-card-3d rounded-[28px] p-6 sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
-                Selected Service
+          {/* RIGHT SIDE */}
+          <aside>
+            <div className="border-b border-[#ead7ca] pb-6">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff8a3d]">
+                Service details
               </p>
 
-              {!selectedService ? (
-                <div className="mt-8 text-center">
-                  <div className="se-icon-box mx-auto h-16 w-16 rounded-3xl text-indigo-300">
-                    <Wrench size={27} />
-                  </div>
-
-                  <h3 className="mt-5 text-xl font-semibold">
-                    Choose a service
-                  </h3>
-
-                  <p className="mt-2 text-sm leading-6 text-slate-400">
-                    Select one of the active
-                    ServEase services to see its
-                    details here.
-                  </p>
-                </div>
-              ) : (
-                <div className="mt-7">
-                  <h3 className="text-2xl font-bold text-white">
-                    {
-                      selectedService.name
-                    }
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-6 text-slate-400">
-                    {selectedService.description ||
-                      'No service description available.'}
-                  </p>
-
-                  <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="se-icon-box h-10 w-10 rounded-xl text-emerald-300">
-                          <PhilippinePeso
-                            size={18}
-                          />
-                        </div>
-
-                        <div>
-                          <p className="text-xs text-slate-500">
-                            Price
-                          </p>
-
-                          <p className="mt-1 font-semibold">
-                            ₱
-                            {Number(
-                              selectedService.price
-                            ).toLocaleString(
-                              'en-PH',
-                              {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                              }
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="se-icon-box h-10 w-10 rounded-xl text-cyan-300">
-                          <Clock3 size={18} />
-                        </div>
-
-                        <div>
-                          <p className="text-xs text-slate-500">
-                            Duration
-                          </p>
-
-                          <p className="mt-1 font-semibold">
-                            {
-                              selectedService.duration_minutes
-                            }{' '}
-                            minutes
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <h2 className="mt-2 text-2xl font-extrabold">
+                Your selection
+              </h2>
             </div>
 
-            {/* BOOKING SUMMARY */}
-            <div className="se-glass rounded-[28px] p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-violet-300">
-                Booking Summary
+            {!selectedService ? (
+              <div className="border-b border-[#ead7ca] py-10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fff0e7] text-[#ff6b4a]">
+                  <Wrench size={21} />
+                </div>
+
+                <h3 className="mt-5 text-lg font-bold">
+                  Choose a service
+                </h3>
+
+                <p className="mt-2 max-w-md text-sm leading-6 text-[#74675f]">
+                  Select one of the active ServEase
+                  services to view its description,
+                  price, and duration.
+                </p>
+              </div>
+            ) : (
+              <div className="border-b border-[#ead7ca] py-8">
+                <h3 className="text-3xl font-extrabold tracking-tight">
+                  {selectedService.name}
+                </h3>
+
+                <p className="mt-4 text-sm leading-7 text-[#74675f]">
+                  {selectedService.description ||
+                    'No service description available.'}
+                </p>
+
+                <div className="mt-7 grid grid-cols-2 gap-6 border-t border-[#ead7ca] pt-6">
+                  <div>
+                    <div className="flex items-center gap-2 text-[#ff6b4a]">
+                      <PhilippinePeso size={16} />
+
+                      <span className="text-xs font-bold uppercase tracking-[0.1em]">
+                        Price
+                      </span>
+                    </div>
+
+                    <p className="mt-2 text-xl font-extrabold">
+                      {formatCurrency(
+                        selectedService.price
+                      )}
+                    </p>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-2 text-[#d98500]">
+                      <Clock3 size={16} />
+
+                      <span className="text-xs font-bold uppercase tracking-[0.1em]">
+                        Duration
+                      </span>
+                    </div>
+
+                    <p className="mt-2 text-xl font-extrabold">
+                      {
+                        selectedService.duration_minutes
+                      }{' '}
+                      min
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SUMMARY */}
+            <div className="pt-8">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6b4a]">
+                Booking summary
               </p>
 
-              <div className="mt-5 space-y-4">
-                <div className="flex items-center justify-between gap-4 border-b border-white/5 pb-4">
-                  <span className="text-sm text-slate-500">
+              <div className="mt-5 divide-y divide-[#ead7ca] border-y border-[#ead7ca]">
+                <div className="flex items-center justify-between gap-4 py-4">
+                  <span className="text-sm text-[#8b7c73]">
                     Service
                   </span>
 
-                  <span className="max-w-[220px] text-right text-sm font-medium text-slate-200">
+                  <span className="max-w-[220px] text-right text-sm font-bold">
                     {selectedService?.name ||
                       'Not selected'}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between gap-4 border-b border-white/5 pb-4">
-                  <span className="text-sm text-slate-500">
+                <div className="flex items-center justify-between gap-4 py-4">
+                  <span className="text-sm text-[#8b7c73]">
                     Date
                   </span>
 
-                  <span className="text-sm font-medium text-slate-200">
+                  <span className="text-sm font-bold">
                     {appointmentDate ||
                       'Not selected'}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between gap-4 border-b border-white/5 pb-4">
-                  <span className="text-sm text-slate-500">
+                <div className="flex items-center justify-between gap-4 py-4">
+                  <span className="text-sm text-[#8b7c73]">
                     Time
                   </span>
 
-                  <span className="text-sm font-medium text-slate-200">
+                  <span className="text-sm font-bold">
                     {appointmentTime ||
                       'Not selected'}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-slate-500">
+                <div className="flex items-center justify-between gap-4 py-4">
+                  <span className="text-sm text-[#8b7c73]">
                     Price
                   </span>
 
-                  <span className="text-lg font-bold text-white">
+                  <span className="text-lg font-extrabold">
                     {selectedService
-                      ? `₱${Number(
+                      ? formatCurrency(
                           selectedService.price
-                        ).toLocaleString(
-                          'en-PH',
-                          {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          }
-                        )}`
+                        )
                       : '—'}
                   </span>
                 </div>
               </div>
+
+              <p className="mt-5 text-xs leading-5 text-[#9b8b82]">
+                Booking confirmation is sent after a
+                successful appointment request when
+                email delivery is available.
+              </p>
             </div>
           </aside>
         </div>

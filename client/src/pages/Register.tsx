@@ -58,75 +58,94 @@ function Register() {
     message.toLowerCase().includes('successful')
 
   return (
-    <main className="se-page se-grid-bg relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-10">
-      <div className="se-orb se-orb-violet -left-24 top-20" />
-      <div className="se-orb se-orb-cyan -right-24 -top-10" />
-      <div className="se-orb se-orb-indigo bottom-[-130px] left-[38%]" />
+    <main className="min-h-screen bg-[#fff8f1] text-[#1c1410]">
+      {/* HEADER */}
+      <header className="border-b border-[#f1ded0] bg-[#fff8f1]/90 backdrop-blur-md">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+          <Link
+            to="/"
+            className="flex items-center gap-3"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white shadow-[0_12px_30px_-12px_rgba(255,107,74,0.6)]">
+              <Sparkles size={20} />
+            </div>
 
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[760px] -translate-x-1/2 rounded-full bg-violet-500/10 blur-[120px]" />
+            <div>
+              <p className="text-base font-extrabold tracking-tight">
+                ServEase
+              </p>
 
-      <div className="relative z-10 grid w-full max-w-6xl overflow-hidden rounded-[32px] border border-white/10 bg-slate-950/45 shadow-[0_40px_120px_rgba(2,6,23,0.7)] backdrop-blur-2xl lg:grid-cols-[0.95fr_1.05fr]">
-        {/* LEFT SIDE - FORM */}
-        <section className="relative flex min-h-[720px] items-center justify-center border-r border-white/10 px-6 py-12 sm:px-10 lg:px-12">
-          <div className="w-full max-w-md se-fade-up">
+              <p className="text-xs text-[#8b7c73]">
+                Business Operations Platform
+              </p>
+            </div>
+          </Link>
+
+          <Link
+            to="/login"
+            className="hidden items-center gap-2 text-sm font-semibold text-[#74675f] transition hover:text-[#ff6b4a] sm:flex"
+          >
+            <ArrowLeft size={16} />
+            Back to sign in
+          </Link>
+        </div>
+      </header>
+
+      {/* MAIN */}
+      <section className="relative overflow-hidden">
+        {/* Background accents */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-32 left-[7%] h-[380px] w-[380px] rounded-full bg-[#ffb020]/15 blur-3xl" />
+
+          <div className="absolute right-[4%] top-16 h-[340px] w-[340px] rounded-full bg-[#ff6b4a]/10 blur-3xl" />
+        </div>
+
+        <div className="relative mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-16 px-6 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-20">
+          {/* LEFT — FORM */}
+          <div className="w-full max-w-md">
             <Link
               to="/login"
-              className="mb-8 inline-flex items-center gap-2 text-sm text-slate-500 transition hover:text-white"
+              className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-[#8b7c73] transition hover:text-[#ff6b4a] sm:hidden"
             >
-              <ArrowLeft size={17} />
+              <ArrowLeft size={16} />
               Back to sign in
             </Link>
 
-            <div className="lg:hidden">
-              <div className="flex items-center gap-3">
-                <div className="se-icon-box h-11 w-11 rounded-2xl text-violet-300">
-                  <Sparkles size={21} />
-                </div>
+            <p className="text-sm font-bold text-[#ff6b4a]">
+              Customer registration
+            </p>
 
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-violet-300">
-                    ServEase
-                  </p>
+            <h1 className="mt-2 text-4xl font-extrabold tracking-[-0.04em] sm:text-5xl">
+              Create your account
+            </h1>
 
-                  <p className="mt-1 text-xs text-slate-500">
-                    Business Operations Platform
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 lg:mt-0">
-              <p className="text-sm font-medium text-violet-300">
-                Customer registration
-              </p>
-
-              <h1 className="se-gradient-text mt-3 text-4xl font-bold tracking-tight">
-                Create your account
-              </h1>
-
-              <p className="mt-3 text-sm leading-6 text-slate-400">
-                Create your ServEase customer account to book
-                available services and manage your appointments.
-              </p>
-            </div>
+            <p className="mt-4 text-sm leading-7 text-[#74675f]">
+              Create your ServEase customer account to
+              book services and manage your appointments
+              from one place.
+            </p>
 
             <form
               onSubmit={handleRegister}
               className="mt-9 space-y-5"
             >
-              {/* FULL NAME */}
+              {/* NAME */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-300">
+                <label
+                  htmlFor="fullName"
+                  className="mb-2 block text-sm font-bold text-[#493c35]"
+                >
                   Full name
                 </label>
 
                 <div className="relative">
                   <UserRound
                     size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
                   />
 
                   <input
+                    id="fullName"
                     type="text"
                     value={fullName}
                     onChange={(event) =>
@@ -134,7 +153,7 @@ function Register() {
                     }
                     required
                     autoComplete="name"
-                    className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4"
+                    className="se-input se-input-icon-left h-14"
                     placeholder="Anna Vida"
                   />
                 </div>
@@ -142,17 +161,21 @@ function Register() {
 
               {/* EMAIL */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-300">
+                <label
+                  htmlFor="email"
+                  className="mb-2 block text-sm font-bold text-[#493c35]"
+                >
                   Email address
                 </label>
 
                 <div className="relative">
                   <Mail
                     size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
                   />
 
                   <input
+                    id="email"
                     type="email"
                     value={email}
                     onChange={(event) =>
@@ -160,7 +183,7 @@ function Register() {
                     }
                     required
                     autoComplete="email"
-                    className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4"
+                    className="se-input se-input-icon-left h-14"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -168,12 +191,15 @@ function Register() {
 
               {/* PASSWORD */}
               <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <label className="block text-sm font-medium text-slate-300">
+                <div className="mb-2 flex items-center justify-between gap-4">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-bold text-[#493c35]"
+                  >
                     Password
                   </label>
 
-                  <span className="text-xs text-slate-600">
+                  <span className="text-xs text-[#a09187]">
                     Minimum 6 characters
                   </span>
                 </div>
@@ -181,10 +207,11 @@ function Register() {
                 <div className="relative">
                   <LockKeyhole
                     size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
                   />
 
                   <input
+                    id="password"
                     type={
                       showPassword
                         ? 'text'
@@ -197,7 +224,7 @@ function Register() {
                     required
                     minLength={6}
                     autoComplete="new-password"
-                    className="se-input w-full rounded-2xl py-3.5 pl-11 pr-12"
+                    className="se-input se-input-icon-both h-14"
                     placeholder="Create a secure password"
                   />
 
@@ -208,7 +235,7 @@ function Register() {
                         (current) => !current
                       )
                     }
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 transition hover:text-white"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8b7c73] transition hover:text-[#1c1410]"
                     aria-label={
                       showPassword
                         ? 'Hide password'
@@ -229,8 +256,8 @@ function Register() {
                 <div
                   className={
                     messageIsSuccess
-                      ? 'rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300 backdrop-blur-xl'
-                      : 'rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300 backdrop-blur-xl'
+                      ? 'rounded-xl border border-[#bfe7d6] bg-[#e9f8f1] px-4 py-3 text-sm text-[#16845b]'
+                      : 'rounded-xl border border-[#f3c7bb] bg-[#fff0ec] px-4 py-3 text-sm text-[#b6412a]'
                   }
                 >
                   {message}
@@ -241,11 +268,11 @@ function Register() {
               <button
                 type="submit"
                 disabled={loading}
-                className="se-btn-primary flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 font-semibold disabled:cursor-not-allowed disabled:opacity-60"
+                className="se-btn-primary mt-2 flex h-14 w-full items-center justify-center gap-2 px-6 text-sm disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? (
                   <>
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
                     Creating account...
                   </>
                 ) : (
@@ -257,108 +284,124 @@ function Register() {
               </button>
             </form>
 
-            <div className="my-8 flex items-center gap-4">
-              <div className="h-px flex-1 bg-white/10" />
+            <div className="my-7 flex items-center gap-4">
+              <div className="h-px flex-1 bg-[#ead7ca]" />
 
-              <span className="text-xs uppercase tracking-[0.2em] text-slate-600">
+              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-[#a09187]">
                 Already registered?
               </span>
 
-              <div className="h-px flex-1 bg-white/10" />
+              <div className="h-px flex-1 bg-[#ead7ca]" />
             </div>
 
             <Link
               to="/login"
-              className="se-btn-secondary flex w-full items-center justify-center rounded-2xl px-5 py-3.5 text-sm font-medium"
+              className="se-btn-secondary flex h-14 w-full items-center justify-center px-6 text-sm"
             >
               Sign in instead
             </Link>
           </div>
-        </section>
 
-        {/* RIGHT SIDE - REAL SERVEASE FEATURES */}
-        <section className="relative hidden min-h-[720px] overflow-hidden p-12 lg:flex lg:flex-col lg:justify-between">
-          <div className="absolute -right-20 top-20 h-80 w-80 rounded-full bg-violet-500/20 blur-[110px]" />
+          {/* RIGHT — PRODUCT CONTENT */}
+          <div className="max-w-2xl lg:justify-self-end">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#f0cdb8] bg-white/80 px-4 py-2 text-xs font-bold text-[#b95736] shadow-sm">
+              <ShieldCheck size={15} />
+              Built for real customer workflows
+            </div>
 
-          <div className="absolute bottom-20 left-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-[100px]" />
+            <h2 className="mt-7 text-5xl font-extrabold leading-[1.05] tracking-[-0.045em] sm:text-6xl">
+              Your services,
+              <br />
+              appointments, and{' '}
+              <span className="se-gradient-text">
+                updates.
+              </span>
+            </h2>
 
-          <div className="relative z-10">
-            <div className="flex items-center gap-3">
-              <div className="se-icon-box h-11 w-11 rounded-2xl text-violet-300">
-                <Sparkles size={21} />
+            <p className="mt-6 max-w-xl text-base leading-8 text-[#74675f] sm:text-lg">
+              ServEase gives customers a simple place
+              to schedule services, monitor their
+              appointments, see assigned staff, and
+              review payment activity.
+            </p>
+
+            {/* NOT BENTO — FLAT FEATURE ROWS */}
+            <div className="mt-10 border-y border-[#ead7ca]">
+              <div className="grid gap-4 border-b border-[#ead7ca] py-6 sm:grid-cols-[140px_1fr]">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6b4a]">
+                    01
+                  </span>
+
+                  <p className="mt-1 font-bold">
+                    Book
+                  </p>
+                </div>
+
+                <p className="text-sm leading-7 text-[#74675f]">
+                  Select an available service, choose
+                  your preferred date and time, and add
+                  appointment notes.
+                </p>
+              </div>
+
+              <div className="grid gap-4 border-b border-[#ead7ca] py-6 sm:grid-cols-[140px_1fr]">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff8a3d]">
+                    02
+                  </span>
+
+                  <p className="mt-1 font-bold">
+                    Track
+                  </p>
+                </div>
+
+                <p className="text-sm leading-7 text-[#74675f]">
+                  Check whether your appointment is
+                  pending, confirmed, completed, or
+                  cancelled and see your assigned staff.
+                </p>
+              </div>
+
+              <div className="grid gap-4 py-6 sm:grid-cols-[140px_1fr]">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#d98500]">
+                    03
+                  </span>
+
+                  <p className="mt-1 font-bold">
+                    Manage
+                  </p>
+                </div>
+
+                <p className="text-sm leading-7 text-[#74675f]">
+                  Review your bookings and payment
+                  information from your ServEase
+                  customer dashboard.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 flex items-start gap-3">
+              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fff0e7] text-[#ff6b4a]">
+                <ShieldCheck size={17} />
               </div>
 
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-300">
-                  ServEase
+                <p className="text-sm font-bold">
+                  Secure customer access
                 </p>
 
-                <p className="mt-1 text-xs text-slate-500">
-                  Business Operations Platform
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-24">
-              <div className="se-badge rounded-full px-4 py-2 text-xs">
-                <ShieldCheck
-                  size={15}
-                  className="text-emerald-300"
-                />
-                Connected to ServEase customer workflows
-              </div>
-
-              <h2 className="se-gradient-text mt-7 max-w-xl text-5xl font-bold leading-[1.08] tracking-tight xl:text-6xl">
-                Book, track, and manage your services.
-              </h2>
-
-              <p className="mt-6 max-w-lg text-base leading-7 text-slate-400">
-                Create your ServEase account to book available
-                services, track appointment status, see assigned
-                staff, and monitor payment activity from one
-                customer dashboard.
-              </p>
-            </div>
-
-            <div className="mt-12 grid grid-cols-2 gap-4">
-              <div className="se-glass se-card-3d rounded-2xl p-5">
-                <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
-                  Booking
-                </p>
-
-                <p className="mt-3 text-2xl font-bold">
-                  Schedule
-                </p>
-
-                <p className="mt-2 text-sm text-slate-400">
-                  Select an active service, appointment date,
-                  and time
-                </p>
-              </div>
-
-              <div className="se-glass se-card-3d translate-y-6 rounded-2xl p-5">
-                <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
-                  Dashboard
-                </p>
-
-                <p className="mt-3 text-2xl font-bold">
-                  Track
-                </p>
-
-                <p className="mt-2 text-sm text-slate-400">
-                  View assigned staff, booking status, and
-                  payment status
+                <p className="mt-1 text-sm leading-6 text-[#74675f]">
+                  Customer accounts use ServEase
+                  authentication and role-based access
+                  controls.
                 </p>
               </div>
             </div>
           </div>
-
-          <div className="relative z-10 flex items-center gap-2 text-xs text-slate-600">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_16px_rgba(52,211,153,0.9)]" />
-            Customer registration available
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </main>
   )
 }

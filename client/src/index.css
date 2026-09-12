@@ -1,12 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 /* =========================================================
    SERVEASE GLOBAL DESIGN SYSTEM
-   3D / GLASS / GRADIENT FOUNDATION
+   WARM / CLEAN / PRODUCT-FOCUSED
    ========================================================= */
 
 :root {
   font-family:
+    "Plus Jakarta Sans",
     Inter,
     ui-sans-serif,
     system-ui,
@@ -15,40 +17,62 @@
     "Segoe UI",
     sans-serif;
 
-  color: #f8fafc;
-  background: #020617;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --se-bg: #020617;
-  --se-surface: rgba(15, 23, 42, 0.72);
-  --se-surface-strong: rgba(15, 23, 42, 0.9);
+  --se-ink: #1c1410;
+  --se-ink-soft: #493c34;
 
-  --se-border: rgba(255, 255, 255, 0.08);
-  --se-border-strong: rgba(129, 140, 248, 0.28);
+  --se-coral: #ff6b4a;
+  --se-orange: #ff8a3d;
+  --se-amber: #ffb020;
 
-  --se-indigo: #6366f1;
-  --se-violet: #8b5cf6;
-  --se-cyan: #22d3ee;
-  --se-emerald: #34d399;
-  --se-pink: #f472b6;
+  --se-cream: #fff8f1;
+  --se-sand: #fdeede;
+  --se-white: #ffffff;
 
-  --se-text: #f8fafc;
-  --se-muted: #94a3b8;
+  --se-surface: #ffffff;
+  --se-surface-soft: #fffaf6;
+
+  --se-border: #f1ded0;
+  --se-border-strong: #e8c9b5;
+
+  --se-text: #1c1410;
+  --se-muted: #74675f;
+
+  --se-success: #16845b;
+  --se-success-bg: #e9f8f1;
+
+  --se-warning: #b26a00;
+  --se-warning-bg: #fff3d7;
+
+  --se-danger: #c9472d;
+  --se-danger-bg: #fff0ec;
+
+  --se-info: #b95736;
+  --se-info-bg: #fff0e9;
+
+  --se-shadow-sm:
+    0 1px 2px rgba(28, 20, 16, 0.04),
+    0 6px 18px rgba(28, 20, 16, 0.04);
 
   --se-shadow:
-    0 24px 80px rgba(2, 6, 23, 0.55);
+    0 1px 2px rgba(28, 20, 16, 0.05),
+    0 14px 35px -18px rgba(28, 20, 16, 0.18);
 
-  --se-glow:
-    0 0 60px rgba(99, 102, 241, 0.18);
+  --se-shadow-warm:
+    0 18px 48px -18px rgba(255, 107, 74, 0.32);
+
+  --se-radius-sm: 10px;
+  --se-radius-md: 14px;
+  --se-radius-lg: 20px;
+  --se-radius-xl: 28px;
 }
 
-
 /* =========================================================
-   BASE
+   RESET / BASE
    ========================================================= */
 
 * {
@@ -57,58 +81,51 @@
 
 html {
   scroll-behavior: smooth;
-  background: var(--se-bg);
+  background: var(--se-cream);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-
   color: var(--se-text);
-
-  background:
-    radial-gradient(
-      circle at 15% 20%,
-      rgba(99, 102, 241, 0.16),
-      transparent 28%
-    ),
-    radial-gradient(
-      circle at 85% 15%,
-      rgba(34, 211, 238, 0.12),
-      transparent 26%
-    ),
-    radial-gradient(
-      circle at 60% 85%,
-      rgba(139, 92, 246, 0.14),
-      transparent 30%
-    ),
-    linear-gradient(
-      180deg,
-      #020617 0%,
-      #020817 50%,
-      #020617 100%
-    );
-
-  background-attachment: fixed;
+  background: var(--se-cream);
 }
 
+body,
 button,
 input,
 select,
 textarea {
-  font: inherit;
+  font-family: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
 }
 
 button {
   cursor: pointer;
 }
 
-::selection {
-  background: rgba(99, 102, 241, 0.35);
-  color: white;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
+img {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background: #ffd9b3;
+  color: var(--se-ink);
+}
 
 /* =========================================================
    SCROLLBAR
@@ -116,9 +133,7 @@ button {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color:
-    rgba(99, 102, 241, 0.45)
-    rgba(15, 23, 42, 0.45);
+  scrollbar-color: #e1bba0 #fff3e8;
 }
 
 *::-webkit-scrollbar {
@@ -127,615 +142,962 @@ button {
 }
 
 *::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.45);
+  background: #fff3e8;
 }
 
 *::-webkit-scrollbar-thumb {
   border-radius: 999px;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(99, 102, 241, 0.75),
-      rgba(139, 92, 246, 0.75)
-    );
+  border: 2px solid #fff3e8;
+  background: linear-gradient(
+    180deg,
+    var(--se-coral),
+    var(--se-amber)
+  );
 }
-
-*::-webkit-scrollbar-thumb:hover {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(129, 140, 248, 0.95),
-      rgba(167, 139, 250, 0.95)
-    );
-}
-
 
 /* =========================================================
-   PAGE BACKGROUND
+   PAGE
    ========================================================= */
 
 .se-page {
   position: relative;
   min-height: 100vh;
-  overflow: hidden;
+  color: var(--se-text);
 
   background:
     radial-gradient(
-      circle at 10% 10%,
-      rgba(99, 102, 241, 0.14),
-      transparent 28%
+      circle at 12% 10%,
+      rgba(255, 176, 32, 0.14),
+      transparent 26%
     ),
     radial-gradient(
-      circle at 90% 20%,
-      rgba(34, 211, 238, 0.1),
-      transparent 30%
+      circle at 90% 12%,
+      rgba(255, 107, 74, 0.1),
+      transparent 24%
     ),
-    radial-gradient(
-      circle at 50% 90%,
-      rgba(139, 92, 246, 0.12),
-      transparent 32%
-    ),
-    #020617;
+    linear-gradient(
+      180deg,
+      var(--se-sand) 0%,
+      var(--se-cream) 24%,
+      var(--se-cream) 100%
+    );
 }
 
 .se-grid-bg {
-  background-image:
-    linear-gradient(
-      rgba(255, 255, 255, 0.025) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.025) 1px,
-      transparent 1px
-    );
-
-  background-size: 48px 48px;
+  background-image: none;
 }
 
-
 /* =========================================================
-   FLOATING GRADIENT ORBS
+   DECORATIVE ORBS
    ========================================================= */
 
 .se-orb {
   position: absolute;
   border-radius: 999px;
   pointer-events: none;
-  filter: blur(18px);
-  opacity: 0.7;
-
-  animation:
-    se-float 10s ease-in-out infinite alternate;
+  filter: blur(70px);
+  opacity: 0.25;
 }
 
-.se-orb-indigo {
-  width: 360px;
-  height: 360px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(99, 102, 241, 0.38),
-      rgba(99, 102, 241, 0.04) 65%,
-      transparent 75%
-    );
+.se-orb-indigo,
+.se-orb-violet {
+  width: 320px;
+  height: 320px;
+  background: rgba(255, 107, 74, 0.34);
 }
 
 .se-orb-cyan {
   width: 300px;
   height: 300px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(34, 211, 238, 0.28),
-      rgba(34, 211, 238, 0.03) 65%,
-      transparent 75%
-    );
-
-  animation-delay: -3s;
+  background: rgba(255, 176, 32, 0.28);
 }
-
-.se-orb-violet {
-  width: 320px;
-  height: 320px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(139, 92, 246, 0.3),
-      rgba(139, 92, 246, 0.03) 65%,
-      transparent 75%
-    );
-
-  animation-delay: -5s;
-}
-
-@keyframes se-float {
-  from {
-    transform:
-      translate3d(0, 0, 0)
-      scale(1);
-  }
-
-  to {
-    transform:
-      translate3d(24px, -18px, 0)
-      scale(1.05);
-  }
-}
-
 
 /* =========================================================
-   GLASS CARD
+   LEGACY GLASS CLASS
+   now rendered as clean normal surface
    ========================================================= */
 
 .se-glass {
   position: relative;
-
-  border:
-    1px solid
-    var(--se-border);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(15, 23, 42, 0.9),
-      rgba(15, 23, 42, 0.6)
-    );
-
-  box-shadow:
-    var(--se-shadow);
-
-  backdrop-filter:
-    blur(22px);
-
-  -webkit-backdrop-filter:
-    blur(22px);
+  border: 1px solid var(--se-border);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--se-shadow);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .se-glass::before {
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  border-radius: inherit;
-
-  padding: 1px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.16),
-      rgba(99, 102, 241, 0.18),
-      rgba(34, 211, 238, 0.08),
-      transparent
-    );
-
-  mask:
-    linear-gradient(#fff 0 0)
-      content-box,
-    linear-gradient(#fff 0 0);
-
-  mask-composite:
-    exclude;
-
-  pointer-events: none;
+  display: none;
 }
 
-
 /* =========================================================
-   3D CARDS
+   LEGACY 3D CARD CLASS
+   flattened
    ========================================================= */
 
 .se-card-3d {
   position: relative;
-
-  transform-style: preserve-3d;
+  border: 1px solid var(--se-border);
+  background: var(--se-white);
+  box-shadow: var(--se-shadow-sm);
+  transform: none;
+  transform-style: flat;
 
   transition:
-    transform 220ms ease,
-    box-shadow 220ms ease,
-    border-color 220ms ease;
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
 }
 
 .se-card-3d:hover {
-  transform:
-    translateY(-6px)
-    rotateX(1.5deg)
-    rotateY(-1.5deg);
-
-  border-color:
-    rgba(129, 140, 248, 0.24);
+  transform: translateY(-2px);
+  border-color: #e8bca1;
 
   box-shadow:
-    0 30px 80px rgba(2, 6, 23, 0.62),
-    0 0 40px rgba(99, 102, 241, 0.12);
+    0 2px 4px rgba(28, 20, 16, 0.04),
+    0 16px 34px -18px rgba(255, 107, 74, 0.22);
 }
 
 .se-card-3d::after {
-  content: "";
-
-  position: absolute;
-  inset: auto 10% -12px 10%;
-
-  height: 22px;
-
-  border-radius: 999px;
-
-  background:
-    rgba(99, 102, 241, 0.22);
-
-  filter:
-    blur(20px);
-
-  opacity: 0;
-
-  transition:
-    opacity 220ms ease;
-
-  z-index: -1;
+  display: none;
 }
-
-.se-card-3d:hover::after {
-  opacity: 1;
-}
-
 
 /* =========================================================
-   GRADIENT TEXT
+   TEXT
    ========================================================= */
 
 .se-gradient-text {
-  background:
-    linear-gradient(
-      90deg,
-      #ffffff 0%,
-      #c7d2fe 26%,
-      #a5b4fc 45%,
-      #67e8f9 68%,
-      #c084fc 100%
-    );
+  background: linear-gradient(
+    96deg,
+    var(--se-coral) 0%,
+    var(--se-orange) 45%,
+    var(--se-amber) 100%
+  );
 
   background-clip: text;
   -webkit-background-clip: text;
-
+  -webkit-text-fill-color: transparent;
   color: transparent;
 }
 
+.se-heading {
+  color: var(--se-ink);
+  letter-spacing: -0.035em;
+}
+
+.se-muted {
+  color: var(--se-muted);
+}
 
 /* =========================================================
    BUTTONS
    ========================================================= */
 
 .se-btn-primary {
-  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
 
-  overflow: hidden;
+  min-height: 44px;
 
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.12);
+  border: 0;
+  border-radius: 999px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #4f46e5 0%,
-      #7c3aed 52%,
-      #0891b2 100%
-    );
+  padding: 0.75rem 1.25rem;
 
-  color: white;
+  color: #ffffff;
+  font-weight: 700;
 
-  box-shadow:
-    0 12px 30px rgba(79, 70, 229, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  background: linear-gradient(
+    90deg,
+    var(--se-coral),
+    var(--se-orange),
+    var(--se-amber)
+  );
+
+  box-shadow: var(--se-shadow-warm);
 
   transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    filter 180ms ease;
+    transform 160ms ease,
+    filter 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .se-btn-primary:hover {
-  transform:
-    translateY(-2px)
-    scale(1.015);
+  transform: translateY(-1px);
+  filter: brightness(1.025);
 
   box-shadow:
-    0 18px 40px rgba(79, 70, 229, 0.34),
-    0 0 34px rgba(34, 211, 238, 0.12);
-
-  filter:
-    saturate(1.08);
+    0 16px 34px -16px rgba(255, 107, 74, 0.48);
 }
 
 .se-btn-primary:active {
-  transform:
-    translateY(0)
-    scale(0.99);
+  transform: translateY(0);
 }
 
 .se-btn-primary::before {
-  content: "";
-
-  position: absolute;
-
-  top: -50%;
-  left: -30%;
-
-  width: 30%;
-  height: 200%;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.25),
-      transparent
-    );
-
-  transform:
-    rotate(18deg);
-
-  transition:
-    left 500ms ease;
-}
-
-.se-btn-primary:hover::before {
-  left: 120%;
+  display: none;
 }
 
 .se-btn-secondary {
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 
-  background:
-    rgba(15, 23, 42, 0.7);
+  min-height: 44px;
 
-  color:
-    #cbd5e1;
+  border: 1px solid var(--se-border-strong);
+  border-radius: 999px;
 
-  backdrop-filter:
-    blur(16px);
+  padding: 0.75rem 1.25rem;
+
+  color: var(--se-ink);
+  font-weight: 700;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  box-shadow: var(--se-shadow-sm);
 
   transition:
-    transform 180ms ease,
-    border-color 180ms ease,
-    background 180ms ease,
-    color 180ms ease;
+    border-color 160ms ease,
+    color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
 }
 
 .se-btn-secondary:hover {
-  transform:
-    translateY(-2px);
-
-  border-color:
-    rgba(129, 140, 248, 0.3);
-
-  background:
-    rgba(30, 41, 59, 0.92);
-
-  color:
-    white;
+  transform: translateY(-1px);
+  border-color: var(--se-coral);
+  background: #ffffff;
+  color: var(--se-coral);
 }
-
 
 /* =========================================================
    INPUTS
    ========================================================= */
 
 .se-input {
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
+  width: 100%;
 
-  background:
-    rgba(15, 23, 42, 0.62);
+  border: 1px solid var(--se-border-strong);
+  border-radius: 12px;
 
-  color:
-    white;
+  background: #ffffff;
+  color: var(--se-ink);
 
-  box-shadow:
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.025);
+  box-shadow: none;
 
-  backdrop-filter:
-    blur(18px);
+  padding: 0.78rem 0.9rem;
 
   transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    background 180ms ease;
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
 }
 
 .se-input::placeholder {
-  color:
-    #475569;
+  color: #a09187;
+}
+
+.se-input:hover {
+  border-color: #ddb497;
 }
 
 .se-input:focus {
-  outline:
-    none;
+  outline: none;
 
-  border-color:
-    rgba(129, 140, 248, 0.5);
+  border-color: var(--se-coral);
 
-  background:
-    rgba(15, 23, 42, 0.88);
+  background: #ffffff;
 
   box-shadow:
-    0 0 0 4px
-      rgba(99, 102, 241, 0.08),
-    0 0 28px
-      rgba(99, 102, 241, 0.08);
+    0 0 0 4px rgba(255, 107, 74, 0.1);
 }
 
+select.se-input {
+  cursor: pointer;
+}
+
+textarea.se-input {
+  resize: vertical;
+}
 
 /* =========================================================
    ICON SURFACE
    ========================================================= */
 
 .se-icon-box {
-  display:
-    inline-flex;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  align-items:
-    center;
+  border: 1px solid rgba(255, 107, 74, 0.14);
+  border-radius: 12px;
 
-  justify-content:
-    center;
+  color: var(--se-coral);
 
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 74, 0.11),
+    rgba(255, 176, 32, 0.14)
+  );
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(99, 102, 241, 0.18),
-      rgba(34, 211, 238, 0.08)
-    );
-
-  box-shadow:
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.1),
-    0 10px 25px
-      rgba(2, 6, 23, 0.3);
+  box-shadow: none;
 }
-
 
 /* =========================================================
    BADGES
    ========================================================= */
 
 .se-badge {
-  display:
-    inline-flex;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 
-  align-items:
-    center;
+  border: 1px solid #f0cdb8;
+  border-radius: 999px;
 
-  gap:
-    0.4rem;
+  padding: 0.35rem 0.7rem;
 
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
+  background: #fff7f1;
+  color: #9d4e33;
 
-  background:
-    rgba(15, 23, 42, 0.62);
-
-  color:
-    #cbd5e1;
-
-  backdrop-filter:
-    blur(14px);
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
-
 /* =========================================================
-   GLOW BORDER
+   LEGACY GLOW BORDER
    ========================================================= */
 
 .se-glow-border {
-  position:
-    relative;
+  position: relative;
+  border: 1px solid var(--se-border);
 }
 
 .se-glow-border::before {
-  content:
-    "";
-
-  position:
-    absolute;
-
-  inset:
-    -1px;
-
-  border-radius:
-    inherit;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(99, 102, 241, 0.5),
-      rgba(34, 211, 238, 0.3),
-      rgba(139, 92, 246, 0.45)
-    );
-
-  z-index:
-    -1;
-
-  opacity:
-    0.5;
-
-  filter:
-    blur(10px);
+  display: none;
 }
 
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.se-shell {
+  width: min(100% - 2rem, 1280px);
+  margin-inline: auto;
+}
+
+.se-content {
+  width: min(100% - 2rem, 1180px);
+  margin-inline: auto;
+}
+
+.se-section {
+  padding-block: 4.5rem;
+}
+
+.se-section-soft {
+  background: var(--se-sand);
+}
 
 /* =========================================================
-   SOFT ANIMATIONS
+   NAVIGATION
+   ========================================================= */
+
+.se-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  border-bottom: 1px solid rgba(232, 201, 181, 0.72);
+
+  background: rgba(255, 248, 241, 0.9);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.se-nav-link {
+  color: #71635b;
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  transition: color 150ms ease;
+}
+
+.se-nav-link:hover {
+  color: var(--se-ink);
+}
+
+.se-nav-link-active {
+  color: var(--se-coral);
+}
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.se-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  border-radius: 11px;
+
+  color: white;
+
+  background: linear-gradient(
+    135deg,
+    var(--se-coral),
+    var(--se-amber)
+  );
+
+  box-shadow:
+    0 10px 22px -12px rgba(255, 107, 74, 0.65);
+}
+
+.se-brand-name {
+  color: var(--se-ink);
+
+  font-size: 1.1rem;
+  font-weight: 800;
+
+  letter-spacing: -0.025em;
+}
+
+/* =========================================================
+   AUTH
+   ========================================================= */
+
+.se-auth-page {
+  min-height: 100vh;
+
+  display: grid;
+  place-items: center;
+
+  padding: 3rem 1.25rem;
+
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(255, 176, 32, 0.2),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 100% 30%,
+      rgba(255, 107, 74, 0.1),
+      transparent 30%
+    ),
+    var(--se-cream);
+}
+
+.se-auth-card {
+  width: min(100%, 460px);
+
+  border: 1px solid var(--se-border);
+  border-radius: 20px;
+
+  padding: 2rem;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 28px 60px -32px rgba(28, 20, 16, 0.28);
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.se-dashboard {
+  min-height: 100vh;
+  background: var(--se-cream);
+}
+
+.se-sidebar {
+  border-right: 1px solid var(--se-border);
+  background: #fffaf5;
+}
+
+.se-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  border-radius: 10px;
+
+  padding: 0.7rem 0.8rem;
+
+  color: #75675f;
+  font-weight: 600;
+
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+}
+
+.se-sidebar-link:hover {
+  background: #fff0e6;
+  color: var(--se-ink);
+}
+
+.se-sidebar-link.active,
+.se-sidebar-link-active {
+  background: #ffe9db;
+  color: #c45231;
+}
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
+.se-topbar {
+  border-bottom: 1px solid var(--se-border);
+
+  background: rgba(255, 248, 241, 0.92);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* =========================================================
+   NORMAL PANELS
+   ========================================================= */
+
+.se-panel {
+  border: 1px solid var(--se-border);
+  border-radius: 16px;
+
+  background: var(--se-white);
+
+  box-shadow: var(--se-shadow-sm);
+}
+
+.se-panel-flat {
+  border-top: 1px solid var(--se-border);
+  border-bottom: 1px solid var(--se-border);
+
+  background: transparent;
+}
+
+.se-section-divider {
+  border-top: 1px solid var(--se-border);
+}
+
+/* =========================================================
+   METRICS
+   ========================================================= */
+
+.se-metric {
+  padding: 0 1.5rem;
+
+  border-left: 2px solid rgba(255, 107, 74, 0.48);
+}
+
+.se-metric:nth-child(even) {
+  border-left-color: rgba(255, 176, 32, 0.6);
+}
+
+.se-metric-value {
+  color: var(--se-ink);
+
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  font-weight: 800;
+
+  letter-spacing: -0.04em;
+}
+
+.se-metric-label {
+  margin-top: 0.2rem;
+
+  color: var(--se-muted);
+
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   TABLES
+   ========================================================= */
+
+.se-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+
+  border: 1px solid var(--se-border);
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  box-shadow: var(--se-shadow-sm);
+}
+
+.se-table {
+  width: 100%;
+
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  color: var(--se-ink);
+}
+
+.se-table thead {
+  background: #fff7f0;
+}
+
+.se-table th {
+  padding: 0.85rem 1rem;
+
+  border-bottom: 1px solid var(--se-border);
+
+  color: #78685f;
+
+  font-size: 0.72rem;
+  font-weight: 800;
+
+  letter-spacing: 0.065em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.se-table td {
+  padding: 0.95rem 1rem;
+
+  border-bottom: 1px solid #f7e8dd;
+
+  color: #493d35;
+
+  font-size: 0.9rem;
+}
+
+.se-table tbody tr {
+  transition: background 120ms ease;
+}
+
+.se-table tbody tr:hover {
+  background: #fffaf6;
+}
+
+.se-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.se-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  border-radius: 999px;
+
+  padding: 0.35rem 0.65rem;
+
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.se-status-pending {
+  background: var(--se-warning-bg);
+  color: var(--se-warning);
+}
+
+.se-status-confirmed {
+  background: #eaf3ff;
+  color: #3569a6;
+}
+
+.se-status-completed,
+.se-status-paid,
+.se-status-active {
+  background: var(--se-success-bg);
+  color: var(--se-success);
+}
+
+.se-status-cancelled,
+.se-status-failed,
+.se-status-inactive {
+  background: var(--se-danger-bg);
+  color: var(--se-danger);
+}
+
+.se-status-refunded {
+  background: #f2edff;
+  color: #6c55aa;
+}
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.se-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+
+  padding: 0.85rem 0;
+
+  border-top: 1px solid var(--se-border);
+  border-bottom: 1px solid var(--se-border);
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.se-empty {
+  display: grid;
+  place-items: center;
+
+  padding: 3.5rem 1.5rem;
+
+  text-align: center;
+}
+
+.se-empty-icon {
+  display: grid;
+  place-items: center;
+
+  width: 54px;
+  height: 54px;
+
+  margin-bottom: 1rem;
+
+  border-radius: 14px;
+
+  color: var(--se-coral);
+
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 74, 0.1),
+    rgba(255, 176, 32, 0.12)
+  );
+}
+
+/* =========================================================
+   DARK SECTION
+   ========================================================= */
+
+.se-dark-section {
+  color: #fff8f1;
+  background: var(--se-ink);
+}
+
+.se-dark-section .se-muted {
+  color: rgba(255, 248, 241, 0.62);
+}
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.se-cta {
+  position: relative;
+  overflow: hidden;
+
+  border-radius: 28px;
+
+  color: white;
+
+  background: linear-gradient(
+    135deg,
+    #d84a25 0%,
+    #e76524 50%,
+    #b66a0c 100%
+  );
+
+  box-shadow:
+    0 30px 70px -28px rgba(217, 74, 37, 0.52);
+}
+
+/* =========================================================
+   CHART
+   ========================================================= */
+
+.se-chart {
+  border-top: 1px solid var(--se-border);
+  padding-top: 1.5rem;
+}
+
+.recharts-cartesian-grid line {
+  stroke: #f0e1d7 !important;
+}
+
+.recharts-text {
+  fill: #81736b !important;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.se-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  display: grid;
+  place-items: center;
+
+  padding: 1rem;
+
+  background: rgba(28, 20, 16, 0.4);
+
+  backdrop-filter: blur(4px);
+}
+
+.se-modal {
+  width: min(100%, 560px);
+
+  border: 1px solid var(--se-border);
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 30px 80px -30px rgba(28, 20, 16, 0.42);
+}
+
+/* =========================================================
+   FORM LABEL
+   ========================================================= */
+
+.se-label {
+  display: block;
+
+  margin-bottom: 0.4rem;
+
+  color: #493c35;
+
+  font-size: 0.83rem;
+  font-weight: 700;
+}
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.se-divider {
+  height: 1px;
+  width: 100%;
+  background: var(--se-border);
+}
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+:focus-visible {
+  outline: 2px solid rgba(255, 107, 74, 0.55);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   SIMPLE FADE
    ========================================================= */
 
 .se-fade-up {
-  animation:
-    se-fade-up
-    520ms
-    cubic-bezier(
-      0.22,
-      1,
-      0.36,
-      1
-    )
-    both;
+  animation: se-fade-up 420ms ease both;
 }
 
 @keyframes se-fade-up {
   from {
-    opacity:
-      0;
-
-    transform:
-      translateY(16px);
+    opacity: 0;
+    transform: translateY(8px);
   }
 
   to {
-    opacity:
-      1;
-
-    transform:
-      translateY(0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .se-section {
+    padding-block: 3.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .se-shell,
+  .se-content {
+    width: min(100% - 1.25rem, 1280px);
+  }
+
+  .se-auth-card {
+    padding: 1.5rem;
+  }
+
+  .se-section {
+    padding-block: 3rem;
+  }
+
+  .se-metric {
+    padding-inline: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .se-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .se-btn-primary,
+  .se-btn-secondary {
+    width: 100%;
+  }
+
+  .se-table th,
+  .se-table td {
+    padding-inline: 0.75rem;
+  }
+}
 
 /* =========================================================
    REDUCED MOTION
    ========================================================= */
 
-@media (
-  prefers-reduced-motion:
-  reduce
-) {
+@media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    scroll-behavior:
-      auto !important;
-
-    animation-duration:
-      0.01ms !important;
-
-    animation-iteration-count:
-      1 !important;
-
-    transition-duration:
-      0.01ms !important;
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
+}
+
+/* =========================================================
+   INPUT ICON SPACING FIX
+   ========================================================= */
+
+.se-input-icon-left {
+  padding-left: 3rem !important;
+}
+
+.se-input-icon-both {
+  padding-left: 3rem !important;
+  padding-right: 3rem !important;
 }

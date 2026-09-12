@@ -71,151 +71,135 @@ function Login() {
   }
 
   return (
-    <main className="se-page se-grid-bg relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-10">
-      {/* Background glow effects */}
-      <div className="se-orb se-orb-indigo -left-28 -top-20" />
+    <main className="min-h-screen bg-[#fff8f1] text-[#1c1410]">
+      {/* Header */}
+      <header className="border-b border-[#f1ded0] bg-[#fff8f1]/90 backdrop-blur-md">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+          <Link
+            to="/"
+            className="flex items-center gap-3"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white shadow-[0_12px_30px_-12px_rgba(255,107,74,0.6)]">
+              <Sparkles size={20} />
+            </div>
 
-      <div className="se-orb se-orb-cyan -right-20 top-24" />
+            <div>
+              <p className="text-base font-extrabold tracking-tight">
+                ServEase
+              </p>
 
-      <div className="se-orb se-orb-violet bottom-[-120px] left-[45%]" />
+              <p className="text-xs text-[#8b7c73]">
+                Business Operations Platform
+              </p>
+            </div>
+          </Link>
 
-      {/* Decorative light */}
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-indigo-500/10 blur-[120px]" />
+          <div className="hidden items-center gap-2 text-sm text-[#74675f] sm:flex">
+            <ShieldCheck
+              size={16}
+              className="text-[#ff6b4a]"
+            />
+            Secure role-based access
+          </div>
+        </div>
+      </header>
 
-      <div className="relative z-10 grid w-full max-w-6xl overflow-hidden rounded-[32px] border border-white/10 bg-slate-950/45 shadow-[0_40px_120px_rgba(2,6,23,0.7)] backdrop-blur-2xl lg:grid-cols-[1.05fr_0.95fr]">
-        {/* LEFT SIDE */}
-        <section className="relative hidden min-h-[680px] overflow-hidden border-r border-white/10 p-12 lg:flex lg:flex-col lg:justify-between">
-          {/* Internal glow */}
-          <div className="absolute -left-20 top-24 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px]" />
+      {/* Main content */}
+      <section className="relative overflow-hidden">
+        {/* soft background */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-32 left-[8%] h-[360px] w-[360px] rounded-full bg-[#ffb020]/15 blur-3xl" />
+          <div className="absolute right-[5%] top-20 h-[320px] w-[320px] rounded-full bg-[#ff6b4a]/10 blur-3xl" />
+        </div>
 
-          <div className="absolute bottom-10 right-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-[100px]" />
+        <div className="relative mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-16 px-6 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-20">
+          {/* Left content */}
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#f0cdb8] bg-white/80 px-4 py-2 text-xs font-bold text-[#b95736] shadow-sm">
+              <ShieldCheck size={15} />
+              Secure business workspace
+            </div>
 
-          <div className="relative z-10">
-            <div className="flex items-center gap-3">
-              <div className="se-icon-box h-11 w-11 rounded-2xl text-indigo-300">
-                <Sparkles size={21} />
+            <h1 className="mt-7 text-5xl font-extrabold leading-[1.05] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
+              Manage your business{' '}
+              <span className="se-gradient-text">
+                with less friction.
+              </span>
+            </h1>
+
+            <p className="mt-6 max-w-xl text-base leading-8 text-[#74675f] sm:text-lg">
+              Sign in to manage bookings, customers,
+              staff, services, payments, and day-to-day
+              operations from one workspace.
+            </p>
+
+            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4 border-t border-[#ead7ca] pt-7">
+              <div>
+                <p className="text-sm font-bold text-[#1c1410]">
+                  Customers
+                </p>
+
+                <p className="mt-1 text-sm text-[#8b7c73]">
+                  Book and track appointments
+                </p>
               </div>
 
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.32em] text-indigo-300">
-                  ServEase
+                <p className="text-sm font-bold text-[#1c1410]">
+                  Staff
                 </p>
 
-                <p className="mt-1 text-xs text-slate-500">
-                  Business Operations Platform
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-24 max-w-xl">
-              <div className="se-badge rounded-full px-4 py-2 text-xs">
-                <ShieldCheck
-                  size={15}
-                  className="text-emerald-300"
-                />
-                Secure role-based workspace
-              </div>
-
-              <h1 className="se-gradient-text mt-7 text-5xl font-bold leading-[1.08] tracking-tight xl:text-6xl">
-                Run your service business from one place.
-              </h1>
-
-              <p className="mt-6 max-w-lg text-base leading-7 text-slate-400">
-                Manage customers, bookings, staff,
-                payments, analytics, and operational
-                activity with a modern workflow built
-                for everyday business operations.
-              </p>
-            </div>
-
-            {/* Floating 3D preview cards */}
-            <div className="mt-12 grid grid-cols-2 gap-4">
-              <div className="se-glass se-card-3d rounded-2xl p-5">
-                <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
-                  Operations
-                </p>
-
-                <p className="mt-3 text-2xl font-bold text-white">
-                  Unified
-                </p>
-
-                <p className="mt-2 text-sm text-slate-400">
-                  Bookings, staff, and services
+                <p className="mt-1 text-sm text-[#8b7c73]">
+                  Manage assigned bookings
                 </p>
               </div>
 
-              <div className="se-glass se-card-3d translate-y-6 rounded-2xl p-5">
-                <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
-                  Insights
+              <div>
+                <p className="text-sm font-bold text-[#1c1410]">
+                  Admin
                 </p>
 
-                <p className="mt-3 text-2xl font-bold text-white">
-                  Live
-                </p>
-
-                <p className="mt-2 text-sm text-slate-400">
-                  Revenue and booking analytics
+                <p className="mt-1 text-sm text-[#8b7c73]">
+                  Run business operations
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="relative z-10 flex items-center gap-2 text-xs text-slate-600">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_16px_rgba(52,211,153,0.9)]" />
-            ServEase systems ready
-          </div>
-        </section>
-
-        {/* RIGHT SIDE */}
-        <section className="relative flex min-h-[680px] items-center justify-center px-6 py-12 sm:px-10 lg:px-12">
-          <div className="w-full max-w-md se-fade-up">
-            <div className="lg:hidden">
-              <div className="flex items-center gap-3">
-                <div className="se-icon-box h-11 w-11 rounded-2xl text-indigo-300">
-                  <Sparkles size={21} />
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-300">
-                    ServEase
-                  </p>
-
-                  <p className="mt-1 text-xs text-slate-500">
-                    Business Operations Platform
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-10 lg:mt-0">
-              <p className="text-sm font-medium text-indigo-300">
+          {/* Login area */}
+          <div className="w-full max-w-md justify-self-end">
+            <div className="mb-8">
+              <p className="text-sm font-bold text-[#ff6b4a]">
                 Welcome back
               </p>
 
-              <h2 className="se-gradient-text mt-3 text-4xl font-bold tracking-tight">
-                Sign in to your workspace
+              <h2 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
+                Sign in to ServEase
               </h2>
 
-              <p className="mt-3 text-sm leading-6 text-slate-400">
-                Access your dashboard and continue
-                managing ServEase.
+              <p className="mt-3 text-sm leading-6 text-[#74675f]">
+                Enter your account details to continue
+                to your dashboard.
               </p>
             </div>
 
             <form
               onSubmit={handleLogin}
-              className="mt-9 space-y-5"
+              className="space-y-5"
             >
               {/* Email */}
               <div>
-                <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-300">
+                <label
+                  htmlFor="email"
+                  className="mb-2 block text-sm font-bold text-[#493c35]"
+                >
                   Email address
                 </label>
 
                 <div className="relative">
                   <Mail
                     size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
                   />
 
                   <input
@@ -227,7 +211,7 @@ function Login() {
                     }
                     required
                     autoComplete="email"
-                    className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4"
+                    className="se-input se-input-icon-left h-14"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -235,16 +219,17 @@ function Login() {
 
               {/* Password */}
               <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <label htmlFor="password" className="block text-sm font-medium text-slate-300">
-                    Password
-                  </label>
-                </div>
+                <label
+                  htmlFor="password"
+                  className="mb-2 block text-sm font-bold text-[#493c35]"
+                >
+                  Password
+                </label>
 
                 <div className="relative">
                   <LockKeyhole
                     size={18}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
                   />
 
                   <input
@@ -256,13 +241,11 @@ function Login() {
                     }
                     value={password}
                     onChange={(event) =>
-                      setPassword(
-                        event.target.value
-                      )
+                      setPassword(event.target.value)
                     }
                     required
                     autoComplete="current-password"
-                    className="se-input w-full rounded-2xl py-3.5 pl-11 pr-12"
+                    className="se-input se-input-icon-both h-14"
                     placeholder="Enter your password"
                   />
 
@@ -273,7 +256,7 @@ function Login() {
                         (current) => !current
                       )
                     }
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 transition hover:text-white"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8b7c73] transition hover:text-[#1c1410]"
                     aria-label={
                       showPassword
                         ? 'Hide password'
@@ -291,7 +274,7 @@ function Login() {
 
               {/* Error */}
               {message && (
-                <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300 backdrop-blur-xl">
+                <div className="rounded-xl border border-[#f3c7bb] bg-[#fff0ec] px-4 py-3 text-sm text-[#b6412a]">
                   {message}
                 </div>
               )}
@@ -300,11 +283,11 @@ function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="se-btn-primary flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 font-semibold disabled:cursor-not-allowed disabled:opacity-60"
+                className="se-btn-primary mt-2 flex h-14 w-full items-center justify-center gap-2 px-6 text-sm disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? (
                   <>
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
                     Signing in...
                   </>
                 ) : (
@@ -316,31 +299,31 @@ function Login() {
               </button>
             </form>
 
-            {/* Divider */}
-            <div className="my-8 flex items-center gap-4">
-              <div className="h-px flex-1 bg-white/10" />
+            <div className="my-7 flex items-center gap-4">
+              <div className="h-px flex-1 bg-[#ead7ca]" />
 
-              <span className="text-xs uppercase tracking-[0.2em] text-slate-600">
-                New here?
+              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-[#a09187]">
+                New to ServEase?
               </span>
 
-              <div className="h-px flex-1 bg-white/10" />
+              <div className="h-px flex-1 bg-[#ead7ca]" />
             </div>
 
             <Link
               to="/register"
-              className="se-btn-secondary flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-medium"
+              className="se-btn-secondary flex h-14 w-full items-center justify-center px-6 text-sm"
             >
               Create an account
             </Link>
 
-            <p className="mt-8 text-center text-xs leading-5 text-slate-600">
-              By signing in, you are accessing the
-              ServEase business operations platform.
+            <p className="mt-7 text-center text-xs leading-5 text-[#9b8b82]">
+              Your account access is protected by
+              ServEase authentication and role-based
+              permissions.
             </p>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </main>
   )
 }

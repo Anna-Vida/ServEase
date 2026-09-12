@@ -48,9 +48,6 @@ function StaffDashboard() {
   const [staffName, setStaffName] =
     useState('Staff')
 
-  /*
-   * LOAD STAFF DATA
-   */
   useEffect(() => {
     const loadStaffDashboard = async () => {
       setLoading(true)
@@ -64,9 +61,6 @@ function StaffDashboard() {
         return
       }
 
-      /*
-       * STAFF PROFILE
-       */
       const {
         data: profileData,
         error: profileError,
@@ -87,9 +81,6 @@ function StaffDashboard() {
         )
       }
 
-      /*
-       * ASSIGNED APPOINTMENTS
-       */
       const { data, error } =
         await supabase
           .from('appointments')
@@ -134,9 +125,6 @@ function StaffDashboard() {
     loadStaffDashboard()
   }, [navigate])
 
-  /*
-   * LIVE STATS
-   */
   const pendingAppointments =
     useMemo(() => {
       return appointments.filter(
@@ -161,9 +149,6 @@ function StaffDashboard() {
       )
     }, [appointments])
 
-  /*
-   * UPDATE APPOINTMENT STATUS
-   */
   const handleStatusChange = async (
     appointmentId: string,
     newStatus: AppointmentStatus
@@ -221,9 +206,6 @@ function StaffDashboard() {
         )
     )
 
-    /*
-     * AUDIT LOG
-     */
     await logAudit({
       action:
         'staff_booking_status_changed',
@@ -260,203 +242,187 @@ function StaffDashboard() {
     setUpdatingId(null)
   }
 
-  /*
-   * LOGOUT
-   */
   const handleLogout = async () => {
     await supabase.auth.signOut()
     navigate('/login')
   }
 
-  /*
-   * STATUS STYLES
-   */
   const getStatusStyles = (
     status: AppointmentStatus
   ) => {
     switch (status) {
       case 'confirmed':
-        return 'border-cyan-400/20 bg-cyan-400/10 text-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.08)]'
+        return 'bg-[#eaf3ff] text-[#3569a6] border-[#cfe1f5]'
 
       case 'completed':
-        return 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300 shadow-[0_0_18px_rgba(52,211,153,0.08)]'
+        return 'bg-[#e9f8f1] text-[#16845b] border-[#bfe7d6]'
 
       case 'cancelled':
-        return 'border-rose-400/20 bg-rose-400/10 text-rose-300'
+        return 'bg-[#fff0ec] text-[#c9472d] border-[#f3c7bb]'
 
       default:
-        return 'border-indigo-400/20 bg-indigo-400/10 text-indigo-300 shadow-[0_0_18px_rgba(99,102,241,0.08)]'
+        return 'bg-[#fff3d7] text-[#b26a00] border-[#f4dda5]'
     }
   }
 
   return (
-    <main className="se-page se-grid-bg relative min-h-screen overflow-hidden text-white">
-      {/* BACKGROUND */}
-      <div className="se-orb se-orb-indigo -left-28 top-10" />
-
-      <div className="se-orb se-orb-cyan -right-24 top-40" />
-
-      <div className="se-orb se-orb-violet bottom-[-120px] left-[42%]" />
-
-      <div className="relative z-10 mx-auto max-w-[1500px] px-5 py-8 sm:px-8 lg:px-10">
-        {/* HEADER */}
-        <header className="se-glass rounded-[28px] px-6 py-6 sm:px-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-center gap-4">
-              <div className="se-icon-box h-14 w-14 rounded-2xl text-indigo-300">
-                <Sparkles size={25} />
-              </div>
-
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-indigo-300">
-                  ServEase
-                </p>
-
-                <h1 className="se-gradient-text mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-                  Staff Dashboard
-                </h1>
-
-                <p className="mt-2 text-sm text-slate-400">
-                  Welcome, {staffName}. Manage
-                  your assigned appointments and
-                  service status.
-                </p>
-              </div>
+    <main className="min-h-screen bg-[#fff8f1] text-[#1c1410]">
+      {/* HEADER */}
+      <header className="sticky top-0 z-40 border-b border-[#f1ded0] bg-[#fff8f1]/95 backdrop-blur-md">
+        <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-5 px-6 py-4 lg:px-8">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white shadow-[0_12px_30px_-12px_rgba(255,107,74,0.6)]">
+              <Sparkles size={20} />
             </div>
 
-            <button
-              onClick={handleLogout}
-              className="se-btn-secondary flex self-start items-center gap-2 rounded-2xl px-5 py-3 text-sm font-medium text-red-300 hover:text-red-200 lg:self-auto"
-            >
-              <LogOut size={18} />
+            <div>
+              <p className="text-base font-extrabold tracking-tight">
+                ServEase
+              </p>
+
+              <p className="text-xs text-[#8b7c73]">
+                Staff Workspace
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="inline-flex h-11 items-center gap-2 rounded-full border border-[#e7d4c6] bg-white px-4 text-sm font-semibold text-[#74675f] transition hover:border-[#ffb9a3] hover:text-[#c9472d]"
+          >
+            <LogOut size={17} />
+
+            <span className="hidden sm:inline">
               Logout
-            </button>
-          </div>
-        </header>
+            </span>
+          </button>
+        </div>
+      </header>
 
-        {/* LIVE STAFF STATS */}
-        <section className="mt-7 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {/* ASSIGNED */}
-          <div className="se-glass se-card-3d rounded-[24px] p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-slate-400">
-                  Assigned
-                </p>
+      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
+        {/* INTRO */}
+        <section className="border-b border-[#ead7ca] pb-10">
+          <p className="text-sm font-bold text-[#ff6b4a]">
+            Staff dashboard
+          </p>
 
-                <p className="mt-3 text-4xl font-bold">
-                  {loading
-                    ? '...'
-                    : appointments.length}
-                </p>
+          <h1 className="mt-2 text-4xl font-extrabold tracking-[-0.04em] sm:text-5xl">
+            Welcome,{' '}
+            <span className="se-gradient-text">
+              {staffName}
+            </span>
+          </h1>
 
-                <p className="mt-2 text-xs text-slate-500">
-                  Total assigned appointments
-                </p>
-              </div>
+          <p className="mt-4 max-w-2xl text-base leading-7 text-[#74675f]">
+            Review your assigned appointments,
+            customer details, service schedules,
+            and update booking status as work
+            progresses.
+          </p>
+        </section>
 
-              <div className="se-icon-box h-12 w-12 rounded-2xl text-indigo-300">
-                <CalendarDays size={21} />
-              </div>
+        {/* STATS */}
+        <section className="grid border-b border-[#ead7ca] py-9 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="border-b border-[#ead7ca] py-5 sm:border-r sm:px-5 lg:border-b-0 lg:px-6 lg:first:pl-0">
+            <div className="flex items-center gap-2 text-[#ff6b4a]">
+              <CalendarDays size={17} />
+
+              <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                Assigned
+              </p>
             </div>
-          </div>
 
-          {/* PENDING */}
-          <div className="se-glass se-card-3d rounded-[24px] p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-slate-400">
-                  Pending
-                </p>
+            <p className="mt-3 text-4xl font-extrabold tracking-tight">
+              {loading
+                ? '...'
+                : appointments.length}
+            </p>
 
-                <p className="mt-3 text-4xl font-bold">
-                  {loading
-                    ? '...'
-                    : pendingAppointments.length}
-                </p>
-
-                <p className="mt-2 text-xs text-indigo-400">
-                  Waiting for confirmation
-                </p>
-              </div>
-
-              <div className="se-icon-box h-12 w-12 rounded-2xl text-indigo-300">
-                <Clock3 size={21} />
-              </div>
-            </div>
+            <p className="mt-1 text-sm text-[#8b7c73]">
+              Total appointments
+            </p>
           </div>
 
-          {/* CONFIRMED */}
-          <div className="se-glass se-card-3d rounded-[24px] p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-slate-400">
-                  Confirmed
-                </p>
+          <div className="border-b border-[#ead7ca] py-5 sm:px-5 lg:border-b-0 lg:border-r lg:px-6">
+            <div className="flex items-center gap-2 text-[#d98500]">
+              <Clock3 size={17} />
 
-                <p className="mt-3 text-4xl font-bold">
-                  {loading
-                    ? '...'
-                    : confirmedAppointments.length}
-                </p>
-
-                <p className="mt-2 text-xs text-cyan-400">
-                  Confirmed service bookings
-                </p>
-              </div>
-
-              <div className="se-icon-box h-12 w-12 rounded-2xl text-cyan-300">
-                <CalendarDays size={21} />
-              </div>
+              <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                Pending
+              </p>
             </div>
+
+            <p className="mt-3 text-4xl font-extrabold tracking-tight">
+              {loading
+                ? '...'
+                : pendingAppointments.length}
+            </p>
+
+            <p className="mt-1 text-sm text-[#8b7c73]">
+              Waiting for confirmation
+            </p>
           </div>
 
-          {/* COMPLETED */}
-          <div className="se-glass se-card-3d rounded-[24px] p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-slate-400">
-                  Completed
-                </p>
+          <div className="border-b border-[#ead7ca] py-5 sm:border-r sm:px-5 lg:border-b-0 lg:px-6">
+            <div className="flex items-center gap-2 text-[#3569a6]">
+              <CalendarDays size={17} />
 
-                <p className="mt-3 text-4xl font-bold">
-                  {loading
-                    ? '...'
-                    : completedAppointments.length}
-                </p>
-
-                <p className="mt-2 text-xs text-emerald-400">
-                  Finished appointments
-                </p>
-              </div>
-
-              <div className="se-icon-box h-12 w-12 rounded-2xl text-emerald-300">
-                <CheckCircle2 size={21} />
-              </div>
+              <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                Confirmed
+              </p>
             </div>
+
+            <p className="mt-3 text-4xl font-extrabold tracking-tight">
+              {loading
+                ? '...'
+                : confirmedAppointments.length}
+            </p>
+
+            <p className="mt-1 text-sm text-[#8b7c73]">
+              Scheduled bookings
+            </p>
+          </div>
+
+          <div className="py-5 sm:px-5 lg:px-6 lg:pr-0">
+            <div className="flex items-center gap-2 text-[#16845b]">
+              <CheckCircle2 size={17} />
+
+              <p className="text-xs font-bold uppercase tracking-[0.12em]">
+                Completed
+              </p>
+            </div>
+
+            <p className="mt-3 text-4xl font-extrabold tracking-tight">
+              {loading
+                ? '...'
+                : completedAppointments.length}
+            </p>
+
+            <p className="mt-1 text-sm text-[#8b7c73]">
+              Finished appointments
+            </p>
           </div>
         </section>
 
-        {/* ASSIGNED APPOINTMENTS */}
-        <section className="se-glass mt-7 overflow-hidden rounded-[28px]">
-          <div className="flex flex-col gap-4 border-b border-white/10 px-6 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        {/* APPOINTMENTS */}
+        <section className="pt-12">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo-300">
-                Staff Workflow
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6b4a]">
+                Staff workflow
               </p>
 
-              <h2 className="mt-2 text-xl font-semibold">
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight">
                 Assigned Appointments
               </h2>
 
-              <p className="mt-1 text-sm text-slate-400">
-                View customers, services,
-                schedules, notes, and update
-                appointment status.
+              <p className="mt-2 text-sm leading-6 text-[#74675f]">
+                View customers, services, schedules,
+                notes, and update appointment status.
               </p>
             </div>
 
-            <div className="se-badge rounded-full px-4 py-2 text-xs">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full bg-[#fff0e7] px-4 py-2 text-xs font-bold text-[#b95736]">
               <Wrench size={14} />
 
               {appointments.length}{' '}
@@ -466,349 +432,307 @@ function StaffDashboard() {
             </div>
           </div>
 
-          {loading ? (
-            <div className="flex min-h-[280px] items-center justify-center">
-              <div className="text-center">
-                <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-indigo-400/30 border-t-indigo-300" />
+          <div className="mt-7">
+            {loading ? (
+              <div className="flex min-h-[260px] items-center justify-center border-y border-[#ead7ca]">
+                <div className="text-center">
+                  <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-[#f4c9b7] border-t-[#ff6b4a]" />
 
-                <p className="mt-4 text-sm text-slate-500">
-                  Loading assigned
-                  appointments...
-                </p>
+                  <p className="mt-4 text-sm text-[#8b7c73]">
+                    Loading assigned appointments...
+                  </p>
+                </div>
               </div>
-            </div>
-          ) : appointments.length === 0 ? (
-            <div className="flex min-h-[300px] items-center justify-center px-6 py-12">
-              <div className="max-w-md text-center">
-                <div className="se-icon-box mx-auto h-16 w-16 rounded-3xl text-indigo-300">
-                  <CalendarDays size={27} />
+            ) : appointments.length === 0 ? (
+              <div className="flex min-h-[300px] items-center justify-center border-y border-[#ead7ca] px-6 py-12">
+                <div className="max-w-md text-center">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#fff0e7] text-[#ff6b4a]">
+                    <CalendarDays size={24} />
+                  </div>
+
+                  <h3 className="mt-5 text-xl font-bold">
+                    No assigned appointments
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-6 text-[#74675f]">
+                    Appointments assigned to your
+                    staff account by an administrator
+                    will appear here.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* DESKTOP TABLE */}
+                <div className="hidden overflow-hidden rounded-2xl border border-[#ead7ca] bg-white lg:block">
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse text-left">
+                      <thead className="bg-[#fff7f0]">
+                        <tr>
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Customer
+                          </th>
+
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Service
+                          </th>
+
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Schedule
+                          </th>
+
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Status
+                          </th>
+
+                          <th className="px-5 py-4 text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Notes
+                          </th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {appointments.map(
+                          (appointment) => (
+                            <tr
+                              key={appointment.id}
+                              className="border-t border-[#f4e5da] transition hover:bg-[#fffaf6]"
+                            >
+                              <td className="px-5 py-5">
+                                <div className="flex items-center gap-3">
+                                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#fff0e7] text-[#ff6b4a]">
+                                    <UserRound size={16} />
+                                  </div>
+
+                                  <span className="font-semibold">
+                                    {appointment.customer
+                                      ?.full_name ??
+                                      'Customer'}
+                                  </span>
+                                </div>
+                              </td>
+
+                              <td className="px-5 py-5">
+                                <div className="flex items-center gap-2 text-sm text-[#65574f]">
+                                  <Wrench
+                                    size={15}
+                                    className="text-[#a09187]"
+                                  />
+
+                                  <span>
+                                    {appointment.service
+                                      ?.name ??
+                                      'Service'}
+                                  </span>
+                                </div>
+                              </td>
+
+                              <td className="whitespace-nowrap px-5 py-5">
+                                <p className="text-sm text-[#493c35]">
+                                  {
+                                    appointment.appointment_date
+                                  }
+                                </p>
+
+                                <p className="mt-1 text-xs text-[#8b7c73]">
+                                  {appointment.appointment_time.slice(
+                                    0,
+                                    5
+                                  )}
+                                </p>
+                              </td>
+
+                              <td className="px-5 py-5">
+                                <select
+                                  value={
+                                    appointment.status
+                                  }
+                                  disabled={
+                                    updatingId ===
+                                    appointment.id
+                                  }
+                                  onChange={(event) =>
+                                    handleStatusChange(
+                                      appointment.id,
+                                      event.target
+                                        .value as AppointmentStatus
+                                    )
+                                  }
+                                  className={`rounded-full border px-3 py-2 text-xs font-bold capitalize outline-none transition disabled:cursor-not-allowed disabled:opacity-60 ${getStatusStyles(
+                                    appointment.status
+                                  )}`}
+                                >
+                                  <option value="pending">
+                                    Pending
+                                  </option>
+
+                                  <option value="confirmed">
+                                    Confirmed
+                                  </option>
+
+                                  <option value="completed">
+                                    Completed
+                                  </option>
+
+                                  <option value="cancelled">
+                                    Cancelled
+                                  </option>
+                                </select>
+
+                                {updatingId ===
+                                  appointment.id && (
+                                  <p className="mt-2 text-xs text-[#8b7c73]">
+                                    Updating...
+                                  </p>
+                                )}
+                              </td>
+
+                              <td className="max-w-[320px] px-5 py-5 text-sm leading-6 text-[#74675f]">
+                                {appointment.notes ||
+                                  '—'}
+                              </td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
 
-                <h3 className="mt-5 text-xl font-semibold">
-                  No assigned appointments
-                </h3>
+                {/* MOBILE */}
+                <div className="divide-y divide-[#ead7ca] border-y border-[#ead7ca] lg:hidden">
+                  {appointments.map(
+                    (appointment) => (
+                      <article
+                        key={appointment.id}
+                        className="py-6"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#fff0e7] text-[#ff6b4a]">
+                              <UserRound size={17} />
+                            </div>
 
-                <p className="mt-2 text-sm leading-6 text-slate-400">
-                  Appointments assigned to your
-                  staff account by an administrator
-                  will appear here.
-                </p>
-              </div>
-            </div>
-          ) : (
-            <>
-              {/* DESKTOP TABLE */}
-              <div className="hidden overflow-x-auto lg:block">
-                <table className="w-full text-left">
-                  <thead className="border-b border-white/10 bg-white/[0.025]">
-                    <tr>
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Customer
-                      </th>
+                            <div>
+                              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#a09187]">
+                                Customer
+                              </p>
 
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Service
-                      </th>
-
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Schedule
-                      </th>
-
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Status
-                      </th>
-
-                      <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                        Notes
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {appointments.map(
-                      (appointment) => (
-                        <tr
-                          key={appointment.id}
-                          className="border-b border-white/5 transition hover:bg-white/[0.035] last:border-0"
-                        >
-                          {/* CUSTOMER */}
-                          <td className="px-6 py-5">
-                            <div className="flex items-center gap-3">
-                              <div className="se-icon-box h-10 w-10 rounded-xl text-indigo-300">
-                                <UserRound
-                                  size={17}
-                                />
-                              </div>
-
-                              <span className="font-medium text-white">
-                                {appointment
-                                  .customer
+                              <h3 className="mt-1 font-bold">
+                                {appointment.customer
                                   ?.full_name ??
                                   'Customer'}
-                              </span>
+                              </h3>
                             </div>
-                          </td>
+                          </div>
 
-                          {/* SERVICE */}
-                          <td className="px-6 py-5">
-                            <div className="flex items-center gap-2">
-                              <Wrench
-                                size={15}
-                                className="text-slate-500"
-                              />
+                          <span
+                            className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-bold capitalize ${getStatusStyles(
+                              appointment.status
+                            )}`}
+                          >
+                            {appointment.status}
+                          </span>
+                        </div>
 
-                              <span className="text-sm text-slate-300">
-                                {appointment
-                                  .service
-                                  ?.name ??
-                                  'Service'}
-                              </span>
-                            </div>
-                          </td>
+                        <dl className="mt-5 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+                          <div>
+                            <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-[#a09187]">
+                              Service
+                            </dt>
 
-                          {/* DATE / TIME */}
-                          <td className="whitespace-nowrap px-6 py-5">
-                            <p className="text-sm text-slate-300">
+                            <dd className="mt-1 text-sm text-[#493c35]">
+                              {appointment.service
+                                ?.name ??
+                                'Service'}
+                            </dd>
+                          </div>
+
+                          <div>
+                            <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-[#a09187]">
+                              Schedule
+                            </dt>
+
+                            <dd className="mt-1 text-sm text-[#493c35]">
                               {
                                 appointment.appointment_date
-                              }
-                            </p>
-
-                            <p className="mt-1 text-xs text-slate-500">
+                              }{' '}
+                              ·{' '}
                               {appointment.appointment_time.slice(
                                 0,
                                 5
                               )}
-                            </p>
-                          </td>
-
-                          {/* STATUS */}
-                          <td className="px-6 py-5">
-                            <select
-                              value={
-                                appointment.status
-                              }
-                              disabled={
-                                updatingId ===
-                                appointment.id
-                              }
-                              onChange={(
-                                event
-                              ) =>
-                                handleStatusChange(
-                                  appointment.id,
-                                  event
-                                    .target
-                                    .value as AppointmentStatus
-                                )
-                              }
-                              className={`rounded-xl border px-3 py-2 text-xs font-medium capitalize outline-none transition disabled:cursor-not-allowed disabled:opacity-60 ${getStatusStyles(
-                                appointment.status
-                              )}`}
-                            >
-                              <option
-                                value="pending"
-                                className="bg-slate-900 text-white"
-                              >
-                                Pending
-                              </option>
-
-                              <option
-                                value="confirmed"
-                                className="bg-slate-900 text-white"
-                              >
-                                Confirmed
-                              </option>
-
-                              <option
-                                value="completed"
-                                className="bg-slate-900 text-white"
-                              >
-                                Completed
-                              </option>
-
-                              <option
-                                value="cancelled"
-                                className="bg-slate-900 text-white"
-                              >
-                                Cancelled
-                              </option>
-                            </select>
-
-                            {updatingId ===
-                              appointment.id && (
-                              <p className="mt-2 text-xs text-slate-500">
-                                Updating...
-                              </p>
-                            )}
-                          </td>
-
-                          {/* NOTES */}
-                          <td className="max-w-[320px] px-6 py-5 text-sm text-slate-400">
-                            {appointment.notes ||
-                              '—'}
-                          </td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* MOBILE / TABLET */}
-              <div className="grid gap-4 p-5 lg:hidden">
-                {appointments.map(
-                  (appointment) => (
-                    <article
-                      key={appointment.id}
-                      className="se-card-3d rounded-3xl border border-white/10 bg-slate-950/55 p-5"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                          <div className="se-icon-box h-11 w-11 rounded-xl text-indigo-300">
-                            <UserRound
-                              size={18}
-                            />
+                            </dd>
                           </div>
+                        </dl>
 
-                          <div>
-                            <p className="text-xs text-slate-600">
-                              Customer
+                        {appointment.notes && (
+                          <div className="mt-5 border-l-2 border-[#f0cdb8] pl-4">
+                            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#a09187]">
+                              Notes
                             </p>
 
-                            <h3 className="mt-1 font-semibold">
-                              {appointment
-                                .customer
-                                ?.full_name ??
-                                'Customer'}
-                            </h3>
+                            <p className="mt-1 text-sm leading-6 text-[#74675f]">
+                              {appointment.notes}
+                            </p>
                           </div>
-                        </div>
-
-                        <span
-                          className={`rounded-full border px-3 py-1.5 text-xs font-medium capitalize ${getStatusStyles(
-                            appointment.status
-                          )}`}
-                        >
-                          {
-                            appointment.status
-                          }
-                        </span>
-                      </div>
-
-                      <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                        <div>
-                          <p className="text-xs text-slate-600">
-                            Service
-                          </p>
-
-                          <p className="mt-1 text-sm text-slate-300">
-                            {appointment
-                              .service
-                              ?.name ??
-                              'Service'}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-xs text-slate-600">
-                            Schedule
-                          </p>
-
-                          <p className="mt-1 text-sm text-slate-300">
-                            {
-                              appointment.appointment_date
-                            }{' '}
-                            •{' '}
-                            {appointment.appointment_time.slice(
-                              0,
-                              5
-                            )}
-                          </p>
-                        </div>
-                      </div>
-
-                      {appointment.notes && (
-                        <div className="mt-5 rounded-2xl border border-white/5 bg-white/[0.025] p-4">
-                          <p className="text-xs text-slate-600">
-                            Notes
-                          </p>
-
-                          <p className="mt-1 text-sm text-slate-400">
-                            {
-                              appointment.notes
-                            }
-                          </p>
-                        </div>
-                      )}
-
-                      <div className="mt-5">
-                        <label className="mb-2 block text-xs font-medium text-slate-500">
-                          Update appointment
-                          status
-                        </label>
-
-                        <select
-                          value={
-                            appointment.status
-                          }
-                          disabled={
-                            updatingId ===
-                            appointment.id
-                          }
-                          onChange={(event) =>
-                            handleStatusChange(
-                              appointment.id,
-                              event.target
-                                .value as AppointmentStatus
-                            )
-                          }
-                          className={`w-full rounded-2xl border px-4 py-3 text-sm font-medium capitalize outline-none ${getStatusStyles(
-                            appointment.status
-                          )}`}
-                        >
-                          <option
-                            value="pending"
-                            className="bg-slate-900 text-white"
-                          >
-                            Pending
-                          </option>
-
-                          <option
-                            value="confirmed"
-                            className="bg-slate-900 text-white"
-                          >
-                            Confirmed
-                          </option>
-
-                          <option
-                            value="completed"
-                            className="bg-slate-900 text-white"
-                          >
-                            Completed
-                          </option>
-
-                          <option
-                            value="cancelled"
-                            className="bg-slate-900 text-white"
-                          >
-                            Cancelled
-                          </option>
-                        </select>
-
-                        {updatingId ===
-                          appointment.id && (
-                          <p className="mt-2 text-xs text-slate-500">
-                            Updating...
-                          </p>
                         )}
-                      </div>
-                    </article>
-                  )
-                )}
-              </div>
-            </>
-          )}
+
+                        <div className="mt-5">
+                          <label className="mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Update appointment status
+                          </label>
+
+                          <select
+                            value={
+                              appointment.status
+                            }
+                            disabled={
+                              updatingId ===
+                              appointment.id
+                            }
+                            onChange={(event) =>
+                              handleStatusChange(
+                                appointment.id,
+                                event.target
+                                  .value as AppointmentStatus
+                              )
+                            }
+                            className={`w-full rounded-xl border px-4 py-3 text-sm font-bold capitalize outline-none ${getStatusStyles(
+                              appointment.status
+                            )}`}
+                          >
+                            <option value="pending">
+                              Pending
+                            </option>
+
+                            <option value="confirmed">
+                              Confirmed
+                            </option>
+
+                            <option value="completed">
+                              Completed
+                            </option>
+
+                            <option value="cancelled">
+                              Cancelled
+                            </option>
+                          </select>
+
+                          {updatingId ===
+                            appointment.id && (
+                            <p className="mt-2 text-xs text-[#8b7c73]">
+                              Updating...
+                            </p>
+                          )}
+                        </div>
+                      </article>
+                    )
+                  )}
+                </div>
+              </>
+            )}
+          </div>
         </section>
       </div>
     </main>

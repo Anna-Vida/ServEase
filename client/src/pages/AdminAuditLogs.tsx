@@ -194,36 +194,36 @@ function AdminAuditLogs() {
     if (
       action.includes('payment')
     ) {
-      return 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300'
+      return 'border-[#bfe7d6] bg-[#e9f8f1] text-[#16845b]'
     }
 
     if (
       action.includes('service')
     ) {
-      return 'border-violet-400/20 bg-violet-400/10 text-violet-300'
+      return 'border-[#ead5ff] bg-[#f5ecff] text-[#7552a8]'
     }
 
     if (
       action.includes('cancelled') ||
       action.includes('deactivated')
     ) {
-      return 'border-rose-400/20 bg-rose-400/10 text-rose-300'
+      return 'border-[#f3c7bb] bg-[#fff0ec] text-[#c9472d]'
     }
 
     if (
       action.includes('staff_assigned') ||
       action.includes('staff_unassigned')
     ) {
-      return 'border-amber-400/20 bg-amber-400/10 text-amber-300'
+      return 'border-[#f4dda5] bg-[#fff3d7] text-[#b26a00]'
     }
 
     if (
       action.includes('booking')
     ) {
-      return 'border-indigo-400/20 bg-indigo-400/10 text-indigo-300'
+      return 'border-[#cfe1f5] bg-[#eaf3ff] text-[#3569a6]'
     }
 
-    return 'border-cyan-400/20 bg-cyan-400/10 text-cyan-300'
+    return 'border-[#f1d6c5] bg-[#fff3ea] text-[#b95736]'
   }
 
   const getDetailsText = (
@@ -401,8 +401,7 @@ function AdminAuditLogs() {
             )
 
           const matchesAction =
-            actionFilter ===
-              'all' ||
+            actionFilter === 'all' ||
             log.action ===
               actionFilter
 
@@ -452,6 +451,35 @@ function AdminAuditLogs() {
       ).length
     }, [logs])
 
+  const getInitials = (
+    name: string
+  ) => {
+    return name
+      .trim()
+      .split(/\s+/)
+      .map((part) => part[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase()
+  }
+
+  const formatDateTime = (
+    value: string
+  ) => {
+    return new Date(
+      value
+    ).toLocaleString(
+      'en-PH',
+      {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+      }
+    )
+  }
+
   const resetFilters = () => {
     setSearchTerm('')
     setActionFilter('all')
@@ -471,7 +499,7 @@ function AdminAuditLogs() {
   const renderNavigation = (
     mobile = false
   ) => (
-    <nav className="mt-8 space-y-2">
+    <nav className="mt-8 space-y-1">
       {navItems.map((item) => {
         const Icon = item.icon
 
@@ -493,11 +521,11 @@ function AdminAuditLogs() {
             }}
             className={
               active
-                ? 'flex w-full items-center gap-3 rounded-2xl border border-violet-400/20 bg-violet-500/10 px-4 py-3 text-left text-violet-200 shadow-[0_0_24px_rgba(139,92,246,0.08)]'
-                : 'flex w-full items-center gap-3 rounded-2xl border border-transparent px-4 py-3 text-left text-slate-400 transition hover:border-white/5 hover:bg-white/5 hover:text-white'
+                ? 'flex w-full items-center gap-3 rounded-xl bg-[#ffe9db] px-4 py-3 text-left font-semibold text-[#c45231]'
+                : 'flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-medium text-[#75675f] transition hover:bg-[#fff0e6] hover:text-[#1c1410]'
             }
           >
-            <Icon size={19} />
+            <Icon size={18} />
             {item.label}
           </button>
         )
@@ -506,26 +534,21 @@ function AdminAuditLogs() {
   )
 
   return (
-    <main className="se-page se-grid-bg relative min-h-screen overflow-hidden text-white">
-      {/* BACKGROUND */}
-      <div className="se-orb se-orb-indigo -left-32 top-20" />
-      <div className="se-orb se-orb-cyan -right-28 top-40" />
-      <div className="se-orb se-orb-violet bottom-[-140px] left-[45%]" />
-
-      <div className="relative z-10 flex min-h-screen">
+    <main className="min-h-screen bg-[#fff8f1] text-[#1c1410]">
+      <div className="flex min-h-screen">
         {/* DESKTOP SIDEBAR */}
-        <aside className="hidden w-[290px] shrink-0 border-r border-white/10 bg-slate-950/55 p-6 backdrop-blur-2xl lg:flex lg:flex-col">
+        <aside className="hidden w-[270px] shrink-0 border-r border-[#f1ded0] bg-[#fffaf5] p-6 lg:flex lg:flex-col">
           <div className="flex items-center gap-3">
-            <div className="se-icon-box h-12 w-12 rounded-2xl text-indigo-300">
-              <Sparkles size={22} />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+              <Sparkles size={20} />
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-indigo-300">
+              <p className="text-base font-extrabold tracking-tight">
                 ServEase
               </p>
 
-              <p className="mt-1 text-sm font-medium text-white">
+              <p className="text-xs text-[#8b7c73]">
                 Admin Console
               </p>
             </div>
@@ -533,22 +556,20 @@ function AdminAuditLogs() {
 
           {renderNavigation()}
 
-          <div className="mt-auto pt-8">
-            <div className="mb-4 rounded-2xl border border-white/5 bg-white/[0.025] p-4">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-600">
-                Access Level
-              </p>
+          <div className="mt-auto border-t border-[#ead7ca] pt-6">
+            <p className="px-4 text-xs font-bold uppercase tracking-[0.12em] text-[#a09187]">
+              Access level
+            </p>
 
-              <p className="mt-2 text-sm font-medium text-slate-300">
-                Administrator
-              </p>
-            </div>
+            <p className="mt-2 px-4 text-sm font-semibold">
+              Administrator
+            </p>
 
             <button
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 rounded-2xl border border-rose-500/10 px-4 py-3 text-left text-rose-300 transition hover:border-rose-500/20 hover:bg-rose-500/10"
+              className="mt-5 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#c9472d] transition hover:bg-[#fff0ec]"
             >
-              <LogOut size={19} />
+              <LogOut size={18} />
               Logout
             </button>
           </div>
@@ -558,7 +579,7 @@ function AdminAuditLogs() {
         {mobileMenuOpen && (
           <>
             <div
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 bg-[#1c1410]/35 lg:hidden"
               onClick={() =>
                 setMobileMenuOpen(
                   false
@@ -566,21 +587,19 @@ function AdminAuditLogs() {
               }
             />
 
-            <aside className="fixed inset-y-0 left-0 z-50 w-[290px] border-r border-white/10 bg-slate-950 p-6 shadow-2xl lg:hidden">
+            <aside className="fixed inset-y-0 left-0 z-50 w-[280px] border-r border-[#f1ded0] bg-[#fffaf5] p-6 shadow-2xl lg:hidden">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="se-icon-box h-11 w-11 rounded-2xl text-indigo-300">
-                    <Sparkles
-                      size={20}
-                    />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+                    <Sparkles size={18} />
                   </div>
 
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-indigo-300">
+                    <p className="font-extrabold">
                       ServEase
                     </p>
 
-                    <p className="mt-1 text-sm font-medium">
+                    <p className="text-xs text-[#8b7c73]">
                       Admin Console
                     </p>
                   </div>
@@ -592,45 +611,41 @@ function AdminAuditLogs() {
                       false
                     )
                   }
-                  className="rounded-xl border border-white/10 bg-white/5 p-2 text-slate-400"
+                  className="rounded-lg border border-[#ead7ca] bg-white p-2 text-[#74675f]"
                 >
                   <X size={18} />
                 </button>
               </div>
 
-              {renderNavigation(
-                true
-              )}
+              {renderNavigation(true)}
 
               <button
                 onClick={handleLogout}
-                className="mt-8 flex w-full items-center gap-3 rounded-2xl border border-rose-500/10 px-4 py-3 text-left text-rose-300"
+                className="mt-8 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#c9472d] hover:bg-[#fff0ec]"
               >
-                <LogOut size={19} />
+                <LogOut size={18} />
                 Logout
               </button>
             </aside>
           </>
         )}
 
-        {/* MAIN CONTENT */}
+        {/* MAIN */}
         <section className="min-w-0 flex-1">
           {/* MOBILE HEADER */}
-          <div className="border-b border-white/10 bg-slate-950/50 px-5 py-4 backdrop-blur-xl lg:hidden">
+          <div className="border-b border-[#f1ded0] bg-[#fffaf5] px-5 py-4 lg:hidden">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="se-icon-box h-10 w-10 rounded-xl text-indigo-300">
-                  <Sparkles
-                    size={18}
-                  />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+                  <Sparkles size={17} />
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">
+                  <p className="font-bold">
                     ServEase
                   </p>
 
-                  <p className="text-sm font-medium">
+                  <p className="text-xs text-[#8b7c73]">
                     Admin Console
                   </p>
                 </div>
@@ -638,90 +653,81 @@ function AdminAuditLogs() {
 
               <button
                 onClick={() =>
-                  setMobileMenuOpen(
-                    true
-                  )
+                  setMobileMenuOpen(true)
                 }
-                className="rounded-xl border border-white/10 bg-white/5 p-2.5 text-slate-300"
+                className="rounded-lg border border-[#ead7ca] bg-white p-2.5 text-[#493c35]"
               >
                 <Menu size={20} />
               </button>
             </div>
           </div>
 
-          <div className="mx-auto max-w-[1600px] px-5 py-8 sm:px-8 lg:px-10">
+          <div className="mx-auto max-w-[1500px] px-6 py-10 lg:px-10 lg:py-12">
             {/* HEADER */}
-            <header className="se-glass rounded-[28px] px-6 py-6 sm:px-8">
-              <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="se-icon-box h-14 w-14 rounded-2xl text-violet-300">
-                    <Activity
-                      size={25}
-                    />
-                  </div>
+            <header className="border-b border-[#ead7ca] pb-9">
+              <div className="flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+                <div>
+                  <p className="text-sm font-bold text-[#ff6b4a]">
+                    System activity
+                  </p>
 
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-violet-300">
-                      System Activity
-                    </p>
+                  <h1 className="mt-2 text-4xl font-extrabold tracking-[-0.04em] sm:text-5xl">
+                    Audit{' '}
+                    <span className="se-gradient-text">
+                      Logs
+                    </span>
+                  </h1>
 
-                    <h1 className="se-gradient-text mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-                      Audit Logs
-                    </h1>
-
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
-                      Review recorded ServEase
-                      actions performed by
-                      administrators, staff,
-                      and customers.
-                    </p>
-                  </div>
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-[#74675f] sm:text-base">
+                    Review recorded ServEase actions
+                    performed by administrators,
+                    staff, and customers.
+                  </p>
                 </div>
 
-                {/* REAL COUNTS */}
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  <div className="se-glass se-card-3d min-w-[105px] rounded-2xl px-4 py-4">
-                    <p className="text-xs text-slate-500">
+                <div className="grid grid-cols-2 gap-x-8 gap-y-5 border-t border-[#ead7ca] pt-6 sm:grid-cols-4 xl:border-t-0 xl:pt-0">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#a09187]">
                       Total
                     </p>
 
-                    <p className="mt-2 text-2xl font-bold">
+                    <p className="mt-1 text-3xl font-extrabold">
                       {loading
                         ? '...'
                         : logs.length}
                     </p>
                   </div>
 
-                  <div className="se-glass se-card-3d min-w-[105px] rounded-2xl px-4 py-4">
-                    <p className="text-xs text-violet-400">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#7552a8]">
                       Admin
                     </p>
 
-                    <p className="mt-2 text-2xl font-bold">
+                    <p className="mt-1 text-3xl font-extrabold">
                       {loading
                         ? '...'
                         : adminLogsCount}
                     </p>
                   </div>
 
-                  <div className="se-glass se-card-3d min-w-[105px] rounded-2xl px-4 py-4">
-                    <p className="text-xs text-amber-400">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#b26a00]">
                       Staff
                     </p>
 
-                    <p className="mt-2 text-2xl font-bold">
+                    <p className="mt-1 text-3xl font-extrabold">
                       {loading
                         ? '...'
                         : staffLogsCount}
                     </p>
                   </div>
 
-                  <div className="se-glass se-card-3d min-w-[105px] rounded-2xl px-4 py-4">
-                    <p className="text-xs text-cyan-400">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#3569a6]">
                       Customer
                     </p>
 
-                    <p className="mt-2 text-2xl font-bold">
+                    <p className="mt-1 text-3xl font-extrabold">
                       {loading
                         ? '...'
                         : customerLogsCount}
@@ -731,259 +737,350 @@ function AdminAuditLogs() {
               </div>
             </header>
 
-            {/* AUDIT WORKSPACE */}
-            <section className="se-glass mt-7 overflow-hidden rounded-[28px]">
-              {/* FILTER AREA */}
-              <div className="border-b border-white/10 px-6 py-6 sm:px-8">
-                <div className="flex items-center gap-3">
-                  <div className="se-icon-box h-10 w-10 rounded-xl text-violet-300">
-                    <SlidersHorizontal
-                      size={18}
-                    />
-                  </div>
+            {/* FILTER AREA */}
+            <section className="border-b border-[#ead7ca] py-8">
+              <div className="flex items-center gap-3">
+                <SlidersHorizontal
+                  size={18}
+                  className="text-[#ff6b4a]"
+                />
 
-                  <div>
-                    <h2 className="font-semibold">
-                      Search & Filters
-                    </h2>
+                <div>
+                  <h2 className="font-bold">
+                    Search & Filters
+                  </h2>
 
-                    <p className="mt-1 text-xs text-slate-500">
-                      Search real recorded
-                      activity from the
-                      ServEase audit table.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-6 grid gap-4 lg:grid-cols-[1fr_260px_180px]">
-                  {/* SEARCH */}
-                  <div className="relative">
-                    <Search
-                      size={17}
-                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
-                    />
-
-                    <input
-                      type="text"
-                      value={searchTerm}
-                      onChange={(event) =>
-                        setSearchTerm(
-                          event.target.value
-                        )
-                      }
-                      placeholder="Search user, action, entity, or details"
-                      className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4 text-sm"
-                    />
-                  </div>
-
-                  {/* ACTION */}
-                  <select
-                    value={actionFilter}
-                    onChange={(event) =>
-                      setActionFilter(
-                        event.target.value
-                      )
-                    }
-                    className="se-input rounded-2xl px-4 py-3.5 text-sm"
-                  >
-                    <option
-                      value="all"
-                      className="bg-slate-900"
-                    >
-                      All actions
-                    </option>
-
-                    {actionOptions.map(
-                      (action) => (
-                        <option
-                          key={action}
-                          value={action}
-                          className="bg-slate-900"
-                        >
-                          {getActionLabel(
-                            action
-                          )}
-                        </option>
-                      )
-                    )}
-                  </select>
-
-                  {/* ROLE */}
-                  <select
-                    value={roleFilter}
-                    onChange={(event) =>
-                      setRoleFilter(
-                        event.target.value
-                      )
-                    }
-                    className="se-input rounded-2xl px-4 py-3.5 text-sm"
-                  >
-                    <option
-                      value="all"
-                      className="bg-slate-900"
-                    >
-                      All roles
-                    </option>
-
-                    <option
-                      value="admin"
-                      className="bg-slate-900"
-                    >
-                      Admin
-                    </option>
-
-                    <option
-                      value="staff"
-                      className="bg-slate-900"
-                    >
-                      Staff
-                    </option>
-
-                    <option
-                      value="customer"
-                      className="bg-slate-900"
-                    >
-                      Customer
-                    </option>
-                  </select>
-                </div>
-
-                <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-                  <p className="text-sm text-slate-500">
-                    Showing{' '}
-                    <span className="font-semibold text-white">
-                      {filteredLogs.length}
-                    </span>{' '}
-                    of{' '}
-                    <span className="font-semibold text-white">
-                      {logs.length}
-                    </span>{' '}
-                    logs
+                  <p className="mt-1 text-xs text-[#8b7c73]">
+                    Search recorded activity from
+                    the ServEase audit table.
                   </p>
-
-                  {hasActiveFilters && (
-                    <button
-                      onClick={resetFilters}
-                      className="se-btn-secondary flex items-center gap-2 rounded-xl px-4 py-2 text-xs"
-                    >
-                      <X size={15} />
-                      Clear filters
-                    </button>
-                  )}
                 </div>
               </div>
 
-              {/* LOG HEADER */}
-              <div className="border-b border-white/10 bg-white/[0.015] px-6 py-5 sm:px-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-violet-300">
-                  Activity History
+              <div className="mt-6 grid gap-3 lg:grid-cols-[1fr_260px_180px]">
+                <div className="relative">
+                  <Search
+                    size={17}
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
+                  />
+
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(event) =>
+                      setSearchTerm(
+                        event.target.value
+                      )
+                    }
+                    placeholder="Search user, action, entity, or details"
+                    className="se-input se-input-icon-left h-11 text-sm"
+                  />
+                </div>
+
+                <select
+                  value={actionFilter}
+                  onChange={(event) =>
+                    setActionFilter(
+                      event.target.value
+                    )
+                  }
+                  className="se-input h-11 text-sm"
+                >
+                  <option value="all">
+                    All actions
+                  </option>
+
+                  {actionOptions.map(
+                    (action) => (
+                      <option
+                        key={action}
+                        value={action}
+                      >
+                        {getActionLabel(
+                          action
+                        )}
+                      </option>
+                    )
+                  )}
+                </select>
+
+                <select
+                  value={roleFilter}
+                  onChange={(event) =>
+                    setRoleFilter(
+                      event.target.value
+                    )
+                  }
+                  className="se-input h-11 text-sm"
+                >
+                  <option value="all">
+                    All roles
+                  </option>
+
+                  <option value="admin">
+                    Admin
+                  </option>
+
+                  <option value="staff">
+                    Staff
+                  </option>
+
+                  <option value="customer">
+                    Customer
+                  </option>
+                </select>
+              </div>
+
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm text-[#8b7c73]">
+                  Showing{' '}
+                  <span className="font-semibold text-[#1c1410]">
+                    {filteredLogs.length}
+                  </span>{' '}
+                  of{' '}
+                  <span className="font-semibold text-[#1c1410]">
+                    {logs.length}
+                  </span>{' '}
+                  logs
                 </p>
 
-                <h2 className="mt-2 text-xl font-semibold">
+                {hasActiveFilters && (
+                  <button
+                    onClick={resetFilters}
+                    className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold text-[#8b6f61] transition hover:bg-[#fff0e7] hover:text-[#c45231]"
+                  >
+                    <X size={14} />
+                    Clear filters
+                  </button>
+                )}
+              </div>
+            </section>
+
+            {/* ACTIVITY */}
+            <section className="pt-10">
+              <div className="mb-7">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6b4a]">
+                  Activity history
+                </p>
+
+                <h2 className="mt-2 text-2xl font-extrabold">
                   Recorded Actions
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
-                  Each entry below comes
-                  directly from the ServEase
-                  audit log.
+                <p className="mt-2 text-sm text-[#74675f]">
+                  Each entry below comes directly
+                  from the ServEase audit log.
                 </p>
               </div>
 
-              {/* DATA */}
               {loading ? (
-                <div className="flex min-h-[300px] items-center justify-center">
+                <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white">
                   <div className="text-center">
-                    <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-violet-400/30 border-t-violet-300" />
+                    <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-[#f4c9b7] border-t-[#ff6b4a]" />
 
-                    <p className="mt-4 text-sm text-slate-500">
+                    <p className="mt-4 text-sm text-[#8b7c73]">
                       Loading audit logs...
                     </p>
                   </div>
                 </div>
               ) : logs.length === 0 ? (
-                <div className="flex min-h-[300px] items-center justify-center">
-                  <div className="text-center">
-                    <Activity
-                      size={28}
-                      className="mx-auto text-slate-600"
-                    />
-
-                    <p className="mt-4 text-sm text-slate-500">
-                      No audit logs found.
-                    </p>
-                  </div>
+                <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white">
+                  <p className="text-sm text-[#8b7c73]">
+                    No audit logs found.
+                  </p>
                 </div>
-              ) : filteredLogs.length ===
-                0 ? (
-                <div className="flex min-h-[300px] items-center justify-center">
+              ) : filteredLogs.length === 0 ? (
+                <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white">
                   <div className="text-center">
                     <Search
                       size={28}
-                      className="mx-auto text-slate-600"
+                      className="mx-auto text-[#b6a79d]"
                     />
 
-                    <p className="mt-4 text-sm text-slate-500">
-                      No audit logs match
-                      your current filters.
+                    <p className="mt-4 text-sm text-[#8b7c73]">
+                      No audit logs match your current filters.
                     </p>
                   </div>
                 </div>
               ) : (
                 <>
                   {/* DESKTOP TABLE */}
-                  <div className="hidden overflow-x-auto xl:block">
-                    <table className="w-full text-left">
-                      <thead className="border-b border-white/10 bg-white/[0.025]">
-                        <tr>
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            User
-                          </th>
+                  <div className="hidden overflow-hidden rounded-2xl border border-[#ead7ca] bg-white shadow-[0_8px_30px_rgba(91,62,47,0.04)] xl:block">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-sm">
+                        <thead>
+                          <tr className="border-b border-[#ead7ca] bg-[#fffaf6]">
+                            <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                              User
+                            </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Action
-                          </th>
+                            <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                              Action
+                            </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Details
-                          </th>
+                            <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                              Details
+                            </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Entity
-                          </th>
+                            <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                              Entity
+                            </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Date & Time
-                          </th>
-                        </tr>
-                      </thead>
+                            <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                              Date & Time
+                            </th>
+                          </tr>
+                        </thead>
 
-                      <tbody>
-                        {filteredLogs.map(
-                          (log) => (
-                            <tr
+                        <tbody className="divide-y divide-[#f1e4db]">
+                          {filteredLogs.map(
+                            (log) => {
+                              const userName =
+                                log.user
+                                  ?.full_name ??
+                                'Unknown user'
+
+                              return (
+                                <tr
+                                  key={log.id}
+                                  className="transition-colors hover:bg-[#fffaf6]"
+                                >
+                                  {/* USER */}
+                                  <td className="px-5 py-4">
+                                    <div className="flex items-center gap-3">
+                                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fff0e7] text-xs font-extrabold text-[#c45231] ring-1 ring-[#f2d7c7]">
+                                        {getInitials(
+                                          userName
+                                        )}
+                                      </div>
+
+                                      <div className="min-w-0">
+                                        <p className="truncate font-semibold text-[#1c1410]">
+                                          {
+                                            userName
+                                          }
+                                        </p>
+
+                                        <p className="mt-0.5 text-xs capitalize text-[#9a8a80]">
+                                          {log.user
+                                            ?.role ??
+                                            'user'}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+
+                                  {/* ACTION */}
+                                  <td className="px-5 py-4">
+                                    <span
+                                      className={`inline-flex rounded-full border px-3 py-1.5 text-xs font-semibold ${getActionStyles(
+                                        log.action
+                                      )}`}
+                                    >
+                                      {getActionLabel(
+                                        log.action
+                                      )}
+                                    </span>
+                                  </td>
+
+                                  {/* DETAILS */}
+                                  <td className="max-w-[320px] px-5 py-4">
+                                    <p
+                                      className="truncate text-[#65574f]"
+                                      title={getDetailsText(
+                                        log.details
+                                      )}
+                                    >
+                                      {getDetailsText(
+                                        log.details
+                                      )}
+                                    </p>
+                                  </td>
+
+                                  {/* ENTITY */}
+                                  <td className="px-5 py-4">
+                                    <p className="font-medium capitalize text-[#493c35]">
+                                      {log.entity_type ??
+                                        '—'}
+                                    </p>
+
+                                    {log.entity_id && (
+                                      <code
+                                        className="mt-1 inline-block max-w-[180px] truncate rounded-md bg-[#fff4ec] px-2 py-1 text-xs text-[#8b6f61]"
+                                        title={
+                                          log.entity_id
+                                        }
+                                      >
+                                        {log.entity_id.slice(
+                                          0,
+                                          8
+                                        )}
+                                        ...
+                                      </code>
+                                    )}
+                                  </td>
+
+                                  {/* DATE */}
+                                  <td className="whitespace-nowrap px-5 py-4">
+                                    <p className="font-medium text-[#493c35]">
+                                      {formatDateTime(
+                                        log.created_at
+                                      )}
+                                    </p>
+
+                                    <p className="mt-0.5 text-xs text-[#9a8a80]">
+                                      Recorded activity
+                                    </p>
+                                  </td>
+                                </tr>
+                              )
+                            }
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* MOBILE / TABLET */}
+                  <div className="overflow-hidden rounded-2xl border border-[#ead7ca] bg-white xl:hidden">
+                    <div className="divide-y divide-[#f1e4db]">
+                      {filteredLogs.map(
+                        (log) => {
+                          const userName =
+                            log.user
+                              ?.full_name ??
+                            'Unknown user'
+
+                          return (
+                            <article
                               key={log.id}
-                              className="border-b border-white/5 transition hover:bg-white/[0.035] last:border-0"
+                              className="p-5 sm:p-6"
                             >
-                              {/* USER */}
-                              <td className="px-6 py-5">
-                                <p className="font-medium text-white">
-                                  {log.user
-                                    ?.full_name ??
-                                    'Unknown user'}
-                                </p>
+                              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                                <div className="flex min-w-0 items-center gap-3">
+                                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#fff0e7] text-xs font-extrabold text-[#c45231] ring-1 ring-[#f2d7c7]">
+                                    {getInitials(
+                                      userName
+                                    )}
+                                  </div>
 
-                                <p className="mt-1 text-xs capitalize text-slate-500">
-                                  {log.user
-                                    ?.role ??
-                                    'user'}
-                                </p>
-                              </td>
+                                  <div className="min-w-0">
+                                    <h3 className="truncate font-bold">
+                                      {
+                                        userName
+                                      }
+                                    </h3>
 
-                              {/* ACTION */}
-                              <td className="px-6 py-5">
+                                    <p className="mt-1 text-xs capitalize text-[#9a8a80]">
+                                      {log.user
+                                        ?.role ??
+                                        'user'}
+                                    </p>
+                                  </div>
+                                </div>
+
                                 <span
-                                  className={`inline-flex rounded-full border px-3 py-1.5 text-xs font-medium ${getActionStyles(
+                                  className={`self-start rounded-full border px-3 py-1.5 text-xs font-semibold ${getActionStyles(
                                     log.action
                                   )}`}
                                 >
@@ -991,152 +1088,57 @@ function AdminAuditLogs() {
                                     log.action
                                   )}
                                 </span>
-                              </td>
+                              </div>
 
-                              {/* DETAILS */}
-                              <td className="max-w-[320px] px-6 py-5 text-sm text-slate-300">
-                                {getDetailsText(
-                                  log.details
-                                )}
-                              </td>
-
-                              {/* ENTITY */}
-                              <td className="px-6 py-5">
-                                <p className="text-sm capitalize text-slate-300">
-                                  {log.entity_type ??
-                                    '—'}
-                                </p>
-
-                                {log.entity_id && (
-                                  <p
-                                    className="mt-1 max-w-[170px] truncate font-mono text-xs text-slate-600"
-                                    title={
-                                      log.entity_id
-                                    }
-                                  >
-                                    {
-                                      log.entity_id
-                                    }
+                              <div className="mt-5 grid gap-4 border-t border-[#f1e4db] pt-4 sm:grid-cols-2">
+                                <div>
+                                  <p className="text-xs font-medium text-[#9a8a80]">
+                                    Details
                                   </p>
-                                )}
-                              </td>
 
-                              {/* DATE */}
-                              <td className="whitespace-nowrap px-6 py-5 text-sm text-slate-400">
-                                {new Date(
-                                  log.created_at
-                                ).toLocaleString(
-                                  'en-PH',
-                                  {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: 'numeric',
-                                    hour: 'numeric',
-                                    minute: '2-digit',
-                                  }
-                                )}
-                              </td>
-                            </tr>
+                                  <p className="mt-1 text-sm text-[#493c35]">
+                                    {getDetailsText(
+                                      log.details
+                                    )}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  <p className="text-xs font-medium text-[#9a8a80]">
+                                    Entity
+                                  </p>
+
+                                  <p className="mt-1 text-sm font-medium capitalize text-[#493c35]">
+                                    {log.entity_type ??
+                                      '—'}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {log.entity_id && (
+                                <div className="mt-4 rounded-xl bg-[#fffaf6] px-4 py-3">
+                                  <p className="text-xs font-medium text-[#9a8a80]">
+                                    Entity ID
+                                  </p>
+
+                                  <p className="mt-1 break-all font-mono text-xs text-[#74675f]">
+                                    {log.entity_id}
+                                  </p>
+                                </div>
+                              )}
+
+                              <div className="mt-4 border-t border-[#f1e4db] pt-4">
+                                <p className="text-xs text-[#8b7c73]">
+                                  {formatDateTime(
+                                    log.created_at
+                                  )}
+                                </p>
+                              </div>
+                            </article>
                           )
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* MOBILE / TABLET */}
-                  <div className="grid gap-4 p-5 xl:hidden">
-                    {filteredLogs.map(
-                      (log) => (
-                        <article
-                          key={log.id}
-                          className="se-card-3d rounded-3xl border border-white/10 bg-slate-950/50 p-5"
-                        >
-                          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                            <div>
-                              <p className="text-xs uppercase tracking-[0.18em] text-violet-300">
-                                {
-                                  log.user
-                                    ?.role ??
-                                  'User'
-                                }
-                              </p>
-
-                              <h3 className="mt-2 font-semibold">
-                                {log.user
-                                  ?.full_name ??
-                                  'Unknown user'}
-                              </h3>
-                            </div>
-
-                            <span
-                              className={`self-start rounded-full border px-3 py-1.5 text-xs font-medium ${getActionStyles(
-                                log.action
-                              )}`}
-                            >
-                              {getActionLabel(
-                                log.action
-                              )}
-                            </span>
-                          </div>
-
-                          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                            <div>
-                              <p className="text-xs text-slate-600">
-                                Details
-                              </p>
-
-                              <p className="mt-1 text-sm text-slate-300">
-                                {getDetailsText(
-                                  log.details
-                                )}
-                              </p>
-                            </div>
-
-                            <div>
-                              <p className="text-xs text-slate-600">
-                                Entity
-                              </p>
-
-                              <p className="mt-1 text-sm capitalize text-slate-300">
-                                {log.entity_type ??
-                                  '—'}
-                              </p>
-                            </div>
-                          </div>
-
-                          {log.entity_id && (
-                            <div className="mt-5 rounded-2xl border border-white/5 bg-white/[0.025] p-4">
-                              <p className="text-xs text-slate-600">
-                                Entity ID
-                              </p>
-
-                              <p className="mt-2 break-all font-mono text-xs text-slate-500">
-                                {
-                                  log.entity_id
-                                }
-                              </p>
-                            </div>
-                          )}
-
-                          <div className="mt-5 border-t border-white/5 pt-4">
-                            <p className="text-xs text-slate-500">
-                              {new Date(
-                                log.created_at
-                              ).toLocaleString(
-                                'en-PH',
-                                {
-                                  year: 'numeric',
-                                  month: 'short',
-                                  day: 'numeric',
-                                  hour: 'numeric',
-                                  minute: '2-digit',
-                                }
-                              )}
-                            </p>
-                          </div>
-                        </article>
-                      )
-                    )}
+                        }
+                      )}
+                    </div>
                   </div>
                 </>
               )}

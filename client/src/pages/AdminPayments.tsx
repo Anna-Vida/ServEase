@@ -237,8 +237,7 @@ function AdminPayments() {
     useMemo(() => {
       return appointments.find(
         (appointment) =>
-          appointment.id ===
-          appointmentId
+          appointment.id === appointmentId
       )
     }, [
       appointments,
@@ -387,13 +386,17 @@ function AdminPayments() {
       .insert({
         appointment_id:
           appointmentId,
+
         amount:
           Number(amount),
+
         payment_method:
           paymentMethod ||
           null,
+
         payment_status:
           paymentStatus,
+
         paid_at:
           paymentStatus ===
           'paid'
@@ -417,20 +420,26 @@ function AdminPayments() {
       action: 'payment_recorded',
       entityType: 'payment',
       entityId: data.id,
+
       details: {
         appointment_id:
           appointmentId,
+
         customer:
           selected?.customer
             ?.full_name ?? null,
+
         service:
           selected?.service
             ?.name ?? null,
+
         amount:
           Number(amount),
+
         payment_method:
           paymentMethod ||
           null,
+
         payment_status:
           paymentStatus,
       },
@@ -484,7 +493,9 @@ function AdminPayments() {
         .update({
           payment_status:
             newStatus,
-          paid_at: paidAt,
+
+          paid_at:
+            paidAt,
         })
         .eq(
           'id',
@@ -509,8 +520,10 @@ function AdminPayments() {
             paymentId
               ? {
                   ...currentPayment,
+
                   payment_status:
                     newStatus,
+
                   paid_at:
                     paidAt,
                 }
@@ -521,23 +534,33 @@ function AdminPayments() {
     await logAudit({
       action:
         'payment_status_changed',
-      entityType: 'payment',
-      entityId: paymentId,
+
+      entityType:
+        'payment',
+
+      entityId:
+        paymentId,
+
       details: {
         previous_status:
           previousStatus,
+
         new_status:
           newStatus,
+
         amount:
           Number(
             payment.amount
           ),
+
         payment_method:
           payment.payment_method,
+
         customer:
           payment.appointment
             ?.customer
             ?.full_name ?? null,
+
         service:
           payment.appointment
             ?.service
@@ -553,16 +576,16 @@ function AdminPayments() {
   ) => {
     switch (status) {
       case 'paid':
-        return 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300'
+        return 'border-[#bfe7d6] bg-[#e9f8f1] text-[#16845b]'
 
       case 'failed':
-        return 'border-rose-400/20 bg-rose-400/10 text-rose-300'
+        return 'border-[#f3c7bb] bg-[#fff0ec] text-[#c9472d]'
 
       case 'refunded':
-        return 'border-amber-400/20 bg-amber-400/10 text-amber-300'
+        return 'border-[#f4dda5] bg-[#fff3d7] text-[#b26a00]'
 
       default:
-        return 'border-indigo-400/20 bg-indigo-400/10 text-indigo-300'
+        return 'border-[#cfe1f5] bg-[#eaf3ff] text-[#3569a6]'
     }
   }
 
@@ -608,6 +631,56 @@ function AdminPayments() {
     )
   }
 
+  const getInitials = (
+    name: string
+  ) => {
+    return name
+      .trim()
+      .split(/\s+/)
+      .map((part) => part[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase()
+  }
+
+  const formatDate = (
+    value: string | null
+  ) => {
+    if (!value) {
+      return '—'
+    }
+
+    return new Date(
+      value
+    ).toLocaleDateString(
+      'en-PH',
+      {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }
+    )
+  }
+
+  const formatAppointmentDate = (
+    value: string | undefined
+  ) => {
+    if (!value) {
+      return '—'
+    }
+
+    return new Date(
+      `${value}T00:00:00`
+    ).toLocaleDateString(
+      'en-PH',
+      {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }
+    )
+  }
+
   const handleLogout = async () => {
     await supabase.auth.signOut()
     navigate('/login')
@@ -616,7 +689,7 @@ function AdminPayments() {
   const renderNavigation = (
     mobile = false
   ) => (
-    <nav className="mt-8 space-y-2">
+    <nav className="mt-8 space-y-1">
       {navItems.map((item) => {
         const Icon = item.icon
 
@@ -636,11 +709,11 @@ function AdminPayments() {
             }}
             className={
               active
-                ? 'flex w-full items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-left text-emerald-200 shadow-[0_0_24px_rgba(52,211,153,0.08)]'
-                : 'flex w-full items-center gap-3 rounded-2xl border border-transparent px-4 py-3 text-left text-slate-400 transition hover:border-white/5 hover:bg-white/5 hover:text-white'
+                ? 'flex w-full items-center gap-3 rounded-xl bg-[#ffe9db] px-4 py-3 text-left font-semibold text-[#c45231]'
+                : 'flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-medium text-[#75675f] transition hover:bg-[#fff0e6] hover:text-[#1c1410]'
             }
           >
-            <Icon size={19} />
+            <Icon size={18} />
             {item.label}
           </button>
         )
@@ -649,26 +722,21 @@ function AdminPayments() {
   )
 
   return (
-    <main className="se-page se-grid-bg relative min-h-screen overflow-hidden text-white">
-      {/* BACKGROUND */}
-      <div className="se-orb se-orb-indigo -left-32 top-20" />
-      <div className="se-orb se-orb-cyan -right-28 top-40" />
-      <div className="se-orb se-orb-violet bottom-[-140px] left-[45%]" />
-
-      <div className="relative z-10 flex min-h-screen">
+    <main className="min-h-screen bg-[#fff8f1] text-[#1c1410]">
+      <div className="flex min-h-screen">
         {/* DESKTOP SIDEBAR */}
-        <aside className="hidden w-[290px] shrink-0 border-r border-white/10 bg-slate-950/55 p-6 backdrop-blur-2xl lg:flex lg:flex-col">
+        <aside className="hidden w-[270px] shrink-0 border-r border-[#f1ded0] bg-[#fffaf5] p-6 lg:flex lg:flex-col">
           <div className="flex items-center gap-3">
-            <div className="se-icon-box h-12 w-12 rounded-2xl text-indigo-300">
-              <Sparkles size={22} />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+              <Sparkles size={20} />
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-indigo-300">
+              <p className="text-base font-extrabold tracking-tight">
                 ServEase
               </p>
 
-              <p className="mt-1 text-sm font-medium text-white">
+              <p className="text-xs text-[#8b7c73]">
                 Admin Console
               </p>
             </div>
@@ -676,22 +744,20 @@ function AdminPayments() {
 
           {renderNavigation()}
 
-          <div className="mt-auto pt-8">
-            <div className="mb-4 rounded-2xl border border-white/5 bg-white/[0.025] p-4">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-600">
-                Access Level
-              </p>
+          <div className="mt-auto border-t border-[#ead7ca] pt-6">
+            <p className="px-4 text-xs font-bold uppercase tracking-[0.12em] text-[#a09187]">
+              Access level
+            </p>
 
-              <p className="mt-2 text-sm font-medium text-slate-300">
-                Administrator
-              </p>
-            </div>
+            <p className="mt-2 px-4 text-sm font-semibold">
+              Administrator
+            </p>
 
             <button
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 rounded-2xl border border-rose-500/10 px-4 py-3 text-left text-rose-300 transition hover:border-rose-500/20 hover:bg-rose-500/10"
+              className="mt-5 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#c9472d] transition hover:bg-[#fff0ec]"
             >
-              <LogOut size={19} />
+              <LogOut size={18} />
               Logout
             </button>
           </div>
@@ -701,25 +767,25 @@ function AdminPayments() {
         {mobileMenuOpen && (
           <>
             <div
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 bg-[#1c1410]/35 lg:hidden"
               onClick={() =>
                 setMobileMenuOpen(false)
               }
             />
 
-            <aside className="fixed inset-y-0 left-0 z-50 w-[290px] border-r border-white/10 bg-slate-950 p-6 shadow-2xl lg:hidden">
+            <aside className="fixed inset-y-0 left-0 z-50 w-[280px] border-r border-[#f1ded0] bg-[#fffaf5] p-6 shadow-2xl lg:hidden">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="se-icon-box h-11 w-11 rounded-2xl text-indigo-300">
-                    <Sparkles size={20} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+                    <Sparkles size={18} />
                   </div>
 
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-indigo-300">
+                    <p className="font-extrabold">
                       ServEase
                     </p>
 
-                    <p className="mt-1 text-sm font-medium">
+                    <p className="text-xs text-[#8b7c73]">
                       Admin Console
                     </p>
                   </div>
@@ -729,7 +795,7 @@ function AdminPayments() {
                   onClick={() =>
                     setMobileMenuOpen(false)
                   }
-                  className="rounded-xl border border-white/10 bg-white/5 p-2 text-slate-400"
+                  className="rounded-lg border border-[#ead7ca] bg-white p-2 text-[#74675f]"
                 >
                   <X size={18} />
                 </button>
@@ -739,9 +805,9 @@ function AdminPayments() {
 
               <button
                 onClick={handleLogout}
-                className="mt-8 flex w-full items-center gap-3 rounded-2xl border border-rose-500/10 px-4 py-3 text-left text-rose-300"
+                className="mt-8 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#c9472d] hover:bg-[#fff0ec]"
               >
-                <LogOut size={19} />
+                <LogOut size={18} />
                 Logout
               </button>
             </aside>
@@ -751,19 +817,19 @@ function AdminPayments() {
         {/* MAIN */}
         <section className="min-w-0 flex-1">
           {/* MOBILE HEADER */}
-          <div className="border-b border-white/10 bg-slate-950/50 px-5 py-4 backdrop-blur-xl lg:hidden">
+          <div className="border-b border-[#f1ded0] bg-[#fffaf5] px-5 py-4 lg:hidden">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="se-icon-box h-10 w-10 rounded-xl text-indigo-300">
-                  <Sparkles size={18} />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+                  <Sparkles size={17} />
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">
+                  <p className="font-bold">
                     ServEase
                   </p>
 
-                  <p className="text-sm font-medium">
+                  <p className="text-xs text-[#8b7c73]">
                     Admin Console
                   </p>
                 </div>
@@ -773,71 +839,67 @@ function AdminPayments() {
                 onClick={() =>
                   setMobileMenuOpen(true)
                 }
-                className="rounded-xl border border-white/10 bg-white/5 p-2.5 text-slate-300"
+                className="rounded-lg border border-[#ead7ca] bg-white p-2.5 text-[#493c35]"
               >
                 <Menu size={20} />
               </button>
             </div>
           </div>
 
-          <div className="mx-auto max-w-[1600px] px-5 py-8 sm:px-8 lg:px-10">
-            {/* PAGE HEADER */}
-            <header className="se-glass rounded-[28px] px-6 py-6 sm:px-8">
-              <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="se-icon-box h-14 w-14 rounded-2xl text-emerald-300">
-                    <CreditCard size={25} />
-                  </div>
+          <div className="mx-auto max-w-[1500px] px-6 py-10 lg:px-10 lg:py-12">
+            {/* HEADER */}
+            <header className="border-b border-[#ead7ca] pb-9">
+              <div className="flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+                <div>
+                  <p className="text-sm font-bold text-[#ff6b4a]">
+                    Payment management
+                  </p>
 
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-300">
-                      Payment Management
-                    </p>
-
-                    <h1 className="se-gradient-text mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+                  <h1 className="mt-2 text-4xl font-extrabold tracking-[-0.04em] sm:text-5xl">
+                    Manage{' '}
+                    <span className="se-gradient-text">
                       Payments
-                    </h1>
+                    </span>
+                  </h1>
 
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
-                      Record appointment payments,
-                      update payment status, and review
-                      ServEase payment activity.
-                    </p>
-                  </div>
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-[#74675f] sm:text-base">
+                    Record appointment payments,
+                    update payment status, and
+                    review ServEase payment activity.
+                  </p>
                 </div>
 
-                {/* REAL STATS */}
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="se-glass se-card-3d min-w-[120px] rounded-2xl px-4 py-4">
-                    <p className="text-xs text-slate-500">
+                <div className="grid grid-cols-3 gap-8 border-t border-[#ead7ca] pt-6 xl:border-t-0 xl:pt-0">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#a09187]">
                       Records
                     </p>
 
-                    <p className="mt-2 text-2xl font-bold">
+                    <p className="mt-1 text-3xl font-extrabold">
                       {loading
                         ? '...'
                         : payments.length}
                     </p>
                   </div>
 
-                  <div className="se-glass se-card-3d min-w-[120px] rounded-2xl px-4 py-4">
-                    <p className="text-xs text-emerald-400">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#16845b]">
                       Paid
                     </p>
 
-                    <p className="mt-2 text-2xl font-bold">
+                    <p className="mt-1 text-3xl font-extrabold">
                       {loading
                         ? '...'
                         : paidCount}
                     </p>
                   </div>
 
-                  <div className="se-glass se-card-3d min-w-[120px] rounded-2xl px-4 py-4">
-                    <p className="text-xs text-indigo-400">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#3569a6]">
                       Pending
                     </p>
 
-                    <p className="mt-2 text-2xl font-bold">
+                    <p className="mt-1 text-3xl font-extrabold">
                       {loading
                         ? '...'
                         : pendingCount}
@@ -847,19 +909,19 @@ function AdminPayments() {
               </div>
             </header>
 
-            {/* REVENUE CARD */}
-            <section className="se-glass se-card-3d mt-7 rounded-[28px] p-6 sm:p-8">
+            {/* REVENUE */}
+            <section className="border-b border-[#ead7ca] py-9">
               <div className="flex items-center gap-4">
-                <div className="se-icon-box h-12 w-12 rounded-2xl text-emerald-300">
-                  <CircleDollarSign size={22} />
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#e9f8f1] text-[#16845b]">
+                  <CircleDollarSign size={21} />
                 </div>
 
                 <div>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#16845b]">
                     Total Paid Revenue
                   </p>
 
-                  <p className="mt-1 text-3xl font-bold">
+                  <p className="mt-1 text-3xl font-extrabold">
                     {loading
                       ? '...'
                       : formatCurrency(
@@ -867,42 +929,40 @@ function AdminPayments() {
                         )}
                   </p>
 
-                  <p className="mt-1 text-xs text-emerald-400">
+                  <p className="mt-1 text-sm text-[#8b7c73]">
                     Sum of payment records currently
-                    marked as paid
+                    marked as paid.
                   </p>
                 </div>
               </div>
             </section>
 
-            {/* PAYMENT WORKSPACE */}
-            <section className="se-glass mt-7 overflow-hidden rounded-[28px]">
-              {/* RECORD PAYMENT */}
+            {/* RECORD PAYMENT */}
+            <section className="border-b border-[#ead7ca] py-10">
+              <div className="flex items-center gap-2 text-[#ff6b4a]">
+                <CirclePlus size={17} />
+
+                <p className="text-xs font-bold uppercase tracking-[0.14em]">
+                  Record payment
+                </p>
+              </div>
+
+              <h2 className="mt-2 text-2xl font-extrabold">
+                New Payment Record
+              </h2>
+
+              <p className="mt-2 text-sm text-[#74675f]">
+                Create a payment record for an existing
+                ServEase appointment.
+              </p>
+
               <form
                 onSubmit={handleSubmit}
-                className="border-b border-white/10 px-6 py-6 sm:px-8"
+                className="mt-7"
               >
-                <div className="flex items-center gap-3">
-                  <div className="se-icon-box h-10 w-10 rounded-xl text-emerald-300">
-                    <CirclePlus size={18} />
-                  </div>
-
+                <div className="grid gap-5 md:grid-cols-2">
                   <div>
-                    <h2 className="font-semibold">
-                      Record Payment
-                    </h2>
-
-                    <p className="mt-1 text-xs text-slate-500">
-                      Create a payment record for a
-                      ServEase appointment.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-6 grid gap-5 md:grid-cols-2">
-                  {/* APPOINTMENT */}
-                  <div>
-                    <label className="text-sm text-slate-400">
+                    <label className="mb-2 block text-sm font-bold text-[#493c35]">
                       Appointment
                     </label>
 
@@ -914,12 +974,9 @@ function AdminPayments() {
                           event.target.value
                         )
                       }
-                      className="se-input mt-2 w-full rounded-2xl px-4 py-3.5 text-sm"
+                      className="se-input h-12 text-sm"
                     >
-                      <option
-                        value=""
-                        className="bg-slate-900"
-                      >
+                      <option value="">
                         Select appointment
                       </option>
 
@@ -928,7 +985,6 @@ function AdminPayments() {
                           <option
                             key={appointment.id}
                             value={appointment.id}
-                            className="bg-slate-900"
                           >
                             {appointment.customer
                               ?.full_name ??
@@ -947,16 +1003,15 @@ function AdminPayments() {
                     </select>
                   </div>
 
-                  {/* AMOUNT */}
                   <div>
-                    <label className="text-sm text-slate-400">
+                    <label className="mb-2 block text-sm font-bold text-[#493c35]">
                       Amount
                     </label>
 
-                    <div className="relative mt-2">
+                    <div className="relative">
                       <PhilippinePeso
                         size={17}
-                        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+                        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
                       />
 
                       <input
@@ -970,15 +1025,14 @@ function AdminPayments() {
                             event.target.value
                           )
                         }
-                        className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4 text-sm"
+                        className="se-input se-input-icon-left h-12 text-sm"
                         placeholder="1000"
                       />
                     </div>
                   </div>
 
-                  {/* METHOD */}
                   <div>
-                    <label className="text-sm text-slate-400">
+                    <label className="mb-2 block text-sm font-bold text-[#493c35]">
                       Payment Method
                     </label>
 
@@ -989,48 +1043,32 @@ function AdminPayments() {
                           event.target.value
                         )
                       }
-                      className="se-input mt-2 w-full rounded-2xl px-4 py-3.5 text-sm"
+                      className="se-input h-12 text-sm"
                     >
-                      <option
-                        value=""
-                        className="bg-slate-900"
-                      >
+                      <option value="">
                         Select method
                       </option>
 
-                      <option
-                        value="cash"
-                        className="bg-slate-900"
-                      >
+                      <option value="cash">
                         Cash
                       </option>
 
-                      <option
-                        value="gcash"
-                        className="bg-slate-900"
-                      >
+                      <option value="gcash">
                         GCash
                       </option>
 
-                      <option
-                        value="maya"
-                        className="bg-slate-900"
-                      >
+                      <option value="maya">
                         Maya
                       </option>
 
-                      <option
-                        value="bank_transfer"
-                        className="bg-slate-900"
-                      >
+                      <option value="bank_transfer">
                         Bank Transfer
                       </option>
                     </select>
                   </div>
 
-                  {/* STATUS */}
                   <div>
-                    <label className="text-sm text-slate-400">
+                    <label className="mb-2 block text-sm font-bold text-[#493c35]">
                       Payment Status
                     </label>
 
@@ -1042,75 +1080,71 @@ function AdminPayments() {
                             .value as PaymentStatus
                         )
                       }
-                      className="se-input mt-2 w-full rounded-2xl px-4 py-3.5 text-sm"
+                      className="se-input h-12 text-sm"
                     >
-                      <option
-                        value="pending"
-                        className="bg-slate-900"
-                      >
+                      <option value="pending">
                         Pending
                       </option>
 
-                      <option
-                        value="paid"
-                        className="bg-slate-900"
-                      >
+                      <option value="paid">
                         Paid
                       </option>
 
-                      <option
-                        value="failed"
-                        className="bg-slate-900"
-                      >
+                      <option value="failed">
                         Failed
                       </option>
 
-                      <option
-                        value="refunded"
-                        className="bg-slate-900"
-                      >
+                      <option value="refunded">
                         Refunded
                       </option>
                     </select>
                   </div>
                 </div>
 
-                {/* SELECTED APPOINTMENT */}
                 {selectedAppointment && (
-                  <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.025] p-4">
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-slate-600">
+                  <div className="mt-6 border-y border-[#ead7ca] py-5">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#a09187]">
                       Selected Appointment
                     </p>
 
-                    <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-                      <p className="text-slate-400">
-                        Customer:{' '}
-                        <span className="text-white">
+                    <div className="mt-4 grid gap-4 sm:grid-cols-3">
+                      <div>
+                        <p className="text-xs text-[#a09187]">
+                          Customer
+                        </p>
+
+                        <p className="mt-1 text-sm font-semibold">
                           {selectedAppointment
                             .customer
                             ?.full_name ??
                             'Customer'}
-                        </span>
-                      </p>
+                        </p>
+                      </div>
 
-                      <p className="text-slate-400">
-                        Service:{' '}
-                        <span className="text-white">
+                      <div>
+                        <p className="text-xs text-[#a09187]">
+                          Service
+                        </p>
+
+                        <p className="mt-1 text-sm font-semibold">
                           {selectedAppointment
                             .service
                             ?.name ??
                             'Service'}
-                        </span>
-                      </p>
+                        </p>
+                      </div>
 
-                      <p className="text-slate-400">
-                        Date:{' '}
-                        <span className="text-white">
+                      <div>
+                        <p className="text-xs text-[#a09187]">
+                          Date
+                        </p>
+
+                        <p className="mt-1 text-sm font-semibold">
                           {
                             selectedAppointment.appointment_date
                           }
-                        </span>
-                      </p>
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -1118,7 +1152,7 @@ function AdminPayments() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="se-btn-primary mt-6 flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60"
+                  className="se-btn-primary mt-6 flex items-center gap-2 px-5 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <CreditCard size={17} />
 
@@ -1127,521 +1161,509 @@ function AdminPayments() {
                     : 'Record Payment'}
                 </button>
               </form>
+            </section>
 
-              {/* PAYMENT RECORDS HEADER */}
-              <div className="border-b border-white/10 bg-white/[0.015] px-6 py-6 sm:px-8">
-                <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-300">
-                      Payment Records
-                    </p>
+            {/* PAYMENT RECORDS */}
+            <section className="pt-10">
+              <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6b4a]">
+                    Payment records
+                  </p>
 
-                    <h2 className="mt-2 text-xl font-semibold">
-                      Manage Payments
-                    </h2>
+                  <h2 className="mt-2 text-2xl font-extrabold">
+                    Payment Activity
+                  </h2>
 
-                    <p className="mt-1 text-sm text-slate-500">
-                      Search payment records and update
-                      their current payment status.
-                    </p>
-                  </div>
-
-                  <div className="grid w-full gap-3 md:grid-cols-[1fr_170px_170px] xl:max-w-3xl">
-                    {/* SEARCH */}
-                    <div className="relative">
-                      <Search
-                        size={17}
-                        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
-                      />
-
-                      <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={(event) =>
-                          setSearchTerm(
-                            event.target.value
-                          )
-                        }
-                        placeholder="Search customer or service"
-                        className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4 text-sm"
-                      />
-                    </div>
-
-                    {/* STATUS FILTER */}
-                    <select
-                      value={statusFilter}
-                      onChange={(event) =>
-                        setStatusFilter(
-                          event.target.value
-                        )
-                      }
-                      className="se-input rounded-2xl px-4 py-3.5 text-sm"
-                    >
-                      <option
-                        value="all"
-                        className="bg-slate-900"
-                      >
-                        All statuses
-                      </option>
-
-                      <option
-                        value="pending"
-                        className="bg-slate-900"
-                      >
-                        Pending
-                      </option>
-
-                      <option
-                        value="paid"
-                        className="bg-slate-900"
-                      >
-                        Paid
-                      </option>
-
-                      <option
-                        value="failed"
-                        className="bg-slate-900"
-                      >
-                        Failed
-                      </option>
-
-                      <option
-                        value="refunded"
-                        className="bg-slate-900"
-                      >
-                        Refunded
-                      </option>
-                    </select>
-
-                    {/* METHOD FILTER */}
-                    <select
-                      value={methodFilter}
-                      onChange={(event) =>
-                        setMethodFilter(
-                          event.target.value
-                        )
-                      }
-                      className="se-input rounded-2xl px-4 py-3.5 text-sm"
-                    >
-                      <option
-                        value="all"
-                        className="bg-slate-900"
-                      >
-                        All methods
-                      </option>
-
-                      <option
-                        value="cash"
-                        className="bg-slate-900"
-                      >
-                        Cash
-                      </option>
-
-                      <option
-                        value="gcash"
-                        className="bg-slate-900"
-                      >
-                        GCash
-                      </option>
-
-                      <option
-                        value="maya"
-                        className="bg-slate-900"
-                      >
-                        Maya
-                      </option>
-
-                      <option
-                        value="bank_transfer"
-                        className="bg-slate-900"
-                      >
-                        Bank Transfer
-                      </option>
-                    </select>
-                  </div>
+                  <p className="mt-2 text-sm text-[#74675f]">
+                    Search payment records and update
+                    their current status.
+                  </p>
                 </div>
 
-                <p className="mt-5 text-sm text-slate-500">
-                  Showing{' '}
-                  <span className="font-semibold text-white">
-                    {filteredPayments.length}
-                  </span>{' '}
-                  of{' '}
-                  <span className="font-semibold text-white">
-                    {payments.length}
-                  </span>{' '}
-                  payment records
-                </p>
-              </div>
-
-              {/* PAYMENT DATA */}
-              {loading ? (
-                <div className="flex min-h-[300px] items-center justify-center">
-                  <div className="text-center">
-                    <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-emerald-400/30 border-t-emerald-300" />
-
-                    <p className="mt-4 text-sm text-slate-500">
-                      Loading payments...
-                    </p>
-                  </div>
-                </div>
-              ) : payments.length === 0 ? (
-                <div className="flex min-h-[300px] items-center justify-center">
-                  <div className="text-center">
-                    <CreditCard
-                      size={28}
-                      className="mx-auto text-slate-600"
+                <div className="grid w-full gap-3 md:grid-cols-[1fr_170px_170px] xl:max-w-3xl">
+                  <div className="relative">
+                    <Search
+                      size={17}
+                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
                     />
 
-                    <p className="mt-4 text-sm text-slate-500">
+                    <input
+                      type="text"
+                      value={searchTerm}
+                      onChange={(event) =>
+                        setSearchTerm(
+                          event.target.value
+                        )
+                      }
+                      placeholder="Search customer or service"
+                      className="se-input se-input-icon-left h-11 text-sm"
+                    />
+                  </div>
+
+                  <select
+                    value={statusFilter}
+                    onChange={(event) =>
+                      setStatusFilter(
+                        event.target.value
+                      )
+                    }
+                    className="se-input h-11 text-sm"
+                  >
+                    <option value="all">
+                      All statuses
+                    </option>
+
+                    <option value="pending">
+                      Pending
+                    </option>
+
+                    <option value="paid">
+                      Paid
+                    </option>
+
+                    <option value="failed">
+                      Failed
+                    </option>
+
+                    <option value="refunded">
+                      Refunded
+                    </option>
+                  </select>
+
+                  <select
+                    value={methodFilter}
+                    onChange={(event) =>
+                      setMethodFilter(
+                        event.target.value
+                      )
+                    }
+                    className="se-input h-11 text-sm"
+                  >
+                    <option value="all">
+                      All methods
+                    </option>
+
+                    <option value="cash">
+                      Cash
+                    </option>
+
+                    <option value="gcash">
+                      GCash
+                    </option>
+
+                    <option value="maya">
+                      Maya
+                    </option>
+
+                    <option value="bank_transfer">
+                      Bank Transfer
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <p className="mt-5 text-sm text-[#8b7c73]">
+                Showing{' '}
+                <span className="font-semibold text-[#1c1410]">
+                  {filteredPayments.length}
+                </span>{' '}
+                of{' '}
+                <span className="font-semibold text-[#1c1410]">
+                  {payments.length}
+                </span>{' '}
+                payment records
+              </p>
+
+              <div className="mt-7">
+                {loading ? (
+                  <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white">
+                    <div className="text-center">
+                      <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-[#f4c9b7] border-t-[#ff6b4a]" />
+
+                      <p className="mt-4 text-sm text-[#8b7c73]">
+                        Loading payments...
+                      </p>
+                    </div>
+                  </div>
+                ) : payments.length === 0 ? (
+                  <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white">
+                    <p className="text-sm text-[#8b7c73]">
                       No payments recorded yet.
                     </p>
                   </div>
-                </div>
-              ) : filteredPayments.length === 0 ? (
-                <div className="flex min-h-[300px] items-center justify-center">
-                  <div className="text-center">
-                    <Search
-                      size={28}
-                      className="mx-auto text-slate-600"
-                    />
+                ) : filteredPayments.length === 0 ? (
+                  <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white">
+                    <div className="text-center">
+                      <Search
+                        size={28}
+                        className="mx-auto text-[#b6a79d]"
+                      />
 
-                    <p className="mt-4 text-sm text-slate-500">
-                      No payments match your current filters.
-                    </p>
+                      <p className="mt-4 text-sm text-[#8b7c73]">
+                        No payments match your current filters.
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <>
-                  {/* DESKTOP TABLE */}
-                  <div className="hidden overflow-x-auto xl:block">
-                    <table className="w-full text-left">
-                      <thead className="border-b border-white/10 bg-white/[0.025]">
-                        <tr>
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Customer
-                          </th>
-
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Service
-                          </th>
-
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Appointment
-                          </th>
-
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Amount
-                          </th>
-
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Method
-                          </th>
-
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Status
-                          </th>
-
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Paid
-                          </th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        {filteredPayments.map(
-                          (payment) => (
-                            <tr
-                              key={payment.id}
-                              className="border-b border-white/5 transition hover:bg-white/[0.035] last:border-0"
-                            >
-                              <td className="px-6 py-5 font-medium text-white">
-                                {payment.appointment
-                                  ?.customer
-                                  ?.full_name ??
-                                  'Customer'}
-                              </td>
-
-                              <td className="px-6 py-5 text-sm text-slate-300">
-                                {payment.appointment
-                                  ?.service
-                                  ?.name ??
-                                  'Service'}
-                              </td>
-
-                              <td className="whitespace-nowrap px-6 py-5">
-                                <p className="text-sm text-slate-300">
-                                  {payment.appointment
-                                    ?.appointment_date ??
-                                    '—'}
-                                </p>
-
-                                <p className="mt-1 text-xs text-slate-500">
-                                  {payment.appointment
-                                    ?.appointment_time
-                                    ? payment.appointment.appointment_time.slice(
-                                        0,
-                                        5
-                                      )
-                                    : '—'}
-                                </p>
-                              </td>
-
-                              <td className="whitespace-nowrap px-6 py-5 font-semibold text-white">
-                                {formatCurrency(
-                                  payment.amount
-                                )}
-                              </td>
-
-                              <td className="px-6 py-5 text-sm text-slate-300">
-                                {formatMethod(
-                                  payment.payment_method
-                                )}
-                              </td>
-
-                              <td className="px-6 py-5">
-                                <select
-                                  value={
-                                    payment.payment_status
-                                  }
-                                  disabled={
-                                    updatingId ===
-                                    payment.id
-                                  }
-                                  onChange={(event) =>
-                                    handleStatusChange(
-                                      payment.id,
-                                      event.target
-                                        .value as PaymentStatus
-                                    )
-                                  }
-                                  className={`rounded-xl border px-3 py-2 text-xs font-medium capitalize outline-none transition disabled:cursor-not-allowed disabled:opacity-60 ${getStatusStyles(
-                                    payment.payment_status
-                                  )}`}
-                                >
-                                  <option
-                                    value="pending"
-                                    className="bg-slate-900 text-white"
-                                  >
-                                    Pending
-                                  </option>
-
-                                  <option
-                                    value="paid"
-                                    className="bg-slate-900 text-white"
-                                  >
-                                    Paid
-                                  </option>
-
-                                  <option
-                                    value="failed"
-                                    className="bg-slate-900 text-white"
-                                  >
-                                    Failed
-                                  </option>
-
-                                  <option
-                                    value="refunded"
-                                    className="bg-slate-900 text-white"
-                                  >
-                                    Refunded
-                                  </option>
-                                </select>
-
-                                {updatingId ===
-                                  payment.id && (
-                                  <p className="mt-2 text-xs text-slate-500">
-                                    Updating...
-                                  </p>
-                                )}
-                              </td>
-
-                              <td className="whitespace-nowrap px-6 py-5 text-sm text-slate-400">
-                                {payment.paid_at
-                                  ? new Date(
-                                      payment.paid_at
-                                    ).toLocaleDateString(
-                                      'en-PH',
-                                      {
-                                        year: 'numeric',
-                                        month: 'short',
-                                        day: 'numeric',
-                                      }
-                                    )
-                                  : '—'}
-                              </td>
-                            </tr>
-                          )
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* MOBILE / TABLET */}
-                  <div className="grid gap-4 p-5 xl:hidden">
-                    {filteredPayments.map(
-                      (payment) => (
-                        <article
-                          key={payment.id}
-                          className="se-card-3d rounded-3xl border border-white/10 bg-slate-950/50 p-5"
-                        >
-                          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                            <div>
-                              <p className="text-xs uppercase tracking-[0.18em] text-emerald-300">
+                ) : (
+                  <>
+                    {/* DESKTOP TABLE */}
+                    <div className="hidden overflow-hidden rounded-2xl border border-[#ead7ca] bg-white shadow-[0_8px_30px_rgba(91,62,47,0.04)] xl:block">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-sm">
+                          <thead>
+                            <tr className="border-b border-[#ead7ca] bg-[#fffaf6]">
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
                                 Customer
-                              </p>
+                              </th>
 
-                              <h3 className="mt-2 text-lg font-semibold">
-                                {payment.appointment
-                                  ?.customer
-                                  ?.full_name ??
-                                  'Customer'}
-                              </h3>
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                                Service
+                              </th>
 
-                              <p className="mt-1 text-sm text-slate-400">
-                                {payment.appointment
-                                  ?.service
-                                  ?.name ??
-                                  'Service'}
-                              </p>
-                            </div>
-
-                            <span
-                              className={`self-start rounded-full border px-3 py-1.5 text-xs font-medium capitalize ${getStatusStyles(
-                                payment.payment_status
-                              )}`}
-                            >
-                              {
-                                payment.payment_status
-                              }
-                            </span>
-                          </div>
-
-                          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                            <div>
-                              <p className="text-xs text-slate-600">
-                                Amount
-                              </p>
-
-                              <p className="mt-1 font-semibold text-white">
-                                {formatCurrency(
-                                  payment.amount
-                                )}
-                              </p>
-                            </div>
-
-                            <div>
-                              <p className="text-xs text-slate-600">
-                                Method
-                              </p>
-
-                              <p className="mt-1 text-sm text-slate-300">
-                                {formatMethod(
-                                  payment.payment_method
-                                )}
-                              </p>
-                            </div>
-
-                            <div>
-                              <p className="text-xs text-slate-600">
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
                                 Appointment
-                              </p>
+                              </th>
 
-                              <p className="mt-1 text-sm text-slate-300">
-                                {payment.appointment
-                                  ?.appointment_date ??
-                                  '—'}
-                              </p>
-                            </div>
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                                Amount
+                              </th>
 
-                            <div>
-                              <p className="text-xs text-slate-600">
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                                Method
+                              </th>
+
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                                Status
+                              </th>
+
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
                                 Paid Date
-                              </p>
+                              </th>
+                            </tr>
+                          </thead>
 
-                              <p className="mt-1 text-sm text-slate-300">
-                                {payment.paid_at
-                                  ? new Date(
-                                      payment.paid_at
-                                    ).toLocaleDateString(
-                                      'en-PH',
-                                      {
-                                        year: 'numeric',
-                                        month: 'short',
-                                        day: 'numeric',
-                                      }
-                                    )
-                                  : '—'}
-                              </p>
-                            </div>
-                          </div>
+                          <tbody className="divide-y divide-[#f1e4db]">
+                            {filteredPayments.map(
+                              (payment) => {
+                                const customerName =
+                                  payment.appointment
+                                    ?.customer
+                                    ?.full_name ??
+                                  'Customer'
 
-                          <div className="mt-5">
-                            <label className="mb-2 block text-xs text-slate-500">
-                              Payment Status
-                            </label>
+                                return (
+                                  <tr
+                                    key={payment.id}
+                                    className="transition-colors hover:bg-[#fffaf6]"
+                                  >
+                                    {/* CUSTOMER */}
+                                    <td className="px-5 py-4">
+                                      <div className="flex items-center gap-3">
+                                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fff0e7] text-xs font-extrabold text-[#c45231] ring-1 ring-[#f2d7c7]">
+                                          {getInitials(
+                                            customerName
+                                          )}
+                                        </div>
 
-                            <select
-                              value={
-                                payment.payment_status
-                              }
-                              disabled={
-                                updatingId ===
-                                payment.id
-                              }
-                              onChange={(event) =>
-                                handleStatusChange(
-                                  payment.id,
-                                  event.target
-                                    .value as PaymentStatus
+                                        <div className="min-w-0">
+                                          <p className="truncate font-semibold text-[#1c1410]">
+                                            {
+                                              customerName
+                                            }
+                                          </p>
+
+                                          <p className="mt-0.5 text-xs text-[#9a8a80]">
+                                            Customer
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </td>
+
+                                    {/* SERVICE */}
+                                    <td className="px-5 py-4">
+                                      <p className="font-medium text-[#493c35]">
+                                        {payment
+                                          .appointment
+                                          ?.service
+                                          ?.name ??
+                                          'Service'}
+                                      </p>
+                                    </td>
+
+                                    {/* APPOINTMENT */}
+                                    <td className="whitespace-nowrap px-5 py-4">
+                                      <p className="font-medium text-[#493c35]">
+                                        {formatAppointmentDate(
+                                          payment
+                                            .appointment
+                                            ?.appointment_date
+                                        )}
+                                      </p>
+
+                                      <p className="mt-0.5 text-xs text-[#9a8a80]">
+                                        {payment.appointment
+                                          ?.appointment_time
+                                          ? payment.appointment.appointment_time.slice(
+                                              0,
+                                              5
+                                            )
+                                          : '—'}
+                                      </p>
+                                    </td>
+
+                                    {/* AMOUNT */}
+                                    <td className="whitespace-nowrap px-5 py-4">
+                                      <p className="font-semibold text-[#1c1410]">
+                                        {formatCurrency(
+                                          payment.amount
+                                        )}
+                                      </p>
+
+                                      <p className="mt-0.5 text-xs text-[#9a8a80]">
+                                        Payment amount
+                                      </p>
+                                    </td>
+
+                                    {/* METHOD */}
+                                    <td className="px-5 py-4">
+                                      <span className="inline-flex rounded-lg bg-[#fff4ec] px-2.5 py-1.5 text-xs font-semibold text-[#8b6f61]">
+                                        {formatMethod(
+                                          payment.payment_method
+                                        )}
+                                      </span>
+                                    </td>
+
+                                    {/* STATUS */}
+                                    <td className="px-5 py-4">
+                                      <select
+                                        value={
+                                          payment.payment_status
+                                        }
+                                        disabled={
+                                          updatingId ===
+                                          payment.id
+                                        }
+                                        onChange={(event) =>
+                                          handleStatusChange(
+                                            payment.id,
+                                            event.target
+                                              .value as PaymentStatus
+                                          )
+                                        }
+                                        className={`rounded-full border px-3 py-1.5 text-xs font-bold capitalize outline-none transition disabled:cursor-not-allowed disabled:opacity-60 ${getStatusStyles(
+                                          payment.payment_status
+                                        )}`}
+                                      >
+                                        <option value="pending">
+                                          Pending
+                                        </option>
+
+                                        <option value="paid">
+                                          Paid
+                                        </option>
+
+                                        <option value="failed">
+                                          Failed
+                                        </option>
+
+                                        <option value="refunded">
+                                          Refunded
+                                        </option>
+                                      </select>
+
+                                      {updatingId ===
+                                        payment.id && (
+                                        <p className="mt-1.5 text-[11px] text-[#9a8a80]">
+                                          Updating...
+                                        </p>
+                                      )}
+                                    </td>
+
+                                    {/* PAID DATE */}
+                                    <td className="whitespace-nowrap px-5 py-4">
+                                      <p className="font-medium text-[#493c35]">
+                                        {formatDate(
+                                          payment.paid_at
+                                        )}
+                                      </p>
+
+                                      <p className="mt-0.5 text-xs text-[#9a8a80]">
+                                        {payment.paid_at
+                                          ? 'Payment completed'
+                                          : 'Not paid'}
+                                      </p>
+                                    </td>
+                                  </tr>
                                 )
                               }
-                              className={`w-full rounded-2xl border px-4 py-3 text-sm font-medium capitalize outline-none ${getStatusStyles(
-                                payment.payment_status
-                              )}`}
-                            >
-                              <option
-                                value="pending"
-                                className="bg-slate-900 text-white"
-                              >
-                                Pending
-                              </option>
-
-                              <option
-                                value="paid"
-                                className="bg-slate-900 text-white"
-                              >
-                                Paid
-                              </option>
-
-                              <option
-                                value="failed"
-                                className="bg-slate-900 text-white"
-                              >
-                                Failed
-                              </option>
-
-                              <option
-                                value="refunded"
-                                className="bg-slate-900 text-white"
-                              >
-                                Refunded
-                              </option>
-                            </select>
-
-                            {updatingId ===
-                              payment.id && (
-                              <p className="mt-2 text-xs text-slate-500">
-                                Updating payment...
-                              </p>
                             )}
-                          </div>
-                        </article>
-                      )
-                    )}
-                  </div>
-                </>
-              )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* MOBILE / TABLET */}
+                    <div className="overflow-hidden rounded-2xl border border-[#ead7ca] bg-white xl:hidden">
+                      <div className="divide-y divide-[#f1e4db]">
+                        {filteredPayments.map(
+                          (payment) => {
+                            const customerName =
+                              payment.appointment
+                                ?.customer
+                                ?.full_name ??
+                              'Customer'
+
+                            return (
+                              <article
+                                key={payment.id}
+                                className="p-5 sm:p-6"
+                              >
+                                <div className="flex items-start justify-between gap-4">
+                                  <div className="flex min-w-0 items-center gap-3">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#fff0e7] text-xs font-extrabold text-[#c45231] ring-1 ring-[#f2d7c7]">
+                                      {getInitials(
+                                        customerName
+                                      )}
+                                    </div>
+
+                                    <div className="min-w-0">
+                                      <h3 className="truncate font-bold">
+                                        {
+                                          customerName
+                                        }
+                                      </h3>
+
+                                      <p className="mt-1 truncate text-sm text-[#74675f]">
+                                        {payment
+                                          .appointment
+                                          ?.service
+                                          ?.name ??
+                                          'Service'}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  <span
+                                    className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-bold capitalize ${getStatusStyles(
+                                      payment.payment_status
+                                    )}`}
+                                  >
+                                    {
+                                      payment.payment_status
+                                    }
+                                  </span>
+                                </div>
+
+                                <div className="mt-5 grid grid-cols-2 gap-4 border-t border-[#f1e4db] pt-4">
+                                  <div>
+                                    <p className="text-xs font-medium text-[#9a8a80]">
+                                      Amount
+                                    </p>
+
+                                    <p className="mt-1 font-semibold text-[#493c35]">
+                                      {formatCurrency(
+                                        payment.amount
+                                      )}
+                                    </p>
+                                  </div>
+
+                                  <div>
+                                    <p className="text-xs font-medium text-[#9a8a80]">
+                                      Method
+                                    </p>
+
+                                    <p className="mt-1 text-sm font-medium text-[#493c35]">
+                                      {formatMethod(
+                                        payment.payment_method
+                                      )}
+                                    </p>
+                                  </div>
+
+                                  <div>
+                                    <p className="text-xs font-medium text-[#9a8a80]">
+                                      Appointment
+                                    </p>
+
+                                    <p className="mt-1 text-sm font-medium text-[#493c35]">
+                                      {formatAppointmentDate(
+                                        payment
+                                          .appointment
+                                          ?.appointment_date
+                                      )}
+                                    </p>
+                                  </div>
+
+                                  <div>
+                                    <p className="text-xs font-medium text-[#9a8a80]">
+                                      Paid Date
+                                    </p>
+
+                                    <p className="mt-1 text-sm font-medium text-[#493c35]">
+                                      {formatDate(
+                                        payment.paid_at
+                                      )}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="mt-5">
+                                  <label className="mb-2 block text-xs font-semibold text-[#74675f]">
+                                    Payment Status
+                                  </label>
+
+                                  <select
+                                    value={
+                                      payment.payment_status
+                                    }
+                                    disabled={
+                                      updatingId ===
+                                      payment.id
+                                    }
+                                    onChange={(event) =>
+                                      handleStatusChange(
+                                        payment.id,
+                                        event.target
+                                          .value as PaymentStatus
+                                      )
+                                    }
+                                    className={`w-full rounded-xl border px-4 py-3 text-sm font-bold capitalize outline-none ${getStatusStyles(
+                                      payment.payment_status
+                                    )}`}
+                                  >
+                                    <option value="pending">
+                                      Pending
+                                    </option>
+
+                                    <option value="paid">
+                                      Paid
+                                    </option>
+
+                                    <option value="failed">
+                                      Failed
+                                    </option>
+
+                                    <option value="refunded">
+                                      Refunded
+                                    </option>
+                                  </select>
+
+                                  {updatingId ===
+                                    payment.id && (
+                                    <p className="mt-2 text-xs text-[#8b7c73]">
+                                      Updating payment...
+                                    </p>
+                                  )}
+                                </div>
+                              </article>
+                            )
+                          }
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
             </section>
           </div>
         </section>

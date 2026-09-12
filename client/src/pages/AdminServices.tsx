@@ -183,17 +183,19 @@ function AdminServices() {
     statusFilter,
   ])
 
-  const activeServicesCount = useMemo(() => {
-    return services.filter(
-      (service) => service.is_active
-    ).length
-  }, [services])
+  const activeServicesCount =
+    useMemo(() => {
+      return services.filter(
+        (service) => service.is_active
+      ).length
+    }, [services])
 
-  const inactiveServicesCount = useMemo(() => {
-    return services.filter(
-      (service) => !service.is_active
-    ).length
-  }, [services])
+  const inactiveServicesCount =
+    useMemo(() => {
+      return services.filter(
+        (service) => !service.is_active
+      ).length
+    }, [services])
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -204,11 +206,16 @@ function AdminServices() {
 
     const serviceData = {
       name: form.name.trim(),
+
       description:
         form.description.trim() || null,
-      price: Number(form.price),
+
+      price:
+        Number(form.price),
+
       duration_minutes:
         Number(form.duration_minutes),
+
       updated_at:
         new Date().toISOString(),
     }
@@ -239,11 +246,17 @@ function AdminServices() {
         action: 'service_updated',
         entityType: 'service',
         entityId: editingId,
+
         details: {
           previous_name:
             existingService?.name ?? null,
-          name: serviceData.name,
-          price: serviceData.price,
+
+          name:
+            serviceData.name,
+
+          price:
+            serviceData.price,
+
           duration_minutes:
             serviceData.duration_minutes,
         },
@@ -275,9 +288,14 @@ function AdminServices() {
         action: 'service_created',
         entityType: 'service',
         entityId: data.id,
+
         details: {
-          name: serviceData.name,
-          price: serviceData.price,
+          name:
+            serviceData.name,
+
+          price:
+            serviceData.price,
+
           duration_minutes:
             serviceData.duration_minutes,
         },
@@ -297,10 +315,15 @@ function AdminServices() {
     setEditingId(service.id)
 
     setForm({
-      name: service.name,
+      name:
+        service.name,
+
       description:
         service.description ?? '',
-      price: String(service.price),
+
+      price:
+        String(service.price),
+
       duration_minutes:
         String(
           service.duration_minutes
@@ -328,6 +351,7 @@ function AdminServices() {
       .from('services')
       .update({
         is_active: newStatus,
+
         updated_at:
           new Date().toISOString(),
       })
@@ -350,8 +374,7 @@ function AdminServices() {
             service.id
               ? {
                   ...currentService,
-                  is_active:
-                    newStatus,
+                  is_active: newStatus,
                 }
               : currentService
         )
@@ -361,15 +384,19 @@ function AdminServices() {
       action: newStatus
         ? 'service_activated'
         : 'service_deactivated',
+
       entityType: 'service',
       entityId: service.id,
+
       details: {
         service_name:
           service.name,
+
         previous_status:
           service.is_active
             ? 'active'
             : 'inactive',
+
         new_status:
           newStatus
             ? 'active'
@@ -397,7 +424,7 @@ function AdminServices() {
   const renderNavigation = (
     mobile = false
   ) => (
-    <nav className="mt-8 space-y-2">
+    <nav className="mt-8 space-y-1">
       {navItems.map((item) => {
         const Icon = item.icon
 
@@ -417,11 +444,11 @@ function AdminServices() {
             }}
             className={
               active
-                ? 'flex w-full items-center gap-3 rounded-2xl border border-violet-400/20 bg-violet-500/10 px-4 py-3 text-left text-violet-200 shadow-[0_0_24px_rgba(139,92,246,0.08)]'
-                : 'flex w-full items-center gap-3 rounded-2xl border border-transparent px-4 py-3 text-left text-slate-400 transition hover:border-white/5 hover:bg-white/5 hover:text-white'
+                ? 'flex w-full items-center gap-3 rounded-xl bg-[#ffe9db] px-4 py-3 text-left font-semibold text-[#c45231]'
+                : 'flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-medium text-[#75675f] transition hover:bg-[#fff0e6] hover:text-[#1c1410]'
             }
           >
-            <Icon size={19} />
+            <Icon size={18} />
             {item.label}
           </button>
         )
@@ -430,26 +457,21 @@ function AdminServices() {
   )
 
   return (
-    <main className="se-page se-grid-bg relative min-h-screen overflow-hidden text-white">
-      {/* BACKGROUND */}
-      <div className="se-orb se-orb-indigo -left-32 top-20" />
-      <div className="se-orb se-orb-cyan -right-28 top-40" />
-      <div className="se-orb se-orb-violet bottom-[-140px] left-[45%]" />
-
-      <div className="relative z-10 flex min-h-screen">
+    <main className="min-h-screen bg-[#fff8f1] text-[#1c1410]">
+      <div className="flex min-h-screen">
         {/* DESKTOP SIDEBAR */}
-        <aside className="hidden w-[290px] shrink-0 border-r border-white/10 bg-slate-950/55 p-6 backdrop-blur-2xl lg:flex lg:flex-col">
+        <aside className="hidden w-[270px] shrink-0 border-r border-[#f1ded0] bg-[#fffaf5] p-6 lg:flex lg:flex-col">
           <div className="flex items-center gap-3">
-            <div className="se-icon-box h-12 w-12 rounded-2xl text-indigo-300">
-              <Sparkles size={22} />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+              <Sparkles size={20} />
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-indigo-300">
+              <p className="text-base font-extrabold tracking-tight">
                 ServEase
               </p>
 
-              <p className="mt-1 text-sm font-medium text-white">
+              <p className="text-xs text-[#8b7c73]">
                 Admin Console
               </p>
             </div>
@@ -457,22 +479,20 @@ function AdminServices() {
 
           {renderNavigation()}
 
-          <div className="mt-auto pt-8">
-            <div className="mb-4 rounded-2xl border border-white/5 bg-white/[0.025] p-4">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-600">
-                Access Level
-              </p>
+          <div className="mt-auto border-t border-[#ead7ca] pt-6">
+            <p className="px-4 text-xs font-bold uppercase tracking-[0.12em] text-[#a09187]">
+              Access level
+            </p>
 
-              <p className="mt-2 text-sm font-medium text-slate-300">
-                Administrator
-              </p>
-            </div>
+            <p className="mt-2 px-4 text-sm font-semibold">
+              Administrator
+            </p>
 
             <button
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 rounded-2xl border border-rose-500/10 px-4 py-3 text-left text-rose-300 transition hover:border-rose-500/20 hover:bg-rose-500/10"
+              className="mt-5 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#c9472d] transition hover:bg-[#fff0ec]"
             >
-              <LogOut size={19} />
+              <LogOut size={18} />
               Logout
             </button>
           </div>
@@ -482,25 +502,25 @@ function AdminServices() {
         {mobileMenuOpen && (
           <>
             <div
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 bg-[#1c1410]/35 lg:hidden"
               onClick={() =>
                 setMobileMenuOpen(false)
               }
             />
 
-            <aside className="fixed inset-y-0 left-0 z-50 w-[290px] border-r border-white/10 bg-slate-950 p-6 shadow-2xl lg:hidden">
+            <aside className="fixed inset-y-0 left-0 z-50 w-[280px] border-r border-[#f1ded0] bg-[#fffaf5] p-6 shadow-2xl lg:hidden">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="se-icon-box h-11 w-11 rounded-2xl text-indigo-300">
-                    <Sparkles size={20} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+                    <Sparkles size={18} />
                   </div>
 
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-indigo-300">
+                    <p className="font-extrabold">
                       ServEase
                     </p>
 
-                    <p className="mt-1 text-sm font-medium">
+                    <p className="text-xs text-[#8b7c73]">
                       Admin Console
                     </p>
                   </div>
@@ -510,7 +530,7 @@ function AdminServices() {
                   onClick={() =>
                     setMobileMenuOpen(false)
                   }
-                  className="rounded-xl border border-white/10 bg-white/5 p-2 text-slate-400"
+                  className="rounded-lg border border-[#ead7ca] bg-white p-2 text-[#74675f]"
                 >
                   <X size={18} />
                 </button>
@@ -520,9 +540,9 @@ function AdminServices() {
 
               <button
                 onClick={handleLogout}
-                className="mt-8 flex w-full items-center gap-3 rounded-2xl border border-rose-500/10 px-4 py-3 text-left text-rose-300"
+                className="mt-8 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#c9472d] hover:bg-[#fff0ec]"
               >
-                <LogOut size={19} />
+                <LogOut size={18} />
                 Logout
               </button>
             </aside>
@@ -532,19 +552,19 @@ function AdminServices() {
         {/* MAIN */}
         <section className="min-w-0 flex-1">
           {/* MOBILE HEADER */}
-          <div className="border-b border-white/10 bg-slate-950/50 px-5 py-4 backdrop-blur-xl lg:hidden">
+          <div className="border-b border-[#f1ded0] bg-[#fffaf5] px-5 py-4 lg:hidden">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="se-icon-box h-10 w-10 rounded-xl text-indigo-300">
-                  <Sparkles size={18} />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+                  <Sparkles size={17} />
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">
+                  <p className="font-bold">
                     ServEase
                   </p>
 
-                  <p className="text-sm font-medium">
+                  <p className="text-xs text-[#8b7c73]">
                     Admin Console
                   </p>
                 </div>
@@ -554,72 +574,67 @@ function AdminServices() {
                 onClick={() =>
                   setMobileMenuOpen(true)
                 }
-                className="rounded-xl border border-white/10 bg-white/5 p-2.5 text-slate-300"
+                className="rounded-lg border border-[#ead7ca] bg-white p-2.5 text-[#493c35]"
               >
                 <Menu size={20} />
               </button>
             </div>
           </div>
 
-          <div className="mx-auto max-w-[1600px] px-5 py-8 sm:px-8 lg:px-10">
+          <div className="mx-auto max-w-[1500px] px-6 py-10 lg:px-10 lg:py-12">
             {/* PAGE HEADER */}
-            <header className="se-glass rounded-[28px] px-6 py-6 sm:px-8">
-              <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="se-icon-box h-14 w-14 rounded-2xl text-violet-300">
-                    <Wrench size={25} />
-                  </div>
+            <header className="border-b border-[#ead7ca] pb-9">
+              <div className="flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+                <div>
+                  <p className="text-sm font-bold text-[#ff6b4a]">
+                    Service management
+                  </p>
 
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-violet-300">
-                      Service Management
-                    </p>
-
-                    <h1 className="se-gradient-text mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+                  <h1 className="mt-2 text-4xl font-extrabold tracking-[-0.04em] sm:text-5xl">
+                    Manage{' '}
+                    <span className="se-gradient-text">
                       Services
-                    </h1>
+                    </span>
+                  </h1>
 
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
-                      Create, edit, activate,
-                      and deactivate the services
-                      customers can book through
-                      ServEase.
-                    </p>
-                  </div>
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-[#74675f] sm:text-base">
+                    Create, edit, activate, and
+                    deactivate the services customers
+                    can book through ServEase.
+                  </p>
                 </div>
 
-                {/* REAL STATS */}
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="se-glass se-card-3d min-w-[110px] rounded-2xl px-4 py-4">
-                    <p className="text-xs text-slate-500">
+                <div className="grid grid-cols-3 gap-8 border-t border-[#ead7ca] pt-6 xl:border-t-0 xl:pt-0">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#a09187]">
                       Total
                     </p>
 
-                    <p className="mt-2 text-2xl font-bold">
+                    <p className="mt-1 text-3xl font-extrabold">
                       {loading
                         ? '...'
                         : services.length}
                     </p>
                   </div>
 
-                  <div className="se-glass se-card-3d min-w-[110px] rounded-2xl px-4 py-4">
-                    <p className="text-xs text-emerald-400">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#16845b]">
                       Active
                     </p>
 
-                    <p className="mt-2 text-2xl font-bold">
+                    <p className="mt-1 text-3xl font-extrabold">
                       {loading
                         ? '...'
                         : activeServicesCount}
                     </p>
                   </div>
 
-                  <div className="se-glass se-card-3d min-w-[110px] rounded-2xl px-4 py-4">
-                    <p className="text-xs text-slate-500">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#8b7c73]">
                       Inactive
                     </p>
 
-                    <p className="mt-2 text-2xl font-bold">
+                    <p className="mt-1 text-3xl font-extrabold">
                       {loading
                         ? '...'
                         : inactiveServicesCount}
@@ -629,49 +644,51 @@ function AdminServices() {
               </div>
             </header>
 
-            {/* SERVICE MANAGEMENT */}
-            <section className="se-glass mt-7 overflow-hidden rounded-[28px]">
-              {/* ADD / EDIT FORM */}
-              <form
-                onSubmit={handleSubmit}
-                className="border-b border-white/10 px-6 py-6 sm:px-8"
-              >
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="se-icon-box h-10 w-10 rounded-xl text-violet-300">
-                      {editingId ? (
-                        <Pencil size={18} />
-                      ) : (
-                        <CirclePlus size={18} />
-                      )}
-                    </div>
+            {/* ADD / EDIT */}
+            <section className="border-b border-[#ead7ca] py-10">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <div className="flex items-center gap-2 text-[#ff6b4a]">
+                    {editingId ? (
+                      <Pencil size={17} />
+                    ) : (
+                      <CirclePlus size={17} />
+                    )}
 
-                    <div>
-                      <h2 className="font-semibold">
-                        {editingId
-                          ? 'Edit Service'
-                          : 'Add Service'}
-                      </h2>
-
-                      <p className="mt-1 text-xs text-slate-500">
-                        {editingId
-                          ? 'Update the selected ServEase service.'
-                          : 'Create a new service available in the ServEase system.'}
-                      </p>
-                    </div>
+                    <p className="text-xs font-bold uppercase tracking-[0.14em]">
+                      {editingId
+                        ? 'Edit Service'
+                        : 'Add Service'}
+                    </p>
                   </div>
 
-                  {editingId && (
-                    <span className="se-badge self-start rounded-full px-4 py-2 text-xs sm:self-auto">
-                      Editing service
-                    </span>
-                  )}
+                  <h2 className="mt-2 text-2xl font-extrabold">
+                    {editingId
+                      ? 'Update service details'
+                      : 'Create a new service'}
+                  </h2>
+
+                  <p className="mt-2 text-sm text-[#74675f]">
+                    {editingId
+                      ? 'Changes will update the selected ServEase service.'
+                      : 'New services are created as active and become available for booking.'}
+                  </p>
                 </div>
 
-                <div className="mt-6 grid gap-5 md:grid-cols-2">
-                  {/* NAME */}
+                {editingId && (
+                  <span className="self-start rounded-full bg-[#fff0e7] px-4 py-2 text-xs font-bold text-[#b95736] sm:self-auto">
+                    Editing service
+                  </span>
+                )}
+              </div>
+
+              <form
+                onSubmit={handleSubmit}
+                className="mt-7"
+              >
+                <div className="grid gap-5 md:grid-cols-2">
                   <div>
-                    <label className="text-sm text-slate-400">
+                    <label className="mb-2 block text-sm font-bold text-[#493c35]">
                       Service Name
                     </label>
 
@@ -686,21 +703,20 @@ function AdminServices() {
                             event.target.value,
                         })
                       }
-                      className="se-input mt-2 w-full rounded-2xl px-4 py-3.5 text-sm"
+                      className="se-input h-12 text-sm"
                       placeholder="Example: Premium Consultation"
                     />
                   </div>
 
-                  {/* PRICE */}
                   <div>
-                    <label className="text-sm text-slate-400">
+                    <label className="mb-2 block text-sm font-bold text-[#493c35]">
                       Price
                     </label>
 
-                    <div className="relative mt-2">
+                    <div className="relative">
                       <PhilippinePeso
                         size={17}
-                        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+                        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
                       />
 
                       <input
@@ -716,22 +732,21 @@ function AdminServices() {
                               event.target.value,
                           })
                         }
-                        className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4 text-sm"
+                        className="se-input se-input-icon-left h-12 text-sm"
                         placeholder="1000"
                       />
                     </div>
                   </div>
 
-                  {/* DURATION */}
                   <div>
-                    <label className="text-sm text-slate-400">
+                    <label className="mb-2 block text-sm font-bold text-[#493c35]">
                       Duration (minutes)
                     </label>
 
-                    <div className="relative mt-2">
+                    <div className="relative">
                       <Clock3
                         size={17}
-                        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+                        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
                       />
 
                       <input
@@ -744,19 +759,19 @@ function AdminServices() {
                         onChange={(event) =>
                           setForm({
                             ...form,
+
                             duration_minutes:
                               event.target.value,
                           })
                         }
-                        className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4 text-sm"
+                        className="se-input se-input-icon-left h-12 text-sm"
                         placeholder="60"
                       />
                     </div>
                   </div>
 
-                  {/* DESCRIPTION */}
                   <div>
-                    <label className="text-sm text-slate-400">
+                    <label className="mb-2 block text-sm font-bold text-[#493c35]">
                       Description
                     </label>
 
@@ -768,11 +783,12 @@ function AdminServices() {
                       onChange={(event) =>
                         setForm({
                           ...form,
+
                           description:
                             event.target.value,
                         })
                       }
-                      className="se-input mt-2 w-full rounded-2xl px-4 py-3.5 text-sm"
+                      className="se-input h-12 text-sm"
                       placeholder="Short service description"
                     />
                   </div>
@@ -782,7 +798,7 @@ function AdminServices() {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="se-btn-primary flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60"
+                    className="se-btn-primary flex items-center gap-2 px-5 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {editingId ? (
                       <Pencil size={17} />
@@ -803,7 +819,7 @@ function AdminServices() {
                       onClick={
                         handleCancelEdit
                       }
-                      className="se-btn-secondary flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold"
+                      className="se-btn-secondary flex items-center gap-2 px-5 py-3 text-sm"
                     >
                       <X size={17} />
                       Cancel
@@ -811,391 +827,389 @@ function AdminServices() {
                   )}
                 </div>
               </form>
+            </section>
 
-              {/* SERVICE LIST HEADER */}
-              <div className="border-b border-white/10 bg-white/[0.015] px-6 py-6 sm:px-8">
-                <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-violet-300">
-                      Service Records
-                    </p>
+            {/* SERVICE RECORDS */}
+            <section className="pt-10">
+              <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6b4a]">
+                    Service records
+                  </p>
 
-                    <h2 className="mt-2 text-xl font-semibold">
-                      Manage Services
-                    </h2>
+                  <h2 className="mt-2 text-2xl font-extrabold">
+                    Service Directory
+                  </h2>
 
-                    <p className="mt-1 text-sm text-slate-500">
-                      Search services and filter
-                      them by their current active
-                      status.
-                    </p>
-                  </div>
+                  <p className="mt-2 text-sm text-[#74675f]">
+                    Search services and filter them
+                    by their current active status.
+                  </p>
+                </div>
 
-                  <div className="grid w-full gap-3 sm:grid-cols-[1fr_180px] xl:max-w-2xl">
-                    {/* SEARCH */}
-                    <div className="relative">
-                      <Search
-                        size={17}
-                        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
-                      />
+                <div className="grid w-full gap-3 sm:grid-cols-[1fr_180px] xl:max-w-2xl">
+                  <div className="relative">
+                    <Search
+                      size={17}
+                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
+                    />
 
-                      <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={(event) =>
-                          setSearchTerm(
-                            event.target.value
-                          )
-                        }
-                        placeholder="Search services"
-                        className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4 text-sm"
-                      />
-                    </div>
-
-                    {/* FILTER */}
-                    <select
-                      value={statusFilter}
+                    <input
+                      type="text"
+                      value={searchTerm}
                       onChange={(event) =>
-                        setStatusFilter(
+                        setSearchTerm(
                           event.target.value
                         )
                       }
-                      className="se-input rounded-2xl px-4 py-3.5 text-sm"
-                    >
-                      <option
-                        value="all"
-                        className="bg-slate-900"
-                      >
-                        All statuses
-                      </option>
-
-                      <option
-                        value="active"
-                        className="bg-slate-900"
-                      >
-                        Active
-                      </option>
-
-                      <option
-                        value="inactive"
-                        className="bg-slate-900"
-                      >
-                        Inactive
-                      </option>
-                    </select>
+                      placeholder="Search services"
+                      className="se-input se-input-icon-left h-11 text-sm"
+                    />
                   </div>
-                </div>
 
-                <p className="mt-5 text-sm text-slate-500">
-                  Showing{' '}
-                  <span className="font-semibold text-white">
-                    {
-                      filteredServices.length
+                  <select
+                    value={statusFilter}
+                    onChange={(event) =>
+                      setStatusFilter(
+                        event.target.value
+                      )
                     }
-                  </span>{' '}
-                  of{' '}
-                  <span className="font-semibold text-white">
-                    {services.length}
-                  </span>{' '}
-                  services
-                </p>
+                    className="se-input h-11 text-sm"
+                  >
+                    <option value="all">
+                      All statuses
+                    </option>
+
+                    <option value="active">
+                      Active
+                    </option>
+
+                    <option value="inactive">
+                      Inactive
+                    </option>
+                  </select>
+                </div>
               </div>
 
-              {/* DATA */}
-              {loading ? (
-                <div className="flex min-h-[300px] items-center justify-center">
-                  <div className="text-center">
-                    <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-violet-400/30 border-t-violet-300" />
+              <p className="mt-5 text-sm text-[#8b7c73]">
+                Showing{' '}
+                <span className="font-semibold text-[#1c1410]">
+                  {filteredServices.length}
+                </span>{' '}
+                of{' '}
+                <span className="font-semibold text-[#1c1410]">
+                  {services.length}
+                </span>{' '}
+                services
+              </p>
 
-                    <p className="mt-4 text-sm text-slate-500">
-                      Loading services...
-                    </p>
+              <div className="mt-7">
+                {loading ? (
+                  <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white">
+                    <div className="text-center">
+                      <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-[#f4c9b7] border-t-[#ff6b4a]" />
+
+                      <p className="mt-4 text-sm text-[#8b7c73]">
+                        Loading services...
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ) : services.length === 0 ? (
-                <div className="flex min-h-[300px] items-center justify-center">
-                  <div className="text-center">
-                    <Wrench
-                      size={28}
-                      className="mx-auto text-slate-600"
-                    />
-
-                    <p className="mt-4 text-sm text-slate-500">
+                ) : services.length === 0 ? (
+                  <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white">
+                    <p className="text-sm text-[#8b7c73]">
                       No services found.
                     </p>
                   </div>
-                </div>
-              ) : filteredServices.length ===
-                0 ? (
-                <div className="flex min-h-[300px] items-center justify-center">
-                  <div className="text-center">
-                    <Search
-                      size={28}
-                      className="mx-auto text-slate-600"
-                    />
+                ) : filteredServices.length ===
+                  0 ? (
+                  <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white">
+                    <div className="text-center">
+                      <Search
+                        size={28}
+                        className="mx-auto text-[#b6a79d]"
+                      />
 
-                    <p className="mt-4 text-sm text-slate-500">
-                      No services match your
-                      current filters.
-                    </p>
+                      <p className="mt-4 text-sm text-[#8b7c73]">
+                        No services match your current filters.
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <>
-                  {/* DESKTOP TABLE */}
-                  <div className="hidden overflow-x-auto lg:block">
-                    <table className="w-full text-left">
-                      <thead className="border-b border-white/10 bg-white/[0.025]">
-                        <tr>
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Service
-                          </th>
+                ) : (
+                  <>
+                    {/* DESKTOP TABLE */}
+                    <div className="hidden overflow-hidden rounded-2xl border border-[#ead7ca] bg-white shadow-[0_8px_30px_rgba(91,62,47,0.04)] lg:block">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-sm">
+                          <thead>
+                            <tr className="border-b border-[#ead7ca] bg-[#fffaf6]">
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                                Service
+                              </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Price
-                          </th>
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                                Price
+                              </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Duration
-                          </th>
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                                Duration
+                              </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Status
-                          </th>
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                                Status
+                              </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Actions
-                          </th>
-                        </tr>
-                      </thead>
+                              <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                                Actions
+                              </th>
+                            </tr>
+                          </thead>
 
-                      <tbody>
+                          <tbody className="divide-y divide-[#f1e4db]">
+                            {filteredServices.map(
+                              (service) => (
+                                <tr
+                                  key={service.id}
+                                  className="transition-colors hover:bg-[#fffaf6]"
+                                >
+                                  {/* SERVICE */}
+                                  <td className="px-5 py-4">
+                                    <div className="flex items-start gap-3">
+                                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fff0e7] text-[#c45231] ring-1 ring-[#f2d7c7]">
+                                        <Wrench size={15} />
+                                      </div>
+
+                                      <div className="min-w-0">
+                                        <p className="font-semibold text-[#1c1410]">
+                                          {
+                                            service.name
+                                          }
+                                        </p>
+
+                                        <p
+                                          className="mt-0.5 max-w-md truncate text-xs text-[#9a8a80]"
+                                          title={
+                                            service.description ??
+                                            ''
+                                          }
+                                        >
+                                          {service.description ||
+                                            'No description'}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+
+                                  {/* PRICE */}
+                                  <td className="whitespace-nowrap px-5 py-4">
+                                    <p className="font-semibold text-[#493c35]">
+                                      {formatPrice(
+                                        service.price
+                                      )}
+                                    </p>
+
+                                    <p className="mt-0.5 text-xs text-[#9a8a80]">
+                                      Service price
+                                    </p>
+                                  </td>
+
+                                  {/* DURATION */}
+                                  <td className="whitespace-nowrap px-5 py-4">
+                                    <div className="flex items-center gap-2">
+                                      <Clock3
+                                        size={14}
+                                        className="text-[#a09187]"
+                                      />
+
+                                      <span className="font-medium text-[#493c35]">
+                                        {
+                                          service.duration_minutes
+                                        }{' '}
+                                        min
+                                      </span>
+                                    </div>
+                                  </td>
+
+                                  {/* STATUS */}
+                                  <td className="px-5 py-4">
+                                    <span
+                                      className={
+                                        service.is_active
+                                          ? 'inline-flex items-center gap-1.5 rounded-full border border-[#bfe7d6] bg-[#e9f8f1] px-3 py-1.5 text-xs font-bold text-[#16845b]'
+                                          : 'inline-flex items-center gap-1.5 rounded-full border border-[#e4d8d0] bg-[#f4eee9] px-3 py-1.5 text-xs font-bold text-[#8b7c73]'
+                                      }
+                                    >
+                                      <span
+                                        className={
+                                          service.is_active
+                                            ? 'h-1.5 w-1.5 rounded-full bg-[#16845b]'
+                                            : 'h-1.5 w-1.5 rounded-full bg-[#a09187]'
+                                        }
+                                      />
+
+                                      {service.is_active
+                                        ? 'Active'
+                                        : 'Inactive'}
+                                    </span>
+                                  </td>
+
+                                  {/* ACTIONS */}
+                                  <td className="px-5 py-4">
+                                    <div className="flex items-center gap-2">
+                                      <button
+                                        onClick={() =>
+                                          handleEdit(
+                                            service
+                                          )
+                                        }
+                                        className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-[#e6d7cc] bg-white px-3 text-xs font-semibold text-[#65574f] transition hover:border-[#ffb9a3] hover:bg-[#fff8f3] hover:text-[#c45231]"
+                                        title="Edit service"
+                                      >
+                                        <Pencil size={14} />
+                                        Edit
+                                      </button>
+
+                                      <button
+                                        onClick={() =>
+                                          handleToggleActive(
+                                            service
+                                          )
+                                        }
+                                        className={
+                                          service.is_active
+                                            ? 'inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-[#f3c7bb] bg-[#fff0ec] px-3 text-xs font-semibold text-[#c9472d] transition hover:bg-[#ffe5dd]'
+                                            : 'inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-[#bfe7d6] bg-[#e9f8f1] px-3 text-xs font-semibold text-[#16845b] transition hover:bg-[#dcf4e9]'
+                                        }
+                                        title={
+                                          service.is_active
+                                            ? 'Deactivate service'
+                                            : 'Activate service'
+                                        }
+                                      >
+                                        <Power size={14} />
+
+                                        {service.is_active
+                                          ? 'Deactivate'
+                                          : 'Activate'}
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              )
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* MOBILE */}
+                    <div className="overflow-hidden rounded-2xl border border-[#ead7ca] bg-white lg:hidden">
+                      <div className="divide-y divide-[#f1e4db]">
                         {filteredServices.map(
                           (service) => (
-                            <tr
+                            <article
                               key={service.id}
-                              className="border-b border-white/5 transition hover:bg-white/[0.035] last:border-0"
+                              className="p-5 sm:p-6"
                             >
-                              {/* SERVICE */}
-                              <td className="px-6 py-5">
-                                <div className="flex items-start gap-3">
-                                  <div className="se-icon-box h-10 w-10 shrink-0 rounded-xl text-violet-300">
-                                    <Wrench
-                                      size={17}
-                                    />
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex min-w-0 items-start gap-3">
+                                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#fff0e7] text-[#c45231] ring-1 ring-[#f2d7c7]">
+                                    <Wrench size={16} />
                                   </div>
 
-                                  <div>
-                                    <p className="font-medium text-white">
+                                  <div className="min-w-0">
+                                    <h3 className="font-bold">
                                       {
                                         service.name
                                       }
-                                    </p>
+                                    </h3>
 
-                                    <p className="mt-1 max-w-md text-sm leading-6 text-slate-500">
+                                    <p className="mt-1 text-sm leading-6 text-[#74675f]">
                                       {service.description ||
                                         'No description'}
                                     </p>
                                   </div>
                                 </div>
-                              </td>
 
-                              {/* PRICE */}
-                              <td className="whitespace-nowrap px-6 py-5 text-sm font-medium text-slate-300">
-                                {formatPrice(
-                                  service.price
-                                )}
-                              </td>
-
-                              {/* DURATION */}
-                              <td className="whitespace-nowrap px-6 py-5">
-                                <div className="flex items-center gap-2 text-sm text-slate-300">
-                                  <Clock3
-                                    size={15}
-                                    className="text-slate-500"
-                                  />
-
-                                  {
-                                    service.duration_minutes
-                                  }{' '}
-                                  min
-                                </div>
-                              </td>
-
-                              {/* STATUS */}
-                              <td className="px-6 py-5">
                                 <span
                                   className={
                                     service.is_active
-                                      ? 'inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-xs font-medium text-emerald-300'
-                                      : 'inline-flex rounded-full border border-white/5 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-500'
+                                      ? 'shrink-0 rounded-full border border-[#bfe7d6] bg-[#e9f8f1] px-3 py-1.5 text-xs font-bold text-[#16845b]'
+                                      : 'shrink-0 rounded-full border border-[#e4d8d0] bg-[#f4eee9] px-3 py-1.5 text-xs font-bold text-[#8b7c73]'
                                   }
                                 >
                                   {service.is_active
                                     ? 'Active'
                                     : 'Inactive'}
                                 </span>
-                              </td>
+                              </div>
 
-                              {/* ACTIONS */}
-                              <td className="px-6 py-5">
-                                <div className="flex items-center gap-2">
-                                  <button
-                                    onClick={() =>
-                                      handleEdit(
-                                        service
-                                      )
-                                    }
-                                    className="rounded-xl border border-white/10 bg-white/[0.025] p-2.5 text-slate-300 transition hover:border-violet-400/20 hover:bg-violet-500/10 hover:text-violet-200"
-                                    title="Edit service"
-                                  >
-                                    <Pencil
-                                      size={16}
-                                    />
-                                  </button>
+                              <div className="mt-5 grid grid-cols-2 gap-4 border-t border-[#f1e4db] pt-4">
+                                <div>
+                                  <p className="text-xs font-medium text-[#9a8a80]">
+                                    Price
+                                  </p>
 
-                                  <button
-                                    onClick={() =>
-                                      handleToggleActive(
-                                        service
-                                      )
-                                    }
-                                    className={
-                                      service.is_active
-                                        ? 'rounded-xl border border-rose-500/20 bg-rose-500/5 p-2.5 text-rose-300 transition hover:bg-rose-500/10'
-                                        : 'rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-2.5 text-emerald-300 transition hover:bg-emerald-500/10'
-                                    }
-                                    title={
-                                      service.is_active
-                                        ? 'Deactivate service'
-                                        : 'Activate service'
-                                    }
-                                  >
-                                    <Power
-                                      size={16}
-                                    />
-                                  </button>
+                                  <p className="mt-1 font-semibold text-[#493c35]">
+                                    {formatPrice(
+                                      service.price
+                                    )}
+                                  </p>
                                 </div>
-                              </td>
-                            </tr>
+
+                                <div>
+                                  <p className="text-xs font-medium text-[#9a8a80]">
+                                    Duration
+                                  </p>
+
+                                  <p className="mt-1 text-sm font-medium text-[#493c35]">
+                                    {
+                                      service.duration_minutes
+                                    }{' '}
+                                    minutes
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div className="mt-5 flex gap-3">
+                                <button
+                                  onClick={() =>
+                                    handleEdit(
+                                      service
+                                    )
+                                  }
+                                  className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#e6d7cc] bg-white px-4 py-3 text-sm font-semibold text-[#65574f] transition hover:border-[#ffb9a3] hover:bg-[#fff8f3] hover:text-[#c45231]"
+                                >
+                                  <Pencil size={16} />
+                                  Edit
+                                </button>
+
+                                <button
+                                  onClick={() =>
+                                    handleToggleActive(
+                                      service
+                                    )
+                                  }
+                                  className={
+                                    service.is_active
+                                      ? 'flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#f3c7bb] bg-[#fff0ec] px-4 py-3 text-sm font-semibold text-[#c9472d] transition hover:bg-[#ffe5dd]'
+                                      : 'flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#bfe7d6] bg-[#e9f8f1] px-4 py-3 text-sm font-semibold text-[#16845b] transition hover:bg-[#dcf4e9]'
+                                  }
+                                >
+                                  <Power size={16} />
+
+                                  {service.is_active
+                                    ? 'Deactivate'
+                                    : 'Activate'}
+                                </button>
+                              </div>
+                            </article>
                           )
                         )}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* MOBILE / TABLET CARDS */}
-                  <div className="grid gap-4 p-5 lg:hidden">
-                    {filteredServices.map(
-                      (service) => (
-                        <article
-                          key={service.id}
-                          className="se-card-3d rounded-3xl border border-white/10 bg-slate-950/50 p-5"
-                        >
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex items-start gap-3">
-                              <div className="se-icon-box h-11 w-11 shrink-0 rounded-xl text-violet-300">
-                                <Wrench
-                                  size={18}
-                                />
-                              </div>
-
-                              <div>
-                                <h3 className="font-semibold">
-                                  {
-                                    service.name
-                                  }
-                                </h3>
-
-                                <p className="mt-1 text-sm leading-6 text-slate-500">
-                                  {service.description ||
-                                    'No description'}
-                                </p>
-                              </div>
-                            </div>
-
-                            <span
-                              className={
-                                service.is_active
-                                  ? 'shrink-0 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300'
-                                  : 'shrink-0 rounded-full border border-white/5 bg-white/5 px-3 py-1 text-xs font-medium text-slate-500'
-                              }
-                            >
-                              {service.is_active
-                                ? 'Active'
-                                : 'Inactive'}
-                            </span>
-                          </div>
-
-                          <div className="mt-5 grid grid-cols-2 gap-4">
-                            <div>
-                              <p className="text-xs text-slate-600">
-                                Price
-                              </p>
-
-                              <p className="mt-1 font-medium text-slate-300">
-                                {formatPrice(
-                                  service.price
-                                )}
-                              </p>
-                            </div>
-
-                            <div>
-                              <p className="text-xs text-slate-600">
-                                Duration
-                              </p>
-
-                              <p className="mt-1 text-sm text-slate-300">
-                                {
-                                  service.duration_minutes
-                                }{' '}
-                                minutes
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="mt-5 flex gap-3">
-                            <button
-                              onClick={() =>
-                                handleEdit(
-                                  service
-                                )
-                              }
-                              className="se-btn-secondary flex flex-1 items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm"
-                            >
-                              <Pencil
-                                size={16}
-                              />
-                              Edit
-                            </button>
-
-                            <button
-                              onClick={() =>
-                                handleToggleActive(
-                                  service
-                                )
-                              }
-                              className={
-                                service.is_active
-                                  ? 'flex flex-1 items-center justify-center gap-2 rounded-2xl border border-rose-500/20 bg-rose-500/5 px-4 py-3 text-sm font-medium text-rose-300 transition hover:bg-rose-500/10'
-                                  : 'flex flex-1 items-center justify-center gap-2 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 text-sm font-medium text-emerald-300 transition hover:bg-emerald-500/10'
-                              }
-                            >
-                              <Power
-                                size={16}
-                              />
-
-                              {service.is_active
-                                ? 'Deactivate'
-                                : 'Activate'}
-                            </button>
-                          </div>
-                        </article>
-                      )
-                    )}
-                  </div>
-                </>
-              )}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
             </section>
           </div>
         </section>

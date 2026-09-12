@@ -57,17 +57,32 @@ type NavItem = {
 function AdminBookings() {
   const navigate = useNavigate()
 
-  const [bookings, setBookings] = useState<Booking[]>([])
-  const [staffMembers, setStaffMembers] = useState<StaffMember[]>([])
-  const [loading, setLoading] = useState(true)
-  const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const [bookings, setBookings] =
+    useState<Booking[]>([])
 
-  const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState('all')
-  const [staffFilter, setStaffFilter] = useState('all')
-  const [dateFilter, setDateFilter] = useState('')
+  const [staffMembers, setStaffMembers] =
+    useState<StaffMember[]>([])
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [loading, setLoading] =
+    useState(true)
+
+  const [updatingId, setUpdatingId] =
+    useState<string | null>(null)
+
+  const [searchTerm, setSearchTerm] =
+    useState('')
+
+  const [statusFilter, setStatusFilter] =
+    useState('all')
+
+  const [staffFilter, setStaffFilter] =
+    useState('all')
+
+  const [dateFilter, setDateFilter] =
+    useState('')
+
+  const [mobileMenuOpen, setMobileMenuOpen] =
+    useState(false)
 
   const navItems: NavItem[] = [
     {
@@ -111,7 +126,10 @@ function AdminBookings() {
     const loadData = async () => {
       setLoading(true)
 
-      const [bookingsResult, staffResult] = await Promise.all([
+      const [
+        bookingsResult,
+        staffResult,
+      ] = await Promise.all([
         supabase
           .from('appointments')
           .select(`
@@ -156,7 +174,8 @@ function AdminBookings() {
         )
       } else {
         setBookings(
-          (bookingsResult.data as unknown as Booking[]) ?? []
+          (bookingsResult.data as unknown as Booking[]) ??
+            []
         )
       }
 
@@ -167,7 +186,8 @@ function AdminBookings() {
         )
       } else {
         setStaffMembers(
-          (staffResult.data as unknown as StaffMember[]) ?? []
+          (staffResult.data as unknown as StaffMember[]) ??
+            []
         )
       }
 
@@ -177,63 +197,80 @@ function AdminBookings() {
     loadData()
   }, [])
 
-  const filteredBookings = useMemo(() => {
-    const normalizedSearch = searchTerm.trim().toLowerCase()
+  const filteredBookings =
+    useMemo(() => {
+      const normalizedSearch =
+        searchTerm.trim().toLowerCase()
 
-    return bookings.filter((booking) => {
-      const customerName =
-        booking.customer?.full_name?.toLowerCase() ?? ''
+      return bookings.filter(
+        (booking) => {
+          const customerName =
+            booking.customer?.full_name
+              ?.toLowerCase() ?? ''
 
-      const serviceName =
-        booking.service?.name?.toLowerCase() ?? ''
+          const serviceName =
+            booking.service?.name
+              ?.toLowerCase() ?? ''
 
-      const matchesSearch =
-        normalizedSearch === '' ||
-        customerName.includes(normalizedSearch) ||
-        serviceName.includes(normalizedSearch)
+          const matchesSearch =
+            normalizedSearch === '' ||
+            customerName.includes(
+              normalizedSearch
+            ) ||
+            serviceName.includes(
+              normalizedSearch
+            )
 
-      const matchesStatus =
-        statusFilter === 'all' ||
-        booking.status === statusFilter
+          const matchesStatus =
+            statusFilter === 'all' ||
+            booking.status ===
+              statusFilter
 
-      const matchesStaff =
-        staffFilter === 'all' ||
-        (staffFilter === 'unassigned'
-          ? booking.staff_id === null
-          : booking.staff_id === staffFilter)
+          const matchesStaff =
+            staffFilter === 'all' ||
+            (staffFilter ===
+            'unassigned'
+              ? booking.staff_id ===
+                null
+              : booking.staff_id ===
+                staffFilter)
 
-      const matchesDate =
-        dateFilter === '' ||
-        booking.appointment_date === dateFilter
+          const matchesDate =
+            dateFilter === '' ||
+            booking.appointment_date ===
+              dateFilter
 
-      return (
-        matchesSearch &&
-        matchesStatus &&
-        matchesStaff &&
-        matchesDate
+          return (
+            matchesSearch &&
+            matchesStatus &&
+            matchesStaff &&
+            matchesDate
+          )
+        }
       )
-    })
-  }, [
-    bookings,
-    searchTerm,
-    statusFilter,
-    staffFilter,
-    dateFilter,
-  ])
+    }, [
+      bookings,
+      searchTerm,
+      statusFilter,
+      staffFilter,
+      dateFilter,
+    ])
 
   const handleStatusChange = async (
     bookingId: string,
     newStatus: BookingStatus
   ) => {
     const booking = bookings.find(
-      (currentBooking) => currentBooking.id === bookingId
+      (currentBooking) =>
+        currentBooking.id === bookingId
     )
 
     if (!booking) {
       return
     }
 
-    const previousStatus = booking.status
+    const previousStatus =
+      booking.status
 
     if (previousStatus === newStatus) {
       return
@@ -245,7 +282,8 @@ function AdminBookings() {
       .from('appointments')
       .update({
         status: newStatus,
-        updated_at: new Date().toISOString(),
+        updated_at:
+          new Date().toISOString(),
       })
       .eq('id', bookingId)
 
@@ -259,26 +297,44 @@ function AdminBookings() {
       return
     }
 
-    setBookings((currentBookings) =>
-      currentBookings.map((currentBooking) =>
-        currentBooking.id === bookingId
-          ? {
-              ...currentBooking,
-              status: newStatus,
-            }
-          : currentBooking
-      )
+    setBookings(
+      (currentBookings) =>
+        currentBookings.map(
+          (currentBooking) =>
+            currentBooking.id ===
+            bookingId
+              ? {
+                  ...currentBooking,
+                  status: newStatus,
+                }
+              : currentBooking
+        )
     )
 
     await logAudit({
-      action: 'booking_status_changed',
-      entityType: 'appointment',
-      entityId: bookingId,
+      action:
+        'booking_status_changed',
+
+      entityType:
+        'appointment',
+
+      entityId:
+        bookingId,
+
       details: {
-        previous_status: previousStatus,
-        new_status: newStatus,
-        customer: booking.customer?.full_name ?? null,
-        service: booking.service?.name ?? null,
+        previous_status:
+          previousStatus,
+
+        new_status:
+          newStatus,
+
+        customer:
+          booking.customer
+            ?.full_name ?? null,
+
+        service:
+          booking.service?.name ??
+          null,
       },
     })
 
@@ -290,21 +346,25 @@ function AdminBookings() {
     staffId: string
   ) => {
     const booking = bookings.find(
-      (currentBooking) => currentBooking.id === bookingId
+      (currentBooking) =>
+        currentBooking.id === bookingId
     )
 
     if (!booking) {
       return
     }
 
-    const previousStaffId = booking.staff_id
+    const previousStaffId =
+      booking.staff_id
 
     const newStaffId =
       staffId === ''
         ? null
         : staffId
 
-    if (previousStaffId === newStaffId) {
+    if (
+      previousStaffId === newStaffId
+    ) {
       return
     }
 
@@ -314,7 +374,8 @@ function AdminBookings() {
       .from('appointments')
       .update({
         staff_id: newStaffId,
-        updated_at: new Date().toISOString(),
+        updated_at:
+          new Date().toISOString(),
       })
       .eq('id', bookingId)
 
@@ -328,47 +389,68 @@ function AdminBookings() {
       return
     }
 
-    setBookings((currentBookings) =>
-      currentBookings.map((currentBooking) =>
-        currentBooking.id === bookingId
-          ? {
-              ...currentBooking,
-              staff_id: newStaffId,
-            }
-          : currentBooking
+    setBookings(
+      (currentBookings) =>
+        currentBookings.map(
+          (currentBooking) =>
+            currentBooking.id ===
+            bookingId
+              ? {
+                  ...currentBooking,
+                  staff_id:
+                    newStaffId,
+                }
+              : currentBooking
+        )
+    )
+
+    const previousStaff =
+      staffMembers.find(
+        (staff) =>
+          staff.id ===
+          previousStaffId
       )
-    )
 
-    const previousStaff = staffMembers.find(
-      (staff) => staff.id === previousStaffId
-    )
-
-    const newStaff = staffMembers.find(
-      (staff) => staff.id === newStaffId
-    )
+    const newStaff =
+      staffMembers.find(
+        (staff) =>
+          staff.id ===
+          newStaffId
+      )
 
     await logAudit({
       action: newStaffId
         ? 'staff_assigned_to_booking'
         : 'staff_unassigned_from_booking',
 
-      entityType: 'appointment',
-      entityId: bookingId,
+      entityType:
+        'appointment',
+
+      entityId:
+        bookingId,
 
       details: {
-        previous_staff_id: previousStaffId,
-        previous_staff_name:
-          previousStaff?.profile?.full_name ?? null,
+        previous_staff_id:
+          previousStaffId,
 
-        new_staff_id: newStaffId,
+        previous_staff_name:
+          previousStaff?.profile
+            ?.full_name ?? null,
+
+        new_staff_id:
+          newStaffId,
+
         new_staff_name:
-          newStaff?.profile?.full_name ?? null,
+          newStaff?.profile
+            ?.full_name ?? null,
 
         customer:
-          booking.customer?.full_name ?? null,
+          booking.customer
+            ?.full_name ?? null,
 
         service:
-          booking.service?.name ?? null,
+          booking.service?.name ??
+          null,
       },
     })
 
@@ -387,17 +469,60 @@ function AdminBookings() {
   ) => {
     switch (status) {
       case 'confirmed':
-        return 'border-cyan-400/20 bg-cyan-400/10 text-cyan-300'
+        return 'border-[#cfe1f5] bg-[#eaf3ff] text-[#3569a6]'
 
       case 'completed':
-        return 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300'
+        return 'border-[#bfe7d6] bg-[#e9f8f1] text-[#16845b]'
 
       case 'cancelled':
-        return 'border-rose-400/20 bg-rose-400/10 text-rose-300'
+        return 'border-[#f3c7bb] bg-[#fff0ec] text-[#c9472d]'
 
       default:
-        return 'border-indigo-400/20 bg-indigo-400/10 text-indigo-300'
+        return 'border-[#f4dda5] bg-[#fff3d7] text-[#b26a00]'
     }
+  }
+
+  const getInitials = (
+    name: string
+  ) => {
+    return name
+      .trim()
+      .split(/\s+/)
+      .map((part) => part[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase()
+  }
+
+  const getStaffName = (
+    staffId: string | null
+  ) => {
+    if (!staffId) {
+      return 'Unassigned'
+    }
+
+    return (
+      staffMembers.find(
+        (staff) =>
+          staff.id === staffId
+      )?.profile?.full_name ??
+      'Staff member'
+    )
+  }
+
+  const formatDate = (
+    value: string
+  ) => {
+    return new Date(
+      `${value}T00:00:00`
+    ).toLocaleDateString(
+      'en-PH',
+      {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }
+    )
   }
 
   const hasActiveFilters =
@@ -414,12 +539,13 @@ function AdminBookings() {
   const renderNavigation = (
     mobile = false
   ) => (
-    <nav className="mt-8 space-y-2">
+    <nav className="mt-8 space-y-1">
       {navItems.map((item) => {
         const Icon = item.icon
 
         const active =
-          item.path === '/admin/bookings'
+          item.path ===
+          '/admin/bookings'
 
         return (
           <button
@@ -433,11 +559,12 @@ function AdminBookings() {
             }}
             className={
               active
-                ? 'flex w-full items-center gap-3 rounded-2xl border border-indigo-400/20 bg-indigo-500/10 px-4 py-3 text-left text-indigo-200 shadow-[0_0_24px_rgba(99,102,241,0.08)]'
-                : 'flex w-full items-center gap-3 rounded-2xl border border-transparent px-4 py-3 text-left text-slate-400 transition hover:border-white/5 hover:bg-white/5 hover:text-white'
+                ? 'flex w-full items-center gap-3 rounded-xl bg-[#ffe9db] px-4 py-3 text-left font-semibold text-[#c45231]'
+                : 'flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-medium text-[#75675f] transition hover:bg-[#fff0e6] hover:text-[#1c1410]'
             }
           >
-            <Icon size={19} />
+            <Icon size={18} />
+
             {item.label}
           </button>
         )
@@ -446,25 +573,21 @@ function AdminBookings() {
   )
 
   return (
-    <main className="se-page se-grid-bg relative min-h-screen overflow-hidden text-white">
-      <div className="se-orb se-orb-indigo -left-32 top-20" />
-      <div className="se-orb se-orb-cyan -right-28 top-40" />
-      <div className="se-orb se-orb-violet bottom-[-140px] left-[45%]" />
-
-      <div className="relative z-10 flex min-h-screen">
+    <main className="min-h-screen bg-[#fff8f1] text-[#1c1410]">
+      <div className="flex min-h-screen">
         {/* DESKTOP SIDEBAR */}
-        <aside className="hidden w-[290px] shrink-0 border-r border-white/10 bg-slate-950/55 p-6 backdrop-blur-2xl lg:flex lg:flex-col">
+        <aside className="hidden w-[270px] shrink-0 border-r border-[#f1ded0] bg-[#fffaf5] p-6 lg:flex lg:flex-col">
           <div className="flex items-center gap-3">
-            <div className="se-icon-box h-12 w-12 rounded-2xl text-indigo-300">
-              <Sparkles size={22} />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+              <Sparkles size={20} />
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-indigo-300">
+              <p className="text-base font-extrabold tracking-tight">
                 ServEase
               </p>
 
-              <p className="mt-1 text-sm font-medium text-white">
+              <p className="text-xs text-[#8b7c73]">
                 Admin Console
               </p>
             </div>
@@ -472,50 +595,48 @@ function AdminBookings() {
 
           {renderNavigation()}
 
-          <div className="mt-auto pt-8">
-            <div className="mb-4 rounded-2xl border border-white/5 bg-white/[0.025] p-4">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-600">
-                Access Level
-              </p>
+          <div className="mt-auto border-t border-[#ead7ca] pt-6">
+            <p className="px-4 text-xs font-bold uppercase tracking-[0.12em] text-[#a09187]">
+              Access level
+            </p>
 
-              <p className="mt-2 text-sm font-medium text-slate-300">
-                Administrator
-              </p>
-            </div>
+            <p className="mt-2 px-4 text-sm font-semibold">
+              Administrator
+            </p>
 
             <button
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 rounded-2xl border border-rose-500/10 px-4 py-3 text-left text-rose-300 transition hover:border-rose-500/20 hover:bg-rose-500/10"
+              className="mt-5 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#c9472d] transition hover:bg-[#fff0ec]"
             >
-              <LogOut size={19} />
+              <LogOut size={18} />
               Logout
             </button>
           </div>
         </aside>
 
-        {/* MOBILE MENU */}
+        {/* MOBILE DRAWER */}
         {mobileMenuOpen && (
           <>
             <div
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 bg-[#1c1410]/35 lg:hidden"
               onClick={() =>
                 setMobileMenuOpen(false)
               }
             />
 
-            <aside className="fixed inset-y-0 left-0 z-50 w-[290px] border-r border-white/10 bg-slate-950 p-6 shadow-2xl lg:hidden">
+            <aside className="fixed inset-y-0 left-0 z-50 w-[280px] border-r border-[#f1ded0] bg-[#fffaf5] p-6 shadow-2xl lg:hidden">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="se-icon-box h-11 w-11 rounded-2xl text-indigo-300">
-                    <Sparkles size={20} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+                    <Sparkles size={18} />
                   </div>
 
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-indigo-300">
+                    <p className="font-extrabold">
                       ServEase
                     </p>
 
-                    <p className="mt-1 text-sm font-medium">
+                    <p className="text-xs text-[#8b7c73]">
                       Admin Console
                     </p>
                   </div>
@@ -525,7 +646,7 @@ function AdminBookings() {
                   onClick={() =>
                     setMobileMenuOpen(false)
                   }
-                  className="rounded-xl border border-white/10 bg-white/5 p-2 text-slate-400"
+                  className="rounded-lg border border-[#ead7ca] bg-white p-2 text-[#74675f]"
                 >
                   <X size={18} />
                 </button>
@@ -535,9 +656,9 @@ function AdminBookings() {
 
               <button
                 onClick={handleLogout}
-                className="mt-8 flex w-full items-center gap-3 rounded-2xl border border-rose-500/10 px-4 py-3 text-left text-rose-300"
+                className="mt-8 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#c9472d] hover:bg-[#fff0ec]"
               >
-                <LogOut size={19} />
+                <LogOut size={18} />
                 Logout
               </button>
             </aside>
@@ -547,19 +668,19 @@ function AdminBookings() {
         {/* MAIN */}
         <section className="min-w-0 flex-1">
           {/* MOBILE HEADER */}
-          <div className="border-b border-white/10 bg-slate-950/50 px-5 py-4 backdrop-blur-xl lg:hidden">
+          <div className="border-b border-[#f1ded0] bg-[#fffaf5] px-5 py-4 lg:hidden">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="se-icon-box h-10 w-10 rounded-xl text-indigo-300">
-                  <Sparkles size={18} />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b4a] to-[#ffb020] text-white">
+                  <Sparkles size={17} />
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">
+                  <p className="font-bold">
                     ServEase
                   </p>
 
-                  <p className="text-sm font-medium">
+                  <p className="text-xs text-[#8b7c73]">
                     Admin Console
                   </p>
                 </div>
@@ -569,570 +690,628 @@ function AdminBookings() {
                 onClick={() =>
                   setMobileMenuOpen(true)
                 }
-                className="rounded-xl border border-white/10 bg-white/5 p-2.5 text-slate-300"
+                className="rounded-lg border border-[#ead7ca] bg-white p-2.5 text-[#493c35]"
               >
                 <Menu size={20} />
               </button>
             </div>
           </div>
 
-          <div className="mx-auto max-w-[1600px] px-5 py-8 sm:px-8 lg:px-10">
-            {/* PAGE HEADER */}
-            <header className="se-glass rounded-[28px] px-6 py-6 sm:px-8">
-              <div className="flex items-center gap-4">
-                <div className="se-icon-box h-14 w-14 rounded-2xl text-indigo-300">
-                  <CalendarDays size={25} />
-                </div>
+          <div className="mx-auto max-w-[1500px] px-6 py-10 lg:px-10 lg:py-12">
+            {/* HEADER */}
+            <header className="border-b border-[#ead7ca] pb-9">
+              <p className="text-sm font-bold text-[#ff6b4a]">
+                Booking management
+              </p>
+
+              <h1 className="mt-2 text-4xl font-extrabold tracking-[-0.04em] sm:text-5xl">
+                Manage{' '}
+                <span className="se-gradient-text">
+                  Bookings
+                </span>
+              </h1>
+
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-[#74675f] sm:text-base">
+                Search appointments, assign staff,
+                update booking status, and manage
+                ServEase appointment activity.
+              </p>
+            </header>
+
+            {/* FILTERS */}
+            <section className="border-b border-[#ead7ca] py-8">
+              <div className="flex items-center gap-3">
+                <SlidersHorizontal
+                  size={18}
+                  className="text-[#ff6b4a]"
+                />
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-indigo-300">
-                    Booking Management
-                  </p>
+                  <h2 className="font-bold">
+                    Search & Filters
+                  </h2>
 
-                  <h1 className="se-gradient-text mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-                    Bookings
-                  </h1>
-
-                  <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
-                    Search appointments,
-                    assign staff, update
-                    booking status, and manage
-                    ServEase appointment activity.
+                  <p className="mt-1 text-xs text-[#8b7c73]">
+                    Filter your booking records.
                   </p>
                 </div>
               </div>
-            </header>
 
-            {/* COMBINED BOOKINGS PANEL */}
-            <section className="se-glass mt-7 overflow-hidden rounded-[28px]">
-              {/* FILTER HEADER */}
-              <div className="border-b border-white/10 px-6 py-6">
-                <div className="flex items-center gap-3">
-                  <div className="se-icon-box h-10 w-10 rounded-xl text-violet-300">
-                    <SlidersHorizontal size={18} />
-                  </div>
-
-                  <div>
-                    <h2 className="font-semibold">
-                      Search & Filters
-                    </h2>
-
-                    <p className="mt-1 text-xs text-slate-500">
-                      Filter real ServEase appointment records.
-                    </p>
-                  </div>
-                </div>
-
-                {/* FILTERS */}
-                <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                  <div className="relative">
-                    <Search
-                      size={17}
-                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
-                    />
-
-                    <input
-                      type="text"
-                      value={searchTerm}
-                      onChange={(event) =>
-                        setSearchTerm(
-                          event.target.value
-                        )
-                      }
-                      placeholder="Search customer or service"
-                      className="se-input w-full rounded-2xl py-3.5 pl-11 pr-4 text-sm"
-                    />
-                  </div>
-
-                  <select
-                    value={statusFilter}
-                    onChange={(event) =>
-                      setStatusFilter(
-                        event.target.value
-                      )
-                    }
-                    className="se-input rounded-2xl px-4 py-3.5 text-sm"
-                  >
-                    <option
-                      value="all"
-                      className="bg-slate-900"
-                    >
-                      All statuses
-                    </option>
-
-                    <option
-                      value="pending"
-                      className="bg-slate-900"
-                    >
-                      Pending
-                    </option>
-
-                    <option
-                      value="confirmed"
-                      className="bg-slate-900"
-                    >
-                      Confirmed
-                    </option>
-
-                    <option
-                      value="completed"
-                      className="bg-slate-900"
-                    >
-                      Completed
-                    </option>
-
-                    <option
-                      value="cancelled"
-                      className="bg-slate-900"
-                    >
-                      Cancelled
-                    </option>
-                  </select>
-
-                  <select
-                    value={staffFilter}
-                    onChange={(event) =>
-                      setStaffFilter(
-                        event.target.value
-                      )
-                    }
-                    className="se-input rounded-2xl px-4 py-3.5 text-sm"
-                  >
-                    <option
-                      value="all"
-                      className="bg-slate-900"
-                    >
-                      All staff
-                    </option>
-
-                    <option
-                      value="unassigned"
-                      className="bg-slate-900"
-                    >
-                      Unassigned
-                    </option>
-
-                    {staffMembers.map((staff) => (
-                      <option
-                        key={staff.id}
-                        value={staff.id}
-                        className="bg-slate-900"
-                      >
-                        {staff.profile?.full_name ??
-                          'Staff member'}
-                      </option>
-                    ))}
-                  </select>
+              <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                <div className="relative">
+                  <Search
+                    size={17}
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a09187]"
+                  />
 
                   <input
-                    type="date"
-                    value={dateFilter}
+                    type="text"
+                    value={searchTerm}
                     onChange={(event) =>
-                      setDateFilter(
+                      setSearchTerm(
                         event.target.value
                       )
                     }
-                    className="se-input rounded-2xl px-4 py-3.5 text-sm"
+                    placeholder="Search customer or service"
+                    className="se-input se-input-icon-left h-11 text-sm"
                   />
                 </div>
 
-                {/* FILTER SUMMARY */}
-                <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-                  <p className="text-sm text-slate-500">
-                    Showing{' '}
-                    <span className="font-semibold text-white">
-                      {filteredBookings.length}
-                    </span>{' '}
-                    of{' '}
-                    <span className="font-semibold text-white">
-                      {bookings.length}
-                    </span>{' '}
-                    bookings
-                  </p>
+                <select
+                  value={statusFilter}
+                  onChange={(event) =>
+                    setStatusFilter(
+                      event.target.value
+                    )
+                  }
+                  className="se-input h-11 text-sm"
+                >
+                  <option value="all">
+                    All statuses
+                  </option>
 
-                  {hasActiveFilters && (
-                    <button
-                      onClick={resetFilters}
-                      className="se-btn-secondary flex items-center gap-2 rounded-xl px-4 py-2 text-xs"
-                    >
-                      <X size={15} />
-                      Clear filters
-                    </button>
+                  <option value="pending">
+                    Pending
+                  </option>
+
+                  <option value="confirmed">
+                    Confirmed
+                  </option>
+
+                  <option value="completed">
+                    Completed
+                  </option>
+
+                  <option value="cancelled">
+                    Cancelled
+                  </option>
+                </select>
+
+                <select
+                  value={staffFilter}
+                  onChange={(event) =>
+                    setStaffFilter(
+                      event.target.value
+                    )
+                  }
+                  className="se-input h-11 text-sm"
+                >
+                  <option value="all">
+                    All staff
+                  </option>
+
+                  <option value="unassigned">
+                    Unassigned
+                  </option>
+
+                  {staffMembers.map(
+                    (staff) => (
+                      <option
+                        key={staff.id}
+                        value={staff.id}
+                      >
+                        {staff.profile
+                          ?.full_name ??
+                          'Staff member'}
+                      </option>
+                    )
                   )}
-                </div>
+                </select>
+
+                <input
+                  type="date"
+                  value={dateFilter}
+                  onChange={(event) =>
+                    setDateFilter(
+                      event.target.value
+                    )
+                  }
+                  className="se-input h-11 text-sm"
+                />
               </div>
 
-              {/* TABLE TITLE */}
-              <div className="border-b border-white/10 bg-white/[0.015] px-6 py-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo-300">
-                  Appointment Records
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm text-[#8b7c73]">
+                  Showing{' '}
+                  <span className="font-semibold text-[#1c1410]">
+                    {filteredBookings.length}
+                  </span>{' '}
+                  of{' '}
+                  <span className="font-semibold text-[#1c1410]">
+                    {bookings.length}
+                  </span>{' '}
+                  bookings
                 </p>
 
-                <h2 className="mt-2 text-xl font-semibold">
-                  Manage Bookings
+                {hasActiveFilters && (
+                  <button
+                    onClick={resetFilters}
+                    className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold text-[#8b6f61] transition hover:bg-[#fff0e7] hover:text-[#c45231]"
+                  >
+                    <X size={14} />
+                    Clear filters
+                  </button>
+                )}
+              </div>
+            </section>
+
+            {/* BOOKINGS */}
+            <section className="pt-10">
+              <div className="mb-6">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6b4a]">
+                  Appointment records
+                </p>
+
+                <h2 className="mt-2 text-2xl font-extrabold">
+                  Booking Activity
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
-                  Staff assignments and status changes are
-                  saved to Supabase and recorded in the
-                  ServEase audit log.
+                <p className="mt-2 text-sm text-[#74675f]">
+                  Manage staff assignments and booking
+                  statuses from one place.
                 </p>
               </div>
 
-              {/* DATA */}
               {loading ? (
-                <div className="flex min-h-[300px] items-center justify-center">
+                <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white">
                   <div className="text-center">
-                    <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-indigo-400/30 border-t-indigo-300" />
+                    <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-[#f4c9b7] border-t-[#ff6b4a]" />
 
-                    <p className="mt-4 text-sm text-slate-500">
+                    <p className="mt-4 text-sm text-[#8b7c73]">
                       Loading bookings...
                     </p>
                   </div>
                 </div>
               ) : bookings.length === 0 ? (
-                <div className="flex min-h-[300px] items-center justify-center text-sm text-slate-500">
+                <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white text-sm text-[#8b7c73]">
                   No bookings found.
                 </div>
               ) : filteredBookings.length === 0 ? (
-                <div className="flex min-h-[300px] items-center justify-center">
+                <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#ead7ca] bg-white">
                   <div className="text-center">
                     <Search
                       size={28}
-                      className="mx-auto text-slate-600"
+                      className="mx-auto text-[#b6a79d]"
                     />
 
-                    <p className="mt-4 text-sm text-slate-500">
+                    <p className="mt-4 text-sm text-[#8b7c73]">
                       No bookings match your current filters.
                     </p>
                   </div>
                 </div>
               ) : (
                 <>
-                  {/* DESKTOP */}
-                  <div className="hidden overflow-x-auto xl:block">
-                    <table className="w-full text-left">
-                      <thead className="border-b border-white/10 bg-white/[0.025]">
-                        <tr>
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Customer
-                          </th>
+                  {/* DESKTOP TABLE */}
+                  <div className="hidden overflow-hidden rounded-2xl border border-[#ead7ca] bg-white shadow-[0_8px_30px_rgba(91,62,47,0.04)] xl:block">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-sm">
+                        <thead>
+                          <tr className="border-b border-[#ead7ca] bg-[#fffaf6]">
+                            <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                              Customer
+                            </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Service
-                          </th>
+                            <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                              Service
+                            </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Schedule
-                          </th>
+                            <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                              Schedule
+                            </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Staff
-                          </th>
+                            <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                              Assigned Staff
+                            </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Status
-                          </th>
+                            <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                              Status
+                            </th>
 
-                          <th className="px-6 py-4 text-xs font-medium uppercase tracking-wider text-slate-500">
-                            Notes
-                          </th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        {filteredBookings.map((booking) => (
-                          <tr
-                            key={booking.id}
-                            className="border-b border-white/5 transition hover:bg-white/[0.035] last:border-0"
-                          >
-                            <td className="px-6 py-5 font-medium text-white">
-                              {booking.customer?.full_name ??
-                                'Customer'}
-                            </td>
-
-                            <td className="px-6 py-5 text-sm text-slate-300">
-                              {booking.service?.name ??
-                                'Service'}
-                            </td>
-
-                            <td className="whitespace-nowrap px-6 py-5">
-                              <p className="text-sm text-slate-300">
-                                {booking.appointment_date}
-                              </p>
-
-                              <p className="mt-1 text-xs text-slate-500">
-                                {booking.appointment_time.slice(
-                                  0,
-                                  5
-                                )}
-                              </p>
-                            </td>
-
-                            <td className="px-6 py-5">
-                              <select
-                                value={booking.staff_id ?? ''}
-                                disabled={
-                                  updatingId === booking.id
-                                }
-                                onChange={(event) =>
-                                  handleStaffChange(
-                                    booking.id,
-                                    event.target.value
-                                  )
-                                }
-                                className="se-input min-w-[160px] rounded-xl px-3 py-2 text-xs"
-                              >
-                                <option
-                                  value=""
-                                  className="bg-slate-900"
-                                >
-                                  Unassigned
-                                </option>
-
-                                {staffMembers.map((staff) => (
-                                  <option
-                                    key={staff.id}
-                                    value={staff.id}
-                                    className="bg-slate-900"
-                                  >
-                                    {staff.profile?.full_name ??
-                                      'Staff member'}
-                                  </option>
-                                ))}
-                              </select>
-                            </td>
-
-                            <td className="px-6 py-5">
-                              <select
-                                value={booking.status}
-                                disabled={
-                                  updatingId === booking.id
-                                }
-                                onChange={(event) =>
-                                  handleStatusChange(
-                                    booking.id,
-                                    event.target
-                                      .value as BookingStatus
-                                  )
-                                }
-                                className={`rounded-xl border px-3 py-2 text-xs font-medium capitalize outline-none transition disabled:cursor-not-allowed disabled:opacity-60 ${getStatusStyles(
-                                  booking.status
-                                )}`}
-                              >
-                                <option
-                                  value="pending"
-                                  className="bg-slate-900 text-white"
-                                >
-                                  Pending
-                                </option>
-
-                                <option
-                                  value="confirmed"
-                                  className="bg-slate-900 text-white"
-                                >
-                                  Confirmed
-                                </option>
-
-                                <option
-                                  value="completed"
-                                  className="bg-slate-900 text-white"
-                                >
-                                  Completed
-                                </option>
-
-                                <option
-                                  value="cancelled"
-                                  className="bg-slate-900 text-white"
-                                >
-                                  Cancelled
-                                </option>
-                              </select>
-
-                              {updatingId === booking.id && (
-                                <p className="mt-2 text-xs text-slate-500">
-                                  Updating...
-                                </p>
-                              )}
-                            </td>
-
-                            <td className="max-w-[260px] px-6 py-5 text-sm text-slate-500">
-                              {booking.notes || '—'}
-                            </td>
+                            <th className="px-5 py-3.5 font-semibold text-[#8b7c73]">
+                              Notes
+                            </th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+
+                        <tbody className="divide-y divide-[#f1e4db]">
+                          {filteredBookings.map(
+                            (booking) => {
+                              const customerName =
+                                booking.customer
+                                  ?.full_name ??
+                                'Customer'
+
+                              return (
+                                <tr
+                                  key={booking.id}
+                                  className="group transition-colors hover:bg-[#fffaf6]"
+                                >
+                                  {/* CUSTOMER */}
+                                  <td className="px-5 py-4">
+                                    <div className="flex items-center gap-3">
+                                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fff0e7] text-xs font-extrabold text-[#c45231] ring-1 ring-[#f2d7c7]">
+                                        {getInitials(
+                                          customerName
+                                        )}
+                                      </div>
+
+                                      <div className="min-w-0">
+                                        <p className="truncate font-semibold text-[#1c1410]">
+                                          {
+                                            customerName
+                                          }
+                                        </p>
+
+                                        <p className="mt-0.5 text-xs text-[#9a8a80]">
+                                          Customer
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+
+                                  {/* SERVICE */}
+                                  <td className="px-5 py-4">
+                                    <p className="font-medium text-[#493c35]">
+                                      {booking
+                                        .service
+                                        ?.name ??
+                                        'Service'}
+                                    </p>
+                                  </td>
+
+                                  {/* SCHEDULE */}
+                                  <td className="whitespace-nowrap px-5 py-4">
+                                    <p className="font-medium text-[#493c35]">
+                                      {formatDate(
+                                        booking.appointment_date
+                                      )}
+                                    </p>
+
+                                    <p className="mt-1 text-xs text-[#9a8a80]">
+                                      {booking.appointment_time.slice(
+                                        0,
+                                        5
+                                      )}
+                                    </p>
+                                  </td>
+
+                                  {/* STAFF */}
+                                  <td className="px-5 py-4">
+                                    <select
+                                      value={
+                                        booking.staff_id ??
+                                        ''
+                                      }
+                                      disabled={
+                                        updatingId ===
+                                        booking.id
+                                      }
+                                      onChange={(event) =>
+                                        handleStaffChange(
+                                          booking.id,
+                                          event.target.value
+                                        )
+                                      }
+                                      className="min-w-[165px] rounded-lg border border-[#e6d7cc] bg-white px-3 py-2 text-xs font-medium text-[#493c35] outline-none transition hover:border-[#d9c0b0] focus:border-[#ff9a76] focus:ring-2 focus:ring-[#ff6b4a]/10 disabled:cursor-not-allowed disabled:opacity-60"
+                                    >
+                                      <option value="">
+                                        Unassigned
+                                      </option>
+
+                                      {staffMembers.map(
+                                        (
+                                          staff
+                                        ) => (
+                                          <option
+                                            key={
+                                              staff.id
+                                            }
+                                            value={
+                                              staff.id
+                                            }
+                                          >
+                                            {staff.profile
+                                              ?.full_name ??
+                                              'Staff member'}
+                                          </option>
+                                        )
+                                      )}
+                                    </select>
+                                  </td>
+
+                                  {/* STATUS */}
+                                  <td className="px-5 py-4">
+                                    <select
+                                      value={
+                                        booking.status
+                                      }
+                                      disabled={
+                                        updatingId ===
+                                        booking.id
+                                      }
+                                      onChange={(event) =>
+                                        handleStatusChange(
+                                          booking.id,
+                                          event.target
+                                            .value as BookingStatus
+                                        )
+                                      }
+                                      className={`rounded-full border px-3 py-1.5 text-xs font-bold capitalize outline-none transition disabled:cursor-not-allowed disabled:opacity-60 ${getStatusStyles(
+                                        booking.status
+                                      )}`}
+                                    >
+                                      <option value="pending">
+                                        Pending
+                                      </option>
+
+                                      <option value="confirmed">
+                                        Confirmed
+                                      </option>
+
+                                      <option value="completed">
+                                        Completed
+                                      </option>
+
+                                      <option value="cancelled">
+                                        Cancelled
+                                      </option>
+                                    </select>
+
+                                    {updatingId ===
+                                      booking.id && (
+                                      <p className="mt-1.5 text-[11px] text-[#9a8a80]">
+                                        Updating...
+                                      </p>
+                                    )}
+                                  </td>
+
+                                  {/* NOTES */}
+                                  <td className="max-w-[250px] px-5 py-4">
+                                    <p
+                                      className="truncate text-sm text-[#74675f]"
+                                      title={
+                                        booking.notes ??
+                                        ''
+                                      }
+                                    >
+                                      {booking.notes ||
+                                        '—'}
+                                    </p>
+                                  </td>
+                                </tr>
+                              )
+                            }
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
 
                   {/* MOBILE / TABLET */}
-                  <div className="grid gap-4 p-5 xl:hidden">
-                    {filteredBookings.map((booking) => (
-                      <article
-                        key={booking.id}
-                        className="se-card-3d rounded-3xl border border-white/10 bg-slate-950/50 p-5"
-                      >
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                          <div>
-                            <p className="text-xs uppercase tracking-[0.18em] text-indigo-300">
-                              Customer
-                            </p>
+                  <div className="overflow-hidden rounded-2xl border border-[#ead7ca] bg-white xl:hidden">
+                    <div className="divide-y divide-[#f1e4db]">
+                      {filteredBookings.map(
+                        (booking) => {
+                          const customerName =
+                            booking.customer
+                              ?.full_name ??
+                            'Customer'
 
-                            <h3 className="mt-2 text-lg font-semibold">
-                              {booking.customer?.full_name ??
-                                'Customer'}
-                            </h3>
-
-                            <p className="mt-1 text-sm text-slate-400">
-                              {booking.service?.name ??
-                                'Service'}
-                            </p>
-                          </div>
-
-                          <span
-                            className={`self-start rounded-full border px-3 py-1.5 text-xs font-medium capitalize ${getStatusStyles(
-                              booking.status
-                            )}`}
-                          >
-                            {booking.status}
-                          </span>
-                        </div>
-
-                        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                          <div>
-                            <p className="text-xs text-slate-600">
-                              Date
-                            </p>
-
-                            <p className="mt-1 text-sm text-slate-300">
-                              {booking.appointment_date}
-                            </p>
-                          </div>
-
-                          <div>
-                            <p className="text-xs text-slate-600">
-                              Time
-                            </p>
-
-                            <p className="mt-1 text-sm text-slate-300">
-                              {booking.appointment_time.slice(
-                                0,
-                                5
-                              )}
-                            </p>
-                          </div>
-                        </div>
-
-                        {booking.notes && (
-                          <div className="mt-5 rounded-2xl border border-white/5 bg-white/[0.025] p-4">
-                            <p className="text-xs text-slate-600">
-                              Notes
-                            </p>
-
-                            <p className="mt-1 text-sm text-slate-400">
-                              {booking.notes}
-                            </p>
-                          </div>
-                        )}
-
-                        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                          <div>
-                            <label className="mb-2 block text-xs text-slate-500">
-                              Assigned Staff
-                            </label>
-
-                            <select
-                              value={booking.staff_id ?? ''}
-                              disabled={
-                                updatingId === booking.id
-                              }
-                              onChange={(event) =>
-                                handleStaffChange(
-                                  booking.id,
-                                  event.target.value
-                                )
-                              }
-                              className="se-input w-full rounded-2xl px-4 py-3 text-sm"
+                          return (
+                            <article
+                              key={booking.id}
+                              className="p-5 sm:p-6"
                             >
-                              <option
-                                value=""
-                                className="bg-slate-900"
-                              >
-                                Unassigned
-                              </option>
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex min-w-0 items-center gap-3">
+                                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#fff0e7] text-xs font-extrabold text-[#c45231] ring-1 ring-[#f2d7c7]">
+                                    {getInitials(
+                                      customerName
+                                    )}
+                                  </div>
 
-                              {staffMembers.map((staff) => (
-                                <option
-                                  key={staff.id}
-                                  value={staff.id}
-                                  className="bg-slate-900"
+                                  <div className="min-w-0">
+                                    <h3 className="truncate font-bold">
+                                      {
+                                        customerName
+                                      }
+                                    </h3>
+
+                                    <p className="mt-1 truncate text-sm text-[#74675f]">
+                                      {booking
+                                        .service
+                                        ?.name ??
+                                        'Service'}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <span
+                                  className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-bold capitalize ${getStatusStyles(
+                                    booking.status
+                                  )}`}
                                 >
-                                  {staff.profile?.full_name ??
-                                    'Staff member'}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
+                                  {
+                                    booking.status
+                                  }
+                                </span>
+                              </div>
 
-                          <div>
-                            <label className="mb-2 block text-xs text-slate-500">
-                              Booking Status
-                            </label>
+                              <div className="mt-5 grid grid-cols-2 gap-4 border-t border-[#f1e4db] pt-4">
+                                <div>
+                                  <p className="text-xs font-medium text-[#9a8a80]">
+                                    Date
+                                  </p>
 
-                            <select
-                              value={booking.status}
-                              disabled={
-                                updatingId === booking.id
-                              }
-                              onChange={(event) =>
-                                handleStatusChange(
-                                  booking.id,
-                                  event.target
-                                    .value as BookingStatus
-                                )
-                              }
-                              className={`w-full rounded-2xl border px-4 py-3 text-sm font-medium capitalize outline-none ${getStatusStyles(
-                                booking.status
-                              )}`}
-                            >
-                              <option
-                                value="pending"
-                                className="bg-slate-900 text-white"
-                              >
-                                Pending
-                              </option>
+                                  <p className="mt-1 text-sm font-medium text-[#493c35]">
+                                    {formatDate(
+                                      booking.appointment_date
+                                    )}
+                                  </p>
+                                </div>
 
-                              <option
-                                value="confirmed"
-                                className="bg-slate-900 text-white"
-                              >
-                                Confirmed
-                              </option>
+                                <div>
+                                  <p className="text-xs font-medium text-[#9a8a80]">
+                                    Time
+                                  </p>
 
-                              <option
-                                value="completed"
-                                className="bg-slate-900 text-white"
-                              >
-                                Completed
-                              </option>
+                                  <p className="mt-1 text-sm font-medium text-[#493c35]">
+                                    {booking.appointment_time.slice(
+                                      0,
+                                      5
+                                    )}
+                                  </p>
+                                </div>
 
-                              <option
-                                value="cancelled"
-                                className="bg-slate-900 text-white"
-                              >
-                                Cancelled
-                              </option>
-                            </select>
-                          </div>
-                        </div>
+                                <div className="col-span-2">
+                                  <p className="text-xs font-medium text-[#9a8a80]">
+                                    Assigned staff
+                                  </p>
 
-                        {updatingId === booking.id && (
-                          <p className="mt-4 text-xs text-slate-500">
-                            Updating booking...
-                          </p>
-                        )}
-                      </article>
-                    ))}
+                                  <p className="mt-1 text-sm font-medium text-[#493c35]">
+                                    {getStaffName(
+                                      booking.staff_id
+                                    )}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {booking.notes && (
+                                <div className="mt-4 rounded-xl bg-[#fffaf6] px-4 py-3">
+                                  <p className="text-xs font-medium text-[#9a8a80]">
+                                    Notes
+                                  </p>
+
+                                  <p className="mt-1 text-sm leading-6 text-[#65574f]">
+                                    {
+                                      booking.notes
+                                    }
+                                  </p>
+                                </div>
+                              )}
+
+                              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                                <div>
+                                  <label className="mb-2 block text-xs font-semibold text-[#74675f]">
+                                    Assigned Staff
+                                  </label>
+
+                                  <select
+                                    value={
+                                      booking.staff_id ??
+                                      ''
+                                    }
+                                    disabled={
+                                      updatingId ===
+                                      booking.id
+                                    }
+                                    onChange={(event) =>
+                                      handleStaffChange(
+                                        booking.id,
+                                        event.target.value
+                                      )
+                                    }
+                                    className="se-input w-full py-3 text-sm"
+                                  >
+                                    <option value="">
+                                      Unassigned
+                                    </option>
+
+                                    {staffMembers.map(
+                                      (
+                                        staff
+                                      ) => (
+                                        <option
+                                          key={
+                                            staff.id
+                                          }
+                                          value={
+                                            staff.id
+                                          }
+                                        >
+                                          {staff.profile
+                                            ?.full_name ??
+                                            'Staff member'}
+                                        </option>
+                                      )
+                                    )}
+                                  </select>
+                                </div>
+
+                                <div>
+                                  <label className="mb-2 block text-xs font-semibold text-[#74675f]">
+                                    Booking Status
+                                  </label>
+
+                                  <select
+                                    value={
+                                      booking.status
+                                    }
+                                    disabled={
+                                      updatingId ===
+                                      booking.id
+                                    }
+                                    onChange={(event) =>
+                                      handleStatusChange(
+                                        booking.id,
+                                        event.target
+                                          .value as BookingStatus
+                                      )
+                                    }
+                                    className={`w-full rounded-xl border px-4 py-3 text-sm font-bold capitalize outline-none ${getStatusStyles(
+                                      booking.status
+                                    )}`}
+                                  >
+                                    <option value="pending">
+                                      Pending
+                                    </option>
+
+                                    <option value="confirmed">
+                                      Confirmed
+                                    </option>
+
+                                    <option value="completed">
+                                      Completed
+                                    </option>
+
+                                    <option value="cancelled">
+                                      Cancelled
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              {updatingId ===
+                                booking.id && (
+                                <p className="mt-3 text-xs text-[#8b7c73]">
+                                  Updating booking...
+                                </p>
+                              )}
+                            </article>
+                          )
+                        }
+                      )}
+                    </div>
                   </div>
                 </>
               )}
