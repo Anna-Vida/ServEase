@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { sendBookingConfirmation } from '../lib/api'
 
 type Service = {
   id: string
@@ -94,7 +95,7 @@ function BookAppointment() {
       return
     }
 
-    const { error } = await supabase
+    const { data: booking, error } = await supabase
       .from('appointments')
       .insert({
         customer_id: user.id,
@@ -105,11 +106,28 @@ function BookAppointment() {
           appointmentTime,
         notes: notes || null,
       })
+      .select('id')
+      .single()
 
-    if (error) {
-      setMessage(error.message)
+    if (error || !booking) {
+      setMessage(error?.message || 'Failed to create appointment.')
       setLoading(false)
       return
+    }
+
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      if (session?.access_token) {
+        await sendBookingConfirmation(booking.id, session.access_token)
+      }
+    } catch (notificationError) {
+      console.error(
+        'Appointment booked, but confirmation email failed:',
+        notificationError,
+      )
     }
 
     setMessage(
@@ -195,7 +213,7 @@ function BookAppointment() {
             >
               {/* SERVICE */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-300">
+                <label htmlFor="service" className="mb-2 block text-sm font-medium text-slate-300">
                   Service
                 </label>
 
@@ -206,6 +224,7 @@ function BookAppointment() {
                   />
 
                   <select
+                    id="service"
                     value={serviceId}
                     onChange={(event) =>
                       setServiceId(
@@ -247,7 +266,7 @@ function BookAppointment() {
               {/* DATE / TIME */}
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-300">
+                  <label htmlFor="appointment-date" className="mb-2 block text-sm font-medium text-slate-300">
                     Appointment Date
                   </label>
 
@@ -258,6 +277,7 @@ function BookAppointment() {
                     />
 
                     <input
+                      id="appointment-date"
                       type="date"
                       value={
                         appointmentDate
@@ -275,7 +295,7 @@ function BookAppointment() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-300">
+                  <label htmlFor="appointment-time" className="mb-2 block text-sm font-medium text-slate-300">
                     Appointment Time
                   </label>
 
@@ -286,6 +306,7 @@ function BookAppointment() {
                     />
 
                     <input
+                      id="appointment-time"
                       type="time"
                       value={
                         appointmentTime
