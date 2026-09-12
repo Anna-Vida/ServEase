@@ -208,7 +208,7 @@ function Login() {
             >
               {/* Email */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-300">
+                <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-300">
                   Email address
                 </label>
 
@@ -219,6 +219,7 @@ function Login() {
                   />
 
                   <input
+                    id="email"
                     type="email"
                     value={email}
                     onChange={(event) =>
@@ -235,7 +236,7 @@ function Login() {
               {/* Password */}
               <div>
                 <div className="mb-2 flex items-center justify-between">
-                  <label className="block text-sm font-medium text-slate-300">
+                  <label htmlFor="password" className="block text-sm font-medium text-slate-300">
                     Password
                   </label>
                 </div>
@@ -247,6 +248,7 @@ function Login() {
                   />
 
                   <input
+                    id="password"
                     type={
                       showPassword
                         ? 'text'
