@@ -869,41 +869,55 @@ function AdminPayments() {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-8 border-t border-[#ead7ca] pt-6 xl:border-t-0 xl:pt-0">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#a09187]">
-                      Records
-                    </p>
+                {/* COMPACT 3D STATS */}
+                <div className="w-full max-w-md xl:w-auto xl:min-w-[430px]">
+                  <div className="relative">
+                    {/* BACK LAYER */}
+                    <div className="absolute inset-x-2 top-2 h-full rounded-2xl border border-[#ead7ca] bg-[#f8e8dc]" />
 
-                    <p className="mt-1 text-3xl font-extrabold">
-                      {loading
-                        ? '...'
-                        : payments.length}
-                    </p>
-                  </div>
+                    {/* MAIN CARD */}
+                    <div className="relative overflow-hidden rounded-2xl border border-[#ead7ca] bg-white shadow-[0_10px_25px_rgba(91,62,47,0.12)]">
+                      <div className="grid grid-cols-3 divide-x divide-[#ead7ca]">
+                        {/* RECORDS */}
+                        <div className="flex flex-col items-center justify-center px-4 py-5 text-center">
+                          <p className="text-3xl font-extrabold tracking-[-0.04em] text-[#1c1410]">
+                            {loading
+                              ? '...'
+                              : payments.length}
+                          </p>
 
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#16845b]">
-                      Paid
-                    </p>
+                          <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Records
+                          </p>
+                        </div>
 
-                    <p className="mt-1 text-3xl font-extrabold">
-                      {loading
-                        ? '...'
-                        : paidCount}
-                    </p>
-                  </div>
+                        {/* PAID */}
+                        <div className="flex flex-col items-center justify-center px-4 py-5 text-center">
+                          <p className="text-3xl font-extrabold tracking-[-0.04em] text-[#16845b]">
+                            {loading
+                              ? '...'
+                              : paidCount}
+                          </p>
 
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#3569a6]">
-                      Pending
-                    </p>
+                          <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Paid
+                          </p>
+                        </div>
 
-                    <p className="mt-1 text-3xl font-extrabold">
-                      {loading
-                        ? '...'
-                        : pendingCount}
-                    </p>
+                        {/* PENDING */}
+                        <div className="flex flex-col items-center justify-center px-4 py-5 text-center">
+                          <p className="text-3xl font-extrabold tracking-[-0.04em] text-[#ff8a3d]">
+                            {loading
+                              ? '...'
+                              : pendingCount}
+                          </p>
+
+                          <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Pending
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
