@@ -604,41 +604,55 @@ function AdminServices() {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-8 border-t border-[#ead7ca] pt-6 xl:border-t-0 xl:pt-0">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#a09187]">
-                      Total
-                    </p>
+                {/* COMPACT 3D STATS */}
+                <div className="w-full max-w-md xl:w-auto xl:min-w-[430px]">
+                  <div className="relative">
+                    {/* BACK LAYER */}
+                    <div className="absolute inset-x-2 top-2 h-full rounded-2xl border border-[#ead7ca] bg-[#f8e8dc]" />
 
-                    <p className="mt-1 text-3xl font-extrabold">
-                      {loading
-                        ? '...'
-                        : services.length}
-                    </p>
-                  </div>
+                    {/* MAIN CARD */}
+                    <div className="relative overflow-hidden rounded-2xl border border-[#ead7ca] bg-white shadow-[0_10px_25px_rgba(91,62,47,0.12)]">
+                      <div className="grid grid-cols-3 divide-x divide-[#ead7ca]">
+                        {/* TOTAL */}
+                        <div className="flex flex-col items-center justify-center px-4 py-5 text-center">
+                          <p className="text-3xl font-extrabold tracking-[-0.04em] text-[#1c1410]">
+                            {loading
+                              ? '...'
+                              : services.length}
+                          </p>
 
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#16845b]">
-                      Active
-                    </p>
+                          <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Total
+                          </p>
+                        </div>
 
-                    <p className="mt-1 text-3xl font-extrabold">
-                      {loading
-                        ? '...'
-                        : activeServicesCount}
-                    </p>
-                  </div>
+                        {/* ACTIVE */}
+                        <div className="flex flex-col items-center justify-center px-4 py-5 text-center">
+                          <p className="text-3xl font-extrabold tracking-[-0.04em] text-[#16845b]">
+                            {loading
+                              ? '...'
+                              : activeServicesCount}
+                          </p>
 
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#8b7c73]">
-                      Inactive
-                    </p>
+                          <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Active
+                          </p>
+                        </div>
 
-                    <p className="mt-1 text-3xl font-extrabold">
-                      {loading
-                        ? '...'
-                        : inactiveServicesCount}
-                    </p>
+                        {/* INACTIVE */}
+                        <div className="flex flex-col items-center justify-center px-4 py-5 text-center">
+                          <p className="text-3xl font-extrabold tracking-[-0.04em] text-[#ff6b4a]">
+                            {loading
+                              ? '...'
+                              : inactiveServicesCount}
+                          </p>
+
+                          <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#8b7c73]">
+                            Inactive
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
