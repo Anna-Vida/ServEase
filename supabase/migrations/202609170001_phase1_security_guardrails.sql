@@ -74,7 +74,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = public
-as $$;
+as $$
 declare
   requested_duration integer;
   requested_start timestamp;
@@ -120,9 +120,7 @@ begin
     where a.staff_id = new.staff_id
       and a.id is distinct from new.id
       and a.status <> 'cancelled'
-      and (
-        new.appointment_date::timestamp + new.appointment_time
-      ) < (
+      and requested_start < (
         a.appointment_date::timestamp
         + a.appointment_time
         + make_interval(
@@ -132,11 +130,7 @@ begin
             )
           )
       )
-      and (
-        new.appointment_date::timestamp
-        + new.appointment_time
-        + make_interval(mins => requested_duration)
-      ) > (
+      and requested_end > (
         a.appointment_date::timestamp + a.appointment_time
       )
   ) then
