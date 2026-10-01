@@ -596,6 +596,29 @@ This provides a deeper code-oriented view of the repository, while this README f
 
 ---
 
+## My Contribution
+
+**Role: Sole Developer / Full-Stack Developer**
+
+I designed and built **ServEase independently from end to end**. My contribution covered the complete application lifecycle, including product planning, UI/UX, frontend development, backend API development, database design, authentication and authorization, testing, security rules, integrations, and deployment configuration.
+
+Key areas I implemented include:
+
+- React + TypeScript frontend and responsive admin/customer/staff interfaces
+- Node.js + Express backend services
+- Supabase PostgreSQL schema, Row Level Security, and authentication flows
+- Role-based customer, staff, and administrator workflows
+- Appointment booking and staff assignment
+- Service, customer, payment, and audit-log management
+- Revenue and booking analytics
+- Resend email-notification integration
+- Frontend and backend automated tests
+- CI and Vercel deployment configuration
+
+This project represents my work as the **sole developer responsible for both the frontend and backend architecture and implementation**.
+
+---
+
 ## Author
 
 **Anna Patricia B. Vida**
