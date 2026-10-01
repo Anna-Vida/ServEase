@@ -1,216 +1,120 @@
+<div align="center">
+
 # ServEase
 
-ServEase is a full-stack business operations and appointment management platform designed to help service-based businesses manage customers, staff, services, bookings, payments, and operational activity from one system.
+**Full-stack appointment and business operations platform for service-based businesses**
 
-The application provides dedicated workflows for **customers, staff, and administrators**, with authentication, role-based access control, analytics, audit logging, and email notifications.
+[Live Demo](https://servease-iota.vercel.app/) ·
+[Technical Documentation](https://gitdocify.com/Anna-Vida/ServEase) ·
+[GitHub Repository](https://github.com/Anna-Vida/ServEase)
 
-**Live Frontend:** https://servease-iota.vercel.app/
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=111827)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
+![Express](https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3FCF8E?logo=supabase&logoColor=white)
+![Vitest](https://img.shields.io/badge/Tests-Vitest-6E9F18?logo=vitest&logoColor=white)
 
-**Repository:** https://github.com/Anna-Vida/ServEase
+</div>
 
 ---
 
 ## Overview
 
-ServEase was built as a full-stack portfolio project focused on practical business workflows rather than a simple CRUD application.
+ServEase is a full-stack business operations and appointment management platform built for service-based businesses. It combines customer booking, staff workflows, service management, payment tracking, analytics, audit logging, authentication, and email notifications in one application.
 
-The system supports three user roles:
+The project is designed around real operational workflows rather than isolated CRUD screens. It includes dedicated interfaces and authorization rules for **customers, staff, and administrators**, backed by Supabase PostgreSQL and an Express API.
 
-### Customer
+## What This Project Demonstrates
 
-Customers can:
-
-- Register and sign in securely
-- View their appointment dashboard
-- Browse active services
-- Create appointment requests
-- View assigned staff
-- Track appointment status
-- View payment information
-- Cancel eligible pending appointments
-- Receive booking confirmation emails
-
-### Staff
-
-Staff members can:
-
-- Access a protected staff dashboard
-- View appointments assigned to them
-- Track pending, confirmed, and completed appointments
-- Update appointment status
-- View customer and service information
-
-### Administrator
-
-Administrators can:
-
-- View operational dashboard analytics
-- Manage bookings
-- Assign and unassign staff
-- Update booking statuses
-- Manage customers
-- Manage staff records
-- Create and update services
-- Activate or deactivate services
-- Record and update payments
-- View revenue information
-- Review system audit logs
-- Search and filter operational records
+- Multi-role authentication and authorization
+- Full-stack React + Express architecture
+- PostgreSQL data modeling with Supabase
+- Row Level Security for database access control
+- Booking and staff-assignment workflows
+- Revenue and operational analytics
+- Audit logging for administrative actions
+- Secure server-side email notification flow
+- Frontend and backend automated testing
+- CI configuration and production frontend deployment
 
 ---
 
-## Tech Stack
+## User Roles
+
+| Role | Main capabilities |
+| --- | --- |
+| **Customer** | Register, sign in, browse services, create appointments, track bookings, view assigned staff and payment information, cancel eligible pending appointments |
+| **Staff** | Access assigned appointments, review customer/service details, and update appointment status |
+| **Administrator** | Manage bookings, staff, customers, services, payments, analytics, audit logs, staff assignments, and booking statuses |
+
+---
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A[React + TypeScript Client] --> B[Supabase Auth]
+    A --> C[Supabase PostgreSQL]
+    A --> D[Express API]
+
+    D --> B
+    D --> C
+    D --> E[Resend]
+
+    C --> F[Row Level Security]
+    C --> G[Audit Logs]
+```
 
 ### Frontend
 
-- React 19
-- TypeScript
-- Vite
-- React Router
-- Tailwind CSS
-- Lucide React
-- Recharts
+The frontend is a React single-page application built with TypeScript, Vite, Tailwind CSS, React Router, Lucide React, and Recharts.
 
 ### Backend
 
-- Node.js
-- Express
-- TypeScript
-- Helmet
-- CORS
-- Morgan
-- Resend
+The Express API handles server-side functionality that should not be trusted to the browser, including authenticated notification requests and Resend email delivery.
 
 ### Database and Authentication
 
-- Supabase
-- PostgreSQL
-- Supabase Auth
-- PostgreSQL Row Level Security
+Supabase provides:
 
-### Testing and CI
-
-- Vitest
-- React Testing Library
-- Supertest
-- GitHub Actions
-
-### Deployment
-
-- Vercel — frontend
-- Supabase — authentication and PostgreSQL database
+- PostgreSQL database
+- Authentication
+- Row Level Security
+- User/profile relationships
+- Appointment, payment, service, staff, and audit data
 
 ---
 
-## Key Features
-
-### Authentication and Authorization
-
-ServEase uses Supabase Auth for account authentication and a profile-based role system for authorization.
-
-Protected routes restrict access based on the authenticated user's role:
-
-- Customer
-- Staff
-- Admin
-
-PostgreSQL Row Level Security provides an additional database-level authorization layer.
-
----
+## Core Features
 
 ### Appointment Management
 
 Customers can create appointment requests using active services stored in Supabase.
 
-Each appointment contains:
+Each appointment can contain:
 
 - Customer
 - Service
 - Appointment date
 - Appointment time
 - Notes
-- Assigned staff
+- Assigned staff member
 - Booking status
 
-Supported appointment statuses include:
+Supported statuses:
 
 - Pending
 - Confirmed
 - Completed
 - Cancelled
 
-Administrators can manage booking status and staff assignments, while staff can update appointments assigned to them.
-
----
-
-### Service Management
-
-Administrators can:
-
-- Create services
-- Edit service information
-- Set service price
-- Set service duration
-- Activate services
-- Deactivate services
-
-Customers only see active services when creating appointments.
-
----
-
-### Staff Management
-
-ServEase maintains separate staff profiles linked to authenticated user profiles.
-
-Administrators can view:
-
-- Staff name
-- Position
-- Contact information
-- Bio
-- Account status
-
-Bookings can be assigned or unassigned from active staff members.
-
----
-
-### Customer Management
-
-Administrators can search and review registered customer profiles, including:
-
-- Customer name
-- Contact number
-- Account identifier
-- Registration date
-
----
-
-### Payment Tracking
-
-Administrators can record payments associated with appointments.
-
-Payment information includes:
-
-- Appointment
-- Customer
-- Service
-- Amount
-- Payment method
-- Payment status
-- Payment date
-
-Supported payment statuses include:
-
-- Pending
-- Paid
-- Failed
-- Refunded
-
----
+Administrators can assign or unassign staff and manage booking statuses. Staff members can work with appointments assigned to them.
 
 ### Admin Analytics
 
-The administrator dashboard provides live data from the application database, including:
+The admin dashboard reads live application data and provides:
 
 - Total bookings
 - Total customers
@@ -220,27 +124,74 @@ The administrator dashboard provides live data from the application database, in
 - Monthly revenue trends
 - Today's appointments
 
-Charts are rendered using Recharts.
+Charts are rendered with Recharts.
 
----
+### Customer Management
+
+Administrators can search and review registered customer profiles by:
+
+- Name
+- Phone number
+- Customer ID
+- Registration date
+
+### Staff Management
+
+Administrators can review staff records and manage active staff used for appointment assignment.
+
+Staff profiles include information such as:
+
+- Name
+- Position
+- Contact information
+- Bio
+- Account status
+
+### Service Management
+
+Administrators can:
+
+- Create services
+- Edit service information
+- Set prices
+- Set duration
+- Activate or deactivate services
+
+Customers only see active services when booking.
+
+### Payment Tracking
+
+Administrators can record and update appointment-related payments.
+
+Payment data includes:
+
+- Appointment
+- Customer
+- Service
+- Amount
+- Payment method
+- Payment status
+- Payment date
+
+Supported payment statuses:
+
+- Pending
+- Paid
+- Failed
+- Refunded
 
 ### Audit Logging
 
-ServEase records important administrative and operational actions.
-
-Examples include:
+ServEase records important operational and administrative actions, including:
 
 - Booking status changes
 - Customer cancellations
-- Staff assignments
-- Staff unassignments
-- Payment creation
-- Payment status changes
-- Service creation
-- Service updates
+- Staff assignments and unassignments
+- Payment creation and status changes
+- Service creation and updates
 - Service activation and deactivation
 
-Audit records contain the authenticated user, action type, affected entity, metadata, and timestamp.
+Audit records include the authenticated user, action type, affected entity, metadata, and timestamp.
 
 ---
 
@@ -248,119 +199,50 @@ Audit records contain the authenticated user, action type, affected entity, meta
 
 ServEase integrates with the **Resend API** through the Express backend.
 
-When a customer successfully creates an appointment:
+Booking confirmation flow:
 
-1. Supabase creates the appointment.
-2. The frontend receives the generated booking ID.
-3. The authenticated Supabase session token is sent to the Express API.
-4. The backend verifies the user through Supabase.
-5. The backend confirms that the booking belongs to the authenticated customer.
-6. Trusted booking information is loaded from the database.
-7. Resend sends a branded ServEase booking confirmation email.
+```text
+Customer creates appointment
+        ↓
+Supabase stores booking
+        ↓
+Frontend sends booking ID + authenticated session token
+        ↓
+Express verifies the Supabase user
+        ↓
+Backend confirms booking ownership
+        ↓
+Trusted booking data is loaded from the database
+        ↓
+Resend sends the confirmation email
+```
 
-The browser does not provide trusted customer or booking details directly to the email provider.
+The browser does not provide trusted booking or customer information directly to the email provider.
 
-Email delivery failure does not roll back a successfully created appointment. The integration is covered by mocked tests; live email delivery has not yet been verified.
+Email delivery failure does not roll back an appointment that was already created successfully.
 
-### Email Security
-
-The integration uses:
-
-- Supabase authentication tokens
-- Customer ownership validation
-- Row Level Security
-- Backend environment variables
-- Server-side Resend API calls
-
-The Resend API key and webhook secret stay on the backend. The frontend uses the Supabase public/publishable key and the signed-in user's access token.
-
-> During development, the Resend testing domain can only deliver email to the email address associated with the Resend account. A verified domain is required for unrestricted production delivery.
+> The notification integration is covered by mocked automated tests. Production email delivery still requires a verified sending domain and a deployed backend.
 
 ---
 
-## Automated Testing
+## Tech Stack
 
-ServEase includes automated frontend and backend tests.
-
-### Frontend
-
-Frontend tests use:
-
-- Vitest
-- React Testing Library
-- jsdom
-
-Current tests cover interface rendering and booking-related functionality.
-
-### Backend
-
-Backend tests use:
-
-- Vitest
-- Supertest
-
-Tests cover:
-
-- API health endpoint
-- API root endpoint
-- Protected notification endpoint
-- Missing authentication
-- Invalid booking requests
-- Booking ownership flow
-- Mocked email delivery
-- Webhook protection
-
-External Supabase and Resend calls are mocked during automated tests.
-
-Current local test suite:
-
-```text
-Frontend: 8 tests
-Backend:  8 tests
-Total:   16 tests
-```
-
----
-
-## Continuous Integration
-
-ServEase includes a GitHub Actions workflow located at:
-
-```text
-.github/workflows/ci.yml
-```
-
-The workflow is configured to run automatically on pushes and pull requests to `main`.
-
-### Frontend CI
-
-```text
-Install dependencies
-        ↓
-Run lint
-        ↓
-Run tests
-        ↓
-Build production frontend
-```
-
-### Backend CI
-
-```text
-Install dependencies
-        ↓
-Run API tests
-        ↓
-Build TypeScript backend
-```
-
-The workflow is configured, and local tests and builds pass. GitHub-hosted execution is currently blocked by an account billing issue; a successful hosted run has not yet been verified.
+| Area | Technologies |
+| --- | --- |
+| **Frontend** | React 19, TypeScript, Vite, React Router, Tailwind CSS 4, Lucide React, Recharts |
+| **Backend** | Node.js, Express 5, TypeScript, Helmet, CORS, Morgan |
+| **Database / Auth** | Supabase, PostgreSQL, Supabase Auth, Row Level Security |
+| **Email** | Resend |
+| **Testing** | Vitest, React Testing Library, jsdom, Supertest |
+| **Code Quality** | Oxlint, TypeScript |
+| **CI** | GitHub Actions |
+| **Deployment** | Vercel frontend, Supabase database/auth |
 
 ---
 
 ## Database
 
-The Supabase PostgreSQL database includes the following primary tables:
+Primary tables:
 
 ```text
 profiles
@@ -371,23 +253,17 @@ payments
 audit_logs
 ```
 
-### Security
-
-Row Level Security is enabled to restrict database operations based on the authenticated user's identity and role.
+Row Level Security is used to restrict database operations according to authenticated identity and role.
 
 Examples include:
 
-- Customers accessing their own appointments
-- Staff accessing appointments assigned to them
-- Administrators managing operational data
+- Customers accessing their own appointment data
+- Staff accessing assigned appointments
 - Customers viewing their own payment information
+- Administrators managing operational records
 - Administrative access to audit logs
 
-Database schema documentation is available in:
-
-```text
-supabase/
-```
+Database schema and migration files are available under [`supabase/`](./supabase).
 
 ---
 
@@ -395,12 +271,11 @@ supabase/
 
 ```text
 ServEase/
-│
 ├── .github/
 │   └── workflows/
 │       └── ci.yml
-│
 ├── client/
+│   ├── public/
 │   ├── src/
 │   │   ├── lib/
 │   │   ├── pages/
@@ -411,7 +286,6 @@ ServEase/
 │   ├── package.json
 │   ├── vercel.json
 │   └── vite.config.ts
-│
 ├── server/
 │   ├── src/
 │   │   ├── lib/
@@ -423,11 +297,11 @@ ServEase/
 │   ├── .env.example
 │   ├── package.json
 │   └── tsconfig.json
-│
 ├── supabase/
+│   ├── migrations/
 │   ├── README.md
 │   └── schema.sql
-│
+├── package.json
 └── README.md
 ```
 
@@ -452,22 +326,20 @@ ServEase/
 
 ---
 
-## Local Setup
+## Getting Started
 
 ### Requirements
 
 Install:
 
-- Node.js 24 (matches CI)
+- Node.js 24
 - npm
 - Git
 
 You also need:
 
-- Supabase project
-- Resend account
-
----
+- A Supabase project
+- A Resend account if you want to test email notifications
 
 ### Clone the Repository
 
@@ -476,18 +348,16 @@ git clone https://github.com/Anna-Vida/ServEase.git
 cd ServEase
 ```
 
----
+### Install Dependencies
 
-### Install Frontend Dependencies
+Frontend:
 
 ```bash
 cd client
 npm install
 ```
 
----
-
-### Install Backend Dependencies
+Backend:
 
 ```bash
 cd ../server
@@ -500,13 +370,7 @@ npm install
 
 ### Frontend
 
-Create:
-
-```text
-client/.env
-```
-
-Example:
+Create `client/.env`:
 
 ```env
 VITE_SUPABASE_URL=your_supabase_project_url
@@ -514,17 +378,9 @@ VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
 VITE_API_URL=http://localhost:5000
 ```
 
----
-
 ### Backend
 
-Create:
-
-```text
-server/.env
-```
-
-Example:
+Create `server/.env`:
 
 ```env
 PORT=5000
@@ -533,19 +389,16 @@ SUPABASE_URL=your_supabase_project_url
 SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
 
 RESEND_API_KEY=your_resend_api_key
-
 NOTIFICATION_WEBHOOK_SECRET=your_secure_webhook_secret
 ```
 
-Never commit real environment files or API keys.
-
-Safe templates are provided through `.env.example` files.
+Do not commit real `.env` files or API keys. Safe templates are included as `.env.example` files.
 
 ---
 
 ## Running Locally
 
-Open two terminals.
+Use two terminals.
 
 ### Frontend
 
@@ -560,8 +413,6 @@ Default development URL:
 http://localhost:5173
 ```
 
-Vite may automatically use another port if 5173 is already occupied.
-
 ### Backend
 
 ```bash
@@ -569,13 +420,13 @@ cd server
 npm run dev
 ```
 
-Backend URL:
+Default backend URL:
 
 ```text
 http://localhost:5000
 ```
 
-Health endpoint:
+Health check:
 
 ```text
 GET /api/health
@@ -583,19 +434,13 @@ GET /api/health
 
 ---
 
-## Running Tests
+## Testing
 
 ### Frontend
 
 ```bash
 cd client
 npm test
-```
-
-Watch mode:
-
-```bash
-npm run test:watch
 ```
 
 ### Backend
@@ -605,29 +450,65 @@ cd server
 npm test
 ```
 
-Watch mode:
+The currently documented local suite contains:
 
-```bash
-npm run test:watch
+```text
+Frontend: 8 tests
+Backend:  8 tests
+Total:   16 tests
 ```
+
+External Supabase and Resend calls are mocked during relevant automated tests.
 
 ---
 
 ## Production Builds
 
-### Frontend
+Frontend:
 
 ```bash
 cd client
 npm run build
 ```
 
-### Backend
+Backend:
 
 ```bash
 cd server
 npm run build
 ```
+
+---
+
+## Continuous Integration
+
+The repository includes [`.github/workflows/ci.yml`](./.github/workflows/ci.yml).
+
+For pushes and pull requests to `main`, the workflow is configured to run:
+
+**Frontend**
+
+```text
+npm ci
+  ↓
+lint
+  ↓
+tests
+  ↓
+production build
+```
+
+**Backend**
+
+```text
+npm ci
+  ↓
+tests
+  ↓
+TypeScript build
+```
+
+Local tests and builds have passed. GitHub-hosted CI execution has not yet been successfully verified because the workflow was previously blocked by an account billing issue.
 
 ---
 
@@ -637,19 +518,36 @@ npm run build
 
 The React frontend is deployed on Vercel:
 
-https://servease-iota.vercel.app/
+**https://servease-iota.vercel.app/**
 
-The Vercel project is connected to GitHub, allowing new frontend deployments after updates are pushed to the configured production branch.
+The Vercel project is connected to the GitHub repository and can deploy frontend updates from the configured production branch.
 
 ### Backend
 
-The Express backend currently runs locally during development and is prepared for separate cloud deployment.
+The Express backend currently runs locally during development and still needs a production cloud deployment.
 
-A production backend deployment will be required for features such as Resend email notifications to work from the live Vercel frontend.
+Until the backend is deployed, backend-dependent features such as production Resend email notifications will not work from the live Vercel frontend.
 
 ---
 
-## Current Development Status
+## Security
+
+ServEase currently uses:
+
+- Supabase Auth
+- Role-based route protection
+- PostgreSQL Row Level Security
+- Authenticated Express API routes
+- Booking ownership validation
+- Environment-based secret management
+- Helmet security headers
+- Protected server-to-server webhook endpoint
+
+The Resend API key and webhook secret remain on the server.
+
+---
+
+## Current Status
 
 ### Completed
 
@@ -669,40 +567,32 @@ A production backend deployment will be required for features such as Resend ema
 - Audit logging
 - Responsive interface
 - Supabase Row Level Security
-- Booking confirmation email integration (live delivery pending verification)
 - Authenticated Express notification API
-- Frontend unit/component tests
+- Booking confirmation email integration
+- Frontend automated tests
 - Backend API tests
 - GitHub Actions CI configuration
 - Vercel frontend deployment
 
 ### Planned Improvements
 
-- Deploy Express backend to the cloud
-- Verify a custom email domain
+- Deploy the Express backend
+- Verify a production email domain
 - Expand automated test coverage
 - Strengthen appointment cancellation security
 - Prevent duplicate payment records
 - Add route-level code splitting and performance optimization
-- Add additional third-party integrations
-- Production security review
+- Perform a production security review
 
 ---
 
-## Security Notes
+## Documentation
 
-ServEase currently uses:
+Additional repository documentation is available through GitDocify:
 
-- Supabase Auth
-- Role-based route protection
-- PostgreSQL Row Level Security
-- Authenticated Express API routes
-- Booking ownership validation
-- Environment-based secret management
-- Helmet security headers
-- Protected server-to-server webhook endpoint
+**https://gitdocify.com/Anna-Vida/ServEase**
 
-Environment files and API credentials are excluded from version control.
+This provides a deeper code-oriented view of the repository, while this README focuses on the project overview, architecture, setup, and development status.
 
 ---
 
@@ -710,18 +600,11 @@ Environment files and API credentials are excluded from version control.
 
 **Anna Patricia B. Vida**
 
-GitHub: https://github.com/Anna-Vida
-
-LinkedIn: https://www.linkedin.com/in/annavida12/
-
----
-
-## License
-
-This project was developed as a portfolio and learning project.
+- GitHub: [Anna-Vida](https://github.com/Anna-Vida)
+- LinkedIn: [annavida12](https://www.linkedin.com/in/annavida12/)
 
 ---
 
 ## Project Status
 
-ServEase is under active development and continues to receive improvements in testing, security, API integration, performance, and cloud deployment.
+ServEase is under active development and continues to receive improvements in deployment, testing, security, performance, and integrations.
